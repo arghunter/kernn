@@ -28,7 +28,7 @@ class SysArrayTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd with 
     // Flush
     dut.io.weightIn.foreach(_.poke(0.S))
     dut.io.actIn.foreach(_.poke(0.S))
-    dut.clock.step(4 * n)
+    dut.clock.step(2 * n)
 
     // Drain
     dut.io.resetIn.poke(true.B)
@@ -40,7 +40,6 @@ class SysArrayTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd with 
       }
     }
     dut.io.resetIn.poke(false.B)
-    dut.clock.step(2 * n)
     results
   }
 

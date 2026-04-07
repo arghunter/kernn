@@ -3,7 +3,7 @@ import chisel3.util._
 import _root_.circt.stage.ChiselStage
 
 
-
+//btw i think that if i ping pong accumulators i can signficant;y up throughput, but thats not really the bottle neck rn
 class SysArray(val n: Int = 12) extends Module {
   val io = IO(new Bundle {
     val weightIn  = Input(Vec(n, SInt(8.W)))   
