@@ -62,10 +62,10 @@ class SysArrayControllerTest extends AnyFlatSpec with HasCliOptions with Cli.Emi
     ctrl.io.weight_base_addr := 0.U
     ctrl.io.activation_base_addr := 0.U
     ctrl.io.output_base_addr := 0.U
-    ctrl.io.weight_dims(0) := n.U
-    ctrl.io.weight_dims(1) := n.U
-    ctrl.io.activation_dims(0) := n.U
-    ctrl.io.activation_dims(1) := n.U
+    // ctrl.io.weight_dims(0) := n.U
+    // ctrl.io.weight_dims(1) := n.U
+    // ctrl.io.activation_dims(0) := n.U
+    // ctrl.io.activation_dims(1) := n.U
     ctrl.io.start := io.start
     ctrl.io.rst_hard := false.B
     io.busy := ctrl.io.busy

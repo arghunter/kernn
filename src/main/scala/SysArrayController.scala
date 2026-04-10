@@ -5,7 +5,7 @@ import _root_.circt.stage.ChiselStage
 object SysState extends ChiselEnum {
   val INIT, INIT_1, IDLE, PREFEED, FEED, FLUSH, DRAIN, WRITE = Value
 }
-
+// i should proxy and pipeline the output so that i can add an add without wor
 class SysArrayController(val n: Int = 8, val weight_addr_width: Int = 16, val activation_addr_width: Int = 16, val output_addr_width: Int = 16) extends Module {
   val io = IO(new Bundle {
     val weight_base_addr = Input(UInt(weight_addr_width.W))
@@ -21,9 +21,6 @@ class SysArrayController(val n: Int = 8, val weight_addr_width: Int = 16, val ac
     val output_data_wr = Output(Vec(n, SInt(32.W)))
     val output_data_r = Input(Vec(n, SInt(32.W)))
     val output_wen = Output(Bool())
-
-    val weight_dims = Input(Vec(2, UInt(24.W)))
-    val activation_dims = Input(Vec(2, UInt(24.W)))
 
     val busy = Output(Bool())
     val start = Input(Bool())
@@ -118,7 +115,7 @@ class SysArrayController(val n: Int = 8, val weight_addr_width: Int = 16, val ac
         }
         when(count === n.U) {
           count := 0.U
-          state := SysState.IDLE
+          state := SysState.INIT
         }
     }
 
