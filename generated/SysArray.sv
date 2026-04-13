@@ -6,148 +6,24 @@ module SysArray(
                 io_weightIn_1,
                 io_weightIn_2,
                 io_weightIn_3,
-                io_weightIn_4,
-                io_weightIn_5,
-                io_weightIn_6,
-                io_weightIn_7,
                 io_actIn_0,
                 io_actIn_1,
                 io_actIn_2,
                 io_actIn_3,
-                io_actIn_4,
-                io_actIn_5,
-                io_actIn_6,
-                io_actIn_7,
   output [31:0] io_actOut_0,
                 io_actOut_1,
                 io_actOut_2,
                 io_actOut_3,
-                io_actOut_4,
-                io_actOut_5,
-                io_actOut_6,
-                io_actOut_7,
   input         io_resetIn
 );
 
-  wire        _array_7_7_io_resetOut;
-  wire [7:0]  _array_7_6_io_weightOut;
-  wire        _array_7_6_io_resetOut;
-  wire [7:0]  _array_7_5_io_weightOut;
-  wire        _array_7_5_io_resetOut;
-  wire [7:0]  _array_7_4_io_weightOut;
-  wire        _array_7_4_io_resetOut;
-  wire [7:0]  _array_7_3_io_weightOut;
-  wire        _array_7_3_io_resetOut;
-  wire [7:0]  _array_7_2_io_weightOut;
-  wire        _array_7_2_io_resetOut;
-  wire [7:0]  _array_7_1_io_weightOut;
-  wire        _array_7_1_io_resetOut;
-  wire [7:0]  _array_7_0_io_weightOut;
-  wire        _array_7_0_io_resetOut;
-  wire [31:0] _array_6_7_io_actOut;
-  wire        _array_6_7_io_resetOut;
-  wire [7:0]  _array_6_6_io_weightOut;
-  wire [31:0] _array_6_6_io_actOut;
-  wire        _array_6_6_io_resetOut;
-  wire [7:0]  _array_6_5_io_weightOut;
-  wire [31:0] _array_6_5_io_actOut;
-  wire        _array_6_5_io_resetOut;
-  wire [7:0]  _array_6_4_io_weightOut;
-  wire [31:0] _array_6_4_io_actOut;
-  wire        _array_6_4_io_resetOut;
-  wire [7:0]  _array_6_3_io_weightOut;
-  wire [31:0] _array_6_3_io_actOut;
-  wire        _array_6_3_io_resetOut;
-  wire [7:0]  _array_6_2_io_weightOut;
-  wire [31:0] _array_6_2_io_actOut;
-  wire        _array_6_2_io_resetOut;
-  wire [7:0]  _array_6_1_io_weightOut;
-  wire [31:0] _array_6_1_io_actOut;
-  wire        _array_6_1_io_resetOut;
-  wire [7:0]  _array_6_0_io_weightOut;
-  wire [31:0] _array_6_0_io_actOut;
-  wire        _array_6_0_io_resetOut;
-  wire [31:0] _array_5_7_io_actOut;
-  wire        _array_5_7_io_resetOut;
-  wire [7:0]  _array_5_6_io_weightOut;
-  wire [31:0] _array_5_6_io_actOut;
-  wire        _array_5_6_io_resetOut;
-  wire [7:0]  _array_5_5_io_weightOut;
-  wire [31:0] _array_5_5_io_actOut;
-  wire        _array_5_5_io_resetOut;
-  wire [7:0]  _array_5_4_io_weightOut;
-  wire [31:0] _array_5_4_io_actOut;
-  wire        _array_5_4_io_resetOut;
-  wire [7:0]  _array_5_3_io_weightOut;
-  wire [31:0] _array_5_3_io_actOut;
-  wire        _array_5_3_io_resetOut;
-  wire [7:0]  _array_5_2_io_weightOut;
-  wire [31:0] _array_5_2_io_actOut;
-  wire        _array_5_2_io_resetOut;
-  wire [7:0]  _array_5_1_io_weightOut;
-  wire [31:0] _array_5_1_io_actOut;
-  wire        _array_5_1_io_resetOut;
-  wire [7:0]  _array_5_0_io_weightOut;
-  wire [31:0] _array_5_0_io_actOut;
-  wire        _array_5_0_io_resetOut;
-  wire [31:0] _array_4_7_io_actOut;
-  wire        _array_4_7_io_resetOut;
-  wire [7:0]  _array_4_6_io_weightOut;
-  wire [31:0] _array_4_6_io_actOut;
-  wire        _array_4_6_io_resetOut;
-  wire [7:0]  _array_4_5_io_weightOut;
-  wire [31:0] _array_4_5_io_actOut;
-  wire        _array_4_5_io_resetOut;
-  wire [7:0]  _array_4_4_io_weightOut;
-  wire [31:0] _array_4_4_io_actOut;
-  wire        _array_4_4_io_resetOut;
-  wire [7:0]  _array_4_3_io_weightOut;
-  wire [31:0] _array_4_3_io_actOut;
-  wire        _array_4_3_io_resetOut;
-  wire [7:0]  _array_4_2_io_weightOut;
-  wire [31:0] _array_4_2_io_actOut;
-  wire        _array_4_2_io_resetOut;
-  wire [7:0]  _array_4_1_io_weightOut;
-  wire [31:0] _array_4_1_io_actOut;
-  wire        _array_4_1_io_resetOut;
-  wire [7:0]  _array_4_0_io_weightOut;
-  wire [31:0] _array_4_0_io_actOut;
-  wire        _array_4_0_io_resetOut;
-  wire [31:0] _array_3_7_io_actOut;
-  wire        _array_3_7_io_resetOut;
-  wire [7:0]  _array_3_6_io_weightOut;
-  wire [31:0] _array_3_6_io_actOut;
-  wire        _array_3_6_io_resetOut;
-  wire [7:0]  _array_3_5_io_weightOut;
-  wire [31:0] _array_3_5_io_actOut;
-  wire        _array_3_5_io_resetOut;
-  wire [7:0]  _array_3_4_io_weightOut;
-  wire [31:0] _array_3_4_io_actOut;
-  wire        _array_3_4_io_resetOut;
-  wire [7:0]  _array_3_3_io_weightOut;
-  wire [31:0] _array_3_3_io_actOut;
   wire        _array_3_3_io_resetOut;
   wire [7:0]  _array_3_2_io_weightOut;
-  wire [31:0] _array_3_2_io_actOut;
   wire        _array_3_2_io_resetOut;
   wire [7:0]  _array_3_1_io_weightOut;
-  wire [31:0] _array_3_1_io_actOut;
   wire        _array_3_1_io_resetOut;
   wire [7:0]  _array_3_0_io_weightOut;
-  wire [31:0] _array_3_0_io_actOut;
   wire        _array_3_0_io_resetOut;
-  wire [31:0] _array_2_7_io_actOut;
-  wire        _array_2_7_io_resetOut;
-  wire [7:0]  _array_2_6_io_weightOut;
-  wire [31:0] _array_2_6_io_actOut;
-  wire        _array_2_6_io_resetOut;
-  wire [7:0]  _array_2_5_io_weightOut;
-  wire [31:0] _array_2_5_io_actOut;
-  wire        _array_2_5_io_resetOut;
-  wire [7:0]  _array_2_4_io_weightOut;
-  wire [31:0] _array_2_4_io_actOut;
-  wire        _array_2_4_io_resetOut;
-  wire [7:0]  _array_2_3_io_weightOut;
   wire [31:0] _array_2_3_io_actOut;
   wire        _array_2_3_io_resetOut;
   wire [7:0]  _array_2_2_io_weightOut;
@@ -159,18 +35,6 @@ module SysArray(
   wire [7:0]  _array_2_0_io_weightOut;
   wire [31:0] _array_2_0_io_actOut;
   wire        _array_2_0_io_resetOut;
-  wire [31:0] _array_1_7_io_actOut;
-  wire        _array_1_7_io_resetOut;
-  wire [7:0]  _array_1_6_io_weightOut;
-  wire [31:0] _array_1_6_io_actOut;
-  wire        _array_1_6_io_resetOut;
-  wire [7:0]  _array_1_5_io_weightOut;
-  wire [31:0] _array_1_5_io_actOut;
-  wire        _array_1_5_io_resetOut;
-  wire [7:0]  _array_1_4_io_weightOut;
-  wire [31:0] _array_1_4_io_actOut;
-  wire        _array_1_4_io_resetOut;
-  wire [7:0]  _array_1_3_io_weightOut;
   wire [31:0] _array_1_3_io_actOut;
   wire        _array_1_3_io_resetOut;
   wire [7:0]  _array_1_2_io_weightOut;
@@ -182,14 +46,6 @@ module SysArray(
   wire [7:0]  _array_1_0_io_weightOut;
   wire [31:0] _array_1_0_io_actOut;
   wire        _array_1_0_io_resetOut;
-  wire [31:0] _array_0_7_io_actOut;
-  wire [7:0]  _array_0_6_io_weightOut;
-  wire [31:0] _array_0_6_io_actOut;
-  wire [7:0]  _array_0_5_io_weightOut;
-  wire [31:0] _array_0_5_io_actOut;
-  wire [7:0]  _array_0_4_io_weightOut;
-  wire [31:0] _array_0_4_io_actOut;
-  wire [7:0]  _array_0_3_io_weightOut;
   wire [31:0] _array_0_3_io_actOut;
   wire [7:0]  _array_0_2_io_weightOut;
   wire [31:0] _array_0_2_io_actOut;
@@ -203,56 +59,12 @@ module SysArray(
   reg  [7:0]  weightSkew_chain_1_1;
   reg  [7:0]  weightSkew_chain_2;
   reg  [7:0]  weightSkew_3;
-  reg  [7:0]  weightSkew_chain_1_2;
-  reg  [7:0]  weightSkew_chain_2_1;
-  reg  [7:0]  weightSkew_chain_3;
-  reg  [7:0]  weightSkew_4;
-  reg  [7:0]  weightSkew_chain_1_3;
-  reg  [7:0]  weightSkew_chain_2_2;
-  reg  [7:0]  weightSkew_chain_3_1;
-  reg  [7:0]  weightSkew_chain_4;
-  reg  [7:0]  weightSkew_5;
-  reg  [7:0]  weightSkew_chain_1_4;
-  reg  [7:0]  weightSkew_chain_2_3;
-  reg  [7:0]  weightSkew_chain_3_2;
-  reg  [7:0]  weightSkew_chain_4_1;
-  reg  [7:0]  weightSkew_chain_5;
-  reg  [7:0]  weightSkew_6;
-  reg  [7:0]  weightSkew_chain_1_5;
-  reg  [7:0]  weightSkew_chain_2_4;
-  reg  [7:0]  weightSkew_chain_3_3;
-  reg  [7:0]  weightSkew_chain_4_2;
-  reg  [7:0]  weightSkew_chain_5_1;
-  reg  [7:0]  weightSkew_chain_6;
-  reg  [7:0]  weightSkew_7;
   reg  [7:0]  actSkew_1;
   reg  [7:0]  actSkew_chain_1;
   reg  [7:0]  actSkew_2;
   reg  [7:0]  actSkew_chain_1_1;
   reg  [7:0]  actSkew_chain_2;
   reg  [7:0]  actSkew_3;
-  reg  [7:0]  actSkew_chain_1_2;
-  reg  [7:0]  actSkew_chain_2_1;
-  reg  [7:0]  actSkew_chain_3;
-  reg  [7:0]  actSkew_4;
-  reg  [7:0]  actSkew_chain_1_3;
-  reg  [7:0]  actSkew_chain_2_2;
-  reg  [7:0]  actSkew_chain_3_1;
-  reg  [7:0]  actSkew_chain_4;
-  reg  [7:0]  actSkew_5;
-  reg  [7:0]  actSkew_chain_1_4;
-  reg  [7:0]  actSkew_chain_2_3;
-  reg  [7:0]  actSkew_chain_3_2;
-  reg  [7:0]  actSkew_chain_4_1;
-  reg  [7:0]  actSkew_chain_5;
-  reg  [7:0]  actSkew_6;
-  reg  [7:0]  actSkew_chain_1_5;
-  reg  [7:0]  actSkew_chain_2_4;
-  reg  [7:0]  actSkew_chain_3_3;
-  reg  [7:0]  actSkew_chain_4_2;
-  reg  [7:0]  actSkew_chain_5_1;
-  reg  [7:0]  actSkew_chain_6;
-  reg  [7:0]  actSkew_7;
   reg         rst;
   always @(posedge clock) begin
     weightSkew_1 <= io_weightIn_1;
@@ -261,56 +73,12 @@ module SysArray(
     weightSkew_chain_1_1 <= io_weightIn_3;
     weightSkew_chain_2 <= weightSkew_chain_1_1;
     weightSkew_3 <= weightSkew_chain_2;
-    weightSkew_chain_1_2 <= io_weightIn_4;
-    weightSkew_chain_2_1 <= weightSkew_chain_1_2;
-    weightSkew_chain_3 <= weightSkew_chain_2_1;
-    weightSkew_4 <= weightSkew_chain_3;
-    weightSkew_chain_1_3 <= io_weightIn_5;
-    weightSkew_chain_2_2 <= weightSkew_chain_1_3;
-    weightSkew_chain_3_1 <= weightSkew_chain_2_2;
-    weightSkew_chain_4 <= weightSkew_chain_3_1;
-    weightSkew_5 <= weightSkew_chain_4;
-    weightSkew_chain_1_4 <= io_weightIn_6;
-    weightSkew_chain_2_3 <= weightSkew_chain_1_4;
-    weightSkew_chain_3_2 <= weightSkew_chain_2_3;
-    weightSkew_chain_4_1 <= weightSkew_chain_3_2;
-    weightSkew_chain_5 <= weightSkew_chain_4_1;
-    weightSkew_6 <= weightSkew_chain_5;
-    weightSkew_chain_1_5 <= io_weightIn_7;
-    weightSkew_chain_2_4 <= weightSkew_chain_1_5;
-    weightSkew_chain_3_3 <= weightSkew_chain_2_4;
-    weightSkew_chain_4_2 <= weightSkew_chain_3_3;
-    weightSkew_chain_5_1 <= weightSkew_chain_4_2;
-    weightSkew_chain_6 <= weightSkew_chain_5_1;
-    weightSkew_7 <= weightSkew_chain_6;
     actSkew_1 <= io_actIn_1;
     actSkew_chain_1 <= io_actIn_2;
     actSkew_2 <= actSkew_chain_1;
     actSkew_chain_1_1 <= io_actIn_3;
     actSkew_chain_2 <= actSkew_chain_1_1;
     actSkew_3 <= actSkew_chain_2;
-    actSkew_chain_1_2 <= io_actIn_4;
-    actSkew_chain_2_1 <= actSkew_chain_1_2;
-    actSkew_chain_3 <= actSkew_chain_2_1;
-    actSkew_4 <= actSkew_chain_3;
-    actSkew_chain_1_3 <= io_actIn_5;
-    actSkew_chain_2_2 <= actSkew_chain_1_3;
-    actSkew_chain_3_1 <= actSkew_chain_2_2;
-    actSkew_chain_4 <= actSkew_chain_3_1;
-    actSkew_5 <= actSkew_chain_4;
-    actSkew_chain_1_4 <= io_actIn_6;
-    actSkew_chain_2_3 <= actSkew_chain_1_4;
-    actSkew_chain_3_2 <= actSkew_chain_2_3;
-    actSkew_chain_4_1 <= actSkew_chain_3_2;
-    actSkew_chain_5 <= actSkew_chain_4_1;
-    actSkew_6 <= actSkew_chain_5;
-    actSkew_chain_1_5 <= io_actIn_7;
-    actSkew_chain_2_4 <= actSkew_chain_1_5;
-    actSkew_chain_3_3 <= actSkew_chain_2_4;
-    actSkew_chain_4_2 <= actSkew_chain_3_3;
-    actSkew_chain_5_1 <= actSkew_chain_4_2;
-    actSkew_chain_6 <= actSkew_chain_5_1;
-    actSkew_7 <= actSkew_chain_6;
     rst <= io_resetIn;
   end // always @(posedge)
   PE array_0_0 (
@@ -347,50 +115,10 @@ module SysArray(
     .clock        (clock),
     .reset        (reset),
     .io_weightIn  (_array_0_2_io_weightOut),
-    .io_weightOut (_array_0_3_io_weightOut),
+    .io_weightOut (/* unused */),
     .io_actIn     ({{24{actSkew_3[7]}}, actSkew_3}),
     .io_actOut    (_array_0_3_io_actOut),
     .io_resetIn   (_array_1_3_io_resetOut),
-    .io_resetOut  (/* unused */)
-  );
-  PE array_0_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_0_3_io_weightOut),
-    .io_weightOut (_array_0_4_io_weightOut),
-    .io_actIn     ({{24{actSkew_4[7]}}, actSkew_4}),
-    .io_actOut    (_array_0_4_io_actOut),
-    .io_resetIn   (_array_1_4_io_resetOut),
-    .io_resetOut  (/* unused */)
-  );
-  PE array_0_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_0_4_io_weightOut),
-    .io_weightOut (_array_0_5_io_weightOut),
-    .io_actIn     ({{24{actSkew_5[7]}}, actSkew_5}),
-    .io_actOut    (_array_0_5_io_actOut),
-    .io_resetIn   (_array_1_5_io_resetOut),
-    .io_resetOut  (/* unused */)
-  );
-  PE array_0_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_0_5_io_weightOut),
-    .io_weightOut (_array_0_6_io_weightOut),
-    .io_actIn     ({{24{actSkew_6[7]}}, actSkew_6}),
-    .io_actOut    (_array_0_6_io_actOut),
-    .io_resetIn   (_array_1_6_io_resetOut),
-    .io_resetOut  (/* unused */)
-  );
-  PE array_0_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_0_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     ({{24{actSkew_7[7]}}, actSkew_7}),
-    .io_actOut    (_array_0_7_io_actOut),
-    .io_resetIn   (_array_1_7_io_resetOut),
     .io_resetOut  (/* unused */)
   );
   PE array_1_0 (
@@ -427,51 +155,11 @@ module SysArray(
     .clock        (clock),
     .reset        (reset),
     .io_weightIn  (_array_1_2_io_weightOut),
-    .io_weightOut (_array_1_3_io_weightOut),
+    .io_weightOut (/* unused */),
     .io_actIn     (_array_0_3_io_actOut),
     .io_actOut    (_array_1_3_io_actOut),
     .io_resetIn   (_array_2_3_io_resetOut),
     .io_resetOut  (_array_1_3_io_resetOut)
-  );
-  PE array_1_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_1_3_io_weightOut),
-    .io_weightOut (_array_1_4_io_weightOut),
-    .io_actIn     (_array_0_4_io_actOut),
-    .io_actOut    (_array_1_4_io_actOut),
-    .io_resetIn   (_array_2_4_io_resetOut),
-    .io_resetOut  (_array_1_4_io_resetOut)
-  );
-  PE array_1_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_1_4_io_weightOut),
-    .io_weightOut (_array_1_5_io_weightOut),
-    .io_actIn     (_array_0_5_io_actOut),
-    .io_actOut    (_array_1_5_io_actOut),
-    .io_resetIn   (_array_2_5_io_resetOut),
-    .io_resetOut  (_array_1_5_io_resetOut)
-  );
-  PE array_1_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_1_5_io_weightOut),
-    .io_weightOut (_array_1_6_io_weightOut),
-    .io_actIn     (_array_0_6_io_actOut),
-    .io_actOut    (_array_1_6_io_actOut),
-    .io_resetIn   (_array_2_6_io_resetOut),
-    .io_resetOut  (_array_1_6_io_resetOut)
-  );
-  PE array_1_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_1_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_0_7_io_actOut),
-    .io_actOut    (_array_1_7_io_actOut),
-    .io_resetIn   (_array_2_7_io_resetOut),
-    .io_resetOut  (_array_1_7_io_resetOut)
   );
   PE array_2_0 (
     .clock        (clock),
@@ -507,51 +195,11 @@ module SysArray(
     .clock        (clock),
     .reset        (reset),
     .io_weightIn  (_array_2_2_io_weightOut),
-    .io_weightOut (_array_2_3_io_weightOut),
+    .io_weightOut (/* unused */),
     .io_actIn     (_array_1_3_io_actOut),
     .io_actOut    (_array_2_3_io_actOut),
     .io_resetIn   (_array_3_3_io_resetOut),
     .io_resetOut  (_array_2_3_io_resetOut)
-  );
-  PE array_2_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_2_3_io_weightOut),
-    .io_weightOut (_array_2_4_io_weightOut),
-    .io_actIn     (_array_1_4_io_actOut),
-    .io_actOut    (_array_2_4_io_actOut),
-    .io_resetIn   (_array_3_4_io_resetOut),
-    .io_resetOut  (_array_2_4_io_resetOut)
-  );
-  PE array_2_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_2_4_io_weightOut),
-    .io_weightOut (_array_2_5_io_weightOut),
-    .io_actIn     (_array_1_5_io_actOut),
-    .io_actOut    (_array_2_5_io_actOut),
-    .io_resetIn   (_array_3_5_io_resetOut),
-    .io_resetOut  (_array_2_5_io_resetOut)
-  );
-  PE array_2_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_2_5_io_weightOut),
-    .io_weightOut (_array_2_6_io_weightOut),
-    .io_actIn     (_array_1_6_io_actOut),
-    .io_actOut    (_array_2_6_io_actOut),
-    .io_resetIn   (_array_3_6_io_resetOut),
-    .io_resetOut  (_array_2_6_io_resetOut)
-  );
-  PE array_2_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_2_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_1_7_io_actOut),
-    .io_actOut    (_array_2_7_io_actOut),
-    .io_resetIn   (_array_3_7_io_resetOut),
-    .io_resetOut  (_array_2_7_io_resetOut)
   );
   PE array_3_0 (
     .clock        (clock),
@@ -559,8 +207,8 @@ module SysArray(
     .io_weightIn  (weightSkew_3),
     .io_weightOut (_array_3_0_io_weightOut),
     .io_actIn     (_array_2_0_io_actOut),
-    .io_actOut    (_array_3_0_io_actOut),
-    .io_resetIn   (_array_4_0_io_resetOut),
+    .io_actOut    (io_actOut_0),
+    .io_resetIn   (rst),
     .io_resetOut  (_array_3_0_io_resetOut)
   );
   PE array_3_1 (
@@ -569,8 +217,8 @@ module SysArray(
     .io_weightIn  (_array_3_0_io_weightOut),
     .io_weightOut (_array_3_1_io_weightOut),
     .io_actIn     (_array_2_1_io_actOut),
-    .io_actOut    (_array_3_1_io_actOut),
-    .io_resetIn   (_array_4_1_io_resetOut),
+    .io_actOut    (io_actOut_1),
+    .io_resetIn   (rst),
     .io_resetOut  (_array_3_1_io_resetOut)
   );
   PE array_3_2 (
@@ -579,379 +227,19 @@ module SysArray(
     .io_weightIn  (_array_3_1_io_weightOut),
     .io_weightOut (_array_3_2_io_weightOut),
     .io_actIn     (_array_2_2_io_actOut),
-    .io_actOut    (_array_3_2_io_actOut),
-    .io_resetIn   (_array_4_2_io_resetOut),
+    .io_actOut    (io_actOut_2),
+    .io_resetIn   (rst),
     .io_resetOut  (_array_3_2_io_resetOut)
   );
   PE array_3_3 (
     .clock        (clock),
     .reset        (reset),
     .io_weightIn  (_array_3_2_io_weightOut),
-    .io_weightOut (_array_3_3_io_weightOut),
+    .io_weightOut (/* unused */),
     .io_actIn     (_array_2_3_io_actOut),
-    .io_actOut    (_array_3_3_io_actOut),
-    .io_resetIn   (_array_4_3_io_resetOut),
-    .io_resetOut  (_array_3_3_io_resetOut)
-  );
-  PE array_3_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_3_3_io_weightOut),
-    .io_weightOut (_array_3_4_io_weightOut),
-    .io_actIn     (_array_2_4_io_actOut),
-    .io_actOut    (_array_3_4_io_actOut),
-    .io_resetIn   (_array_4_4_io_resetOut),
-    .io_resetOut  (_array_3_4_io_resetOut)
-  );
-  PE array_3_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_3_4_io_weightOut),
-    .io_weightOut (_array_3_5_io_weightOut),
-    .io_actIn     (_array_2_5_io_actOut),
-    .io_actOut    (_array_3_5_io_actOut),
-    .io_resetIn   (_array_4_5_io_resetOut),
-    .io_resetOut  (_array_3_5_io_resetOut)
-  );
-  PE array_3_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_3_5_io_weightOut),
-    .io_weightOut (_array_3_6_io_weightOut),
-    .io_actIn     (_array_2_6_io_actOut),
-    .io_actOut    (_array_3_6_io_actOut),
-    .io_resetIn   (_array_4_6_io_resetOut),
-    .io_resetOut  (_array_3_6_io_resetOut)
-  );
-  PE array_3_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_3_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_2_7_io_actOut),
-    .io_actOut    (_array_3_7_io_actOut),
-    .io_resetIn   (_array_4_7_io_resetOut),
-    .io_resetOut  (_array_3_7_io_resetOut)
-  );
-  PE array_4_0 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (weightSkew_4),
-    .io_weightOut (_array_4_0_io_weightOut),
-    .io_actIn     (_array_3_0_io_actOut),
-    .io_actOut    (_array_4_0_io_actOut),
-    .io_resetIn   (_array_5_0_io_resetOut),
-    .io_resetOut  (_array_4_0_io_resetOut)
-  );
-  PE array_4_1 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_0_io_weightOut),
-    .io_weightOut (_array_4_1_io_weightOut),
-    .io_actIn     (_array_3_1_io_actOut),
-    .io_actOut    (_array_4_1_io_actOut),
-    .io_resetIn   (_array_5_1_io_resetOut),
-    .io_resetOut  (_array_4_1_io_resetOut)
-  );
-  PE array_4_2 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_1_io_weightOut),
-    .io_weightOut (_array_4_2_io_weightOut),
-    .io_actIn     (_array_3_2_io_actOut),
-    .io_actOut    (_array_4_2_io_actOut),
-    .io_resetIn   (_array_5_2_io_resetOut),
-    .io_resetOut  (_array_4_2_io_resetOut)
-  );
-  PE array_4_3 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_2_io_weightOut),
-    .io_weightOut (_array_4_3_io_weightOut),
-    .io_actIn     (_array_3_3_io_actOut),
-    .io_actOut    (_array_4_3_io_actOut),
-    .io_resetIn   (_array_5_3_io_resetOut),
-    .io_resetOut  (_array_4_3_io_resetOut)
-  );
-  PE array_4_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_3_io_weightOut),
-    .io_weightOut (_array_4_4_io_weightOut),
-    .io_actIn     (_array_3_4_io_actOut),
-    .io_actOut    (_array_4_4_io_actOut),
-    .io_resetIn   (_array_5_4_io_resetOut),
-    .io_resetOut  (_array_4_4_io_resetOut)
-  );
-  PE array_4_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_4_io_weightOut),
-    .io_weightOut (_array_4_5_io_weightOut),
-    .io_actIn     (_array_3_5_io_actOut),
-    .io_actOut    (_array_4_5_io_actOut),
-    .io_resetIn   (_array_5_5_io_resetOut),
-    .io_resetOut  (_array_4_5_io_resetOut)
-  );
-  PE array_4_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_5_io_weightOut),
-    .io_weightOut (_array_4_6_io_weightOut),
-    .io_actIn     (_array_3_6_io_actOut),
-    .io_actOut    (_array_4_6_io_actOut),
-    .io_resetIn   (_array_5_6_io_resetOut),
-    .io_resetOut  (_array_4_6_io_resetOut)
-  );
-  PE array_4_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_4_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_3_7_io_actOut),
-    .io_actOut    (_array_4_7_io_actOut),
-    .io_resetIn   (_array_5_7_io_resetOut),
-    .io_resetOut  (_array_4_7_io_resetOut)
-  );
-  PE array_5_0 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (weightSkew_5),
-    .io_weightOut (_array_5_0_io_weightOut),
-    .io_actIn     (_array_4_0_io_actOut),
-    .io_actOut    (_array_5_0_io_actOut),
-    .io_resetIn   (_array_6_0_io_resetOut),
-    .io_resetOut  (_array_5_0_io_resetOut)
-  );
-  PE array_5_1 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_0_io_weightOut),
-    .io_weightOut (_array_5_1_io_weightOut),
-    .io_actIn     (_array_4_1_io_actOut),
-    .io_actOut    (_array_5_1_io_actOut),
-    .io_resetIn   (_array_6_1_io_resetOut),
-    .io_resetOut  (_array_5_1_io_resetOut)
-  );
-  PE array_5_2 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_1_io_weightOut),
-    .io_weightOut (_array_5_2_io_weightOut),
-    .io_actIn     (_array_4_2_io_actOut),
-    .io_actOut    (_array_5_2_io_actOut),
-    .io_resetIn   (_array_6_2_io_resetOut),
-    .io_resetOut  (_array_5_2_io_resetOut)
-  );
-  PE array_5_3 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_2_io_weightOut),
-    .io_weightOut (_array_5_3_io_weightOut),
-    .io_actIn     (_array_4_3_io_actOut),
-    .io_actOut    (_array_5_3_io_actOut),
-    .io_resetIn   (_array_6_3_io_resetOut),
-    .io_resetOut  (_array_5_3_io_resetOut)
-  );
-  PE array_5_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_3_io_weightOut),
-    .io_weightOut (_array_5_4_io_weightOut),
-    .io_actIn     (_array_4_4_io_actOut),
-    .io_actOut    (_array_5_4_io_actOut),
-    .io_resetIn   (_array_6_4_io_resetOut),
-    .io_resetOut  (_array_5_4_io_resetOut)
-  );
-  PE array_5_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_4_io_weightOut),
-    .io_weightOut (_array_5_5_io_weightOut),
-    .io_actIn     (_array_4_5_io_actOut),
-    .io_actOut    (_array_5_5_io_actOut),
-    .io_resetIn   (_array_6_5_io_resetOut),
-    .io_resetOut  (_array_5_5_io_resetOut)
-  );
-  PE array_5_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_5_io_weightOut),
-    .io_weightOut (_array_5_6_io_weightOut),
-    .io_actIn     (_array_4_6_io_actOut),
-    .io_actOut    (_array_5_6_io_actOut),
-    .io_resetIn   (_array_6_6_io_resetOut),
-    .io_resetOut  (_array_5_6_io_resetOut)
-  );
-  PE array_5_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_5_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_4_7_io_actOut),
-    .io_actOut    (_array_5_7_io_actOut),
-    .io_resetIn   (_array_6_7_io_resetOut),
-    .io_resetOut  (_array_5_7_io_resetOut)
-  );
-  PE array_6_0 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (weightSkew_6),
-    .io_weightOut (_array_6_0_io_weightOut),
-    .io_actIn     (_array_5_0_io_actOut),
-    .io_actOut    (_array_6_0_io_actOut),
-    .io_resetIn   (_array_7_0_io_resetOut),
-    .io_resetOut  (_array_6_0_io_resetOut)
-  );
-  PE array_6_1 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_0_io_weightOut),
-    .io_weightOut (_array_6_1_io_weightOut),
-    .io_actIn     (_array_5_1_io_actOut),
-    .io_actOut    (_array_6_1_io_actOut),
-    .io_resetIn   (_array_7_1_io_resetOut),
-    .io_resetOut  (_array_6_1_io_resetOut)
-  );
-  PE array_6_2 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_1_io_weightOut),
-    .io_weightOut (_array_6_2_io_weightOut),
-    .io_actIn     (_array_5_2_io_actOut),
-    .io_actOut    (_array_6_2_io_actOut),
-    .io_resetIn   (_array_7_2_io_resetOut),
-    .io_resetOut  (_array_6_2_io_resetOut)
-  );
-  PE array_6_3 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_2_io_weightOut),
-    .io_weightOut (_array_6_3_io_weightOut),
-    .io_actIn     (_array_5_3_io_actOut),
-    .io_actOut    (_array_6_3_io_actOut),
-    .io_resetIn   (_array_7_3_io_resetOut),
-    .io_resetOut  (_array_6_3_io_resetOut)
-  );
-  PE array_6_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_3_io_weightOut),
-    .io_weightOut (_array_6_4_io_weightOut),
-    .io_actIn     (_array_5_4_io_actOut),
-    .io_actOut    (_array_6_4_io_actOut),
-    .io_resetIn   (_array_7_4_io_resetOut),
-    .io_resetOut  (_array_6_4_io_resetOut)
-  );
-  PE array_6_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_4_io_weightOut),
-    .io_weightOut (_array_6_5_io_weightOut),
-    .io_actIn     (_array_5_5_io_actOut),
-    .io_actOut    (_array_6_5_io_actOut),
-    .io_resetIn   (_array_7_5_io_resetOut),
-    .io_resetOut  (_array_6_5_io_resetOut)
-  );
-  PE array_6_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_5_io_weightOut),
-    .io_weightOut (_array_6_6_io_weightOut),
-    .io_actIn     (_array_5_6_io_actOut),
-    .io_actOut    (_array_6_6_io_actOut),
-    .io_resetIn   (_array_7_6_io_resetOut),
-    .io_resetOut  (_array_6_6_io_resetOut)
-  );
-  PE array_6_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_6_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_5_7_io_actOut),
-    .io_actOut    (_array_6_7_io_actOut),
-    .io_resetIn   (_array_7_7_io_resetOut),
-    .io_resetOut  (_array_6_7_io_resetOut)
-  );
-  PE array_7_0 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (weightSkew_7),
-    .io_weightOut (_array_7_0_io_weightOut),
-    .io_actIn     (_array_6_0_io_actOut),
-    .io_actOut    (io_actOut_0),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_0_io_resetOut)
-  );
-  PE array_7_1 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_0_io_weightOut),
-    .io_weightOut (_array_7_1_io_weightOut),
-    .io_actIn     (_array_6_1_io_actOut),
-    .io_actOut    (io_actOut_1),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_1_io_resetOut)
-  );
-  PE array_7_2 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_1_io_weightOut),
-    .io_weightOut (_array_7_2_io_weightOut),
-    .io_actIn     (_array_6_2_io_actOut),
-    .io_actOut    (io_actOut_2),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_2_io_resetOut)
-  );
-  PE array_7_3 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_2_io_weightOut),
-    .io_weightOut (_array_7_3_io_weightOut),
-    .io_actIn     (_array_6_3_io_actOut),
     .io_actOut    (io_actOut_3),
     .io_resetIn   (rst),
-    .io_resetOut  (_array_7_3_io_resetOut)
-  );
-  PE array_7_4 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_3_io_weightOut),
-    .io_weightOut (_array_7_4_io_weightOut),
-    .io_actIn     (_array_6_4_io_actOut),
-    .io_actOut    (io_actOut_4),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_4_io_resetOut)
-  );
-  PE array_7_5 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_4_io_weightOut),
-    .io_weightOut (_array_7_5_io_weightOut),
-    .io_actIn     (_array_6_5_io_actOut),
-    .io_actOut    (io_actOut_5),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_5_io_resetOut)
-  );
-  PE array_7_6 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_5_io_weightOut),
-    .io_weightOut (_array_7_6_io_weightOut),
-    .io_actIn     (_array_6_6_io_actOut),
-    .io_actOut    (io_actOut_6),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_6_io_resetOut)
-  );
-  PE array_7_7 (
-    .clock        (clock),
-    .reset        (reset),
-    .io_weightIn  (_array_7_6_io_weightOut),
-    .io_weightOut (/* unused */),
-    .io_actIn     (_array_6_7_io_actOut),
-    .io_actOut    (io_actOut_7),
-    .io_resetIn   (rst),
-    .io_resetOut  (_array_7_7_io_resetOut)
+    .io_resetOut  (_array_3_3_io_resetOut)
   );
 endmodule
 

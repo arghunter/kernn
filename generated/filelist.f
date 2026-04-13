@@ -1,3 +1,15 @@
+UartRx.sv
+UartTx.sv
+CommandParser.sv
 PE.sv
 SysArray.sv
 SysArrayController.sv
+TiledMatMulController.sv
+ActivationFunctionBank.sv
+configMem_16x120.sv
+LayerSequencer.sv
+weightMem_16384x32.sv
+actMem_4096x32.sv
+outMem_4096x128.sv
+biasMem_256x128.sv
+AlchitryTop.sv

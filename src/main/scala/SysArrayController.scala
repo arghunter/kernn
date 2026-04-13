@@ -17,11 +17,9 @@ class SysArrayController(val n: Int = 8, val weight_addr_width: Int = 16, val ac
 
     val output_base_addr = Input(UInt(output_addr_width.W))
 
-    // Port A: read
     val output_rd_addr = Output(UInt(output_addr_width.W))
     val output_data_r = Input(Vec(n, SInt(32.W)))
 
-    // Port B: write
     val output_wr_addr = Output(UInt(output_addr_width.W))
     val output_data_wr = Output(Vec(n, SInt(32.W)))
     val output_wen = Output(Bool())
@@ -47,7 +45,6 @@ class SysArrayController(val n: Int = 8, val weight_addr_width: Int = 16, val ac
   val drainResult = Reg(Vec(n, SInt(32.W)))
   val drainAddr = Reg(UInt(output_addr_width.W))
 
-  // Defaults
   io.weight_addr := weight_base_addr_reg + count
   io.activation_addr := activation_base_addr_reg + count
   io.output_rd_addr := 0.U
@@ -73,7 +70,6 @@ is(SysState.INIT_1) {
       count := count + 1.U
       when(count === (2 * n).U) {
         count := 1.U
-        // Override defaults to issue base + 0
         io.weight_addr := weight_base_addr_reg
         io.activation_addr := activation_base_addr_reg
         state := SysState.FEED
@@ -110,10 +106,8 @@ is(SysState.INIT_1) {
     }
 
     is(SysState.DRAIN_SKIP) {
-      // Rising edge of resetIn — first drain row appears next cycle
       array.io.resetIn := true.B
 
-      // Issue read address for first row's accumulation
       io.output_rd_addr := output_base_addr_reg + n.U - 1.U
 
       count := 1.U
@@ -123,8 +117,6 @@ is(SysState.INIT_1) {
     is(SysState.DRAIN_READ) {
       array.io.resetIn := true.B
 
-      // Port A: read data from address issued LAST cycle is now available
-      // Port B: write the accumulated result
       io.output_wen := true.B
       io.output_wr_addr := output_base_addr_reg + n.U - count
       for (c <- 0 until n) {
@@ -135,7 +127,6 @@ is(SysState.INIT_1) {
         }
       }
 
-      // Issue read address for NEXT row's accumulation
       count := count + 1.U
       io.output_rd_addr := output_base_addr_reg + n.U - (count + 1.U)
 
