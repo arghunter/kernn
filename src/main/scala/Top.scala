@@ -57,11 +57,15 @@ class AlchitryTop(val n: Int = 4, val clockFreq: Int = 100000000, val baudRate: 
 
   // === Activation Memory ===
   // Multiplexing the write port to prevent generating a 3rd port
-when(seq.io.act_wr_en) {
-  actMem.write(seq.io.act_wr_addr, seq.io.act_wr_data)
-}.elsewhen(parser.io.act_wr_en) {
-  actMem.write(parser.io.act_wr_addr, parser.io.act_wr_data)
+// === Activation Memory ===
+val act_wr_en   = seq.io.act_wr_en || parser.io.act_wr_en
+val act_wr_addr = Mux(seq.io.act_wr_en, seq.io.act_wr_addr, parser.io.act_wr_addr)
+val act_wr_data = Mux(seq.io.act_wr_en, seq.io.act_wr_data, parser.io.act_wr_data)
+
+when(act_wr_en) {
+  actMem.write(act_wr_addr, act_wr_data)
 }
+seq.io.act_rd_data := actMem.read(seq.io.act_rd_addr)
 
   
   // Single read port
@@ -76,13 +80,19 @@ when(seq.io.act_wr_en) {
 
   // === Output Memory ===
   // Multiplexing the write port
-when(seq.io.output_wen) {
-  outMem.write(seq.io.output_wr_addr, seq.io.output_data_wr)
-}.elsewhen(parser.io.out_wr_en) {
-  outMem.write(parser.io.out_wr_addr, parser.io.out_wr_data)
+// === Output Memory ===
+val out_wr_en   = seq.io.output_wen || parser.io.out_wr_en
+val out_wr_addr = Mux(seq.io.output_wen, seq.io.output_wr_addr, parser.io.out_wr_addr)
+val out_wr_data = Mux(seq.io.output_wen, seq.io.output_data_wr, parser.io.out_wr_data)
+
+when(out_wr_en) {
+  outMem.write(out_wr_addr, out_wr_data)
 }
-seq.io.output_data_r  := outMem.read(seq.io.output_rd_addr)
-parser.io.out_rd_data := outMem.read(parser.io.out_rd_addr)
+
+val out_rd_addr = Mux(seq.io.busy, seq.io.output_rd_addr, parser.io.out_rd_addr)
+val out_rd_data = outMem.read(out_rd_addr)
+seq.io.output_data_r := out_rd_data
+parser.io.out_rd_data := out_rd_data
 
   // Multiplexing the read port
   // Assuming the sequencer takes priority while busy, and parser reads when done

@@ -51,7 +51,9 @@ module CommandParser(
 );
 
   reg  [4:0]  state;
+  wire [4:0]  state_0 = state;
   reg  [7:0]  byteBuffer_0;
+  wire [7:0]  byteBuffer_0_0 = byteBuffer_0;
   reg  [7:0]  byteBuffer_1;
   reg  [7:0]  byteBuffer_2;
   reg  [7:0]  byteBuffer_3;
@@ -101,7 +103,9 @@ module CommandParser(
   reg  [7:0]  biasByteBuf_13;
   reg  [7:0]  biasByteBuf_14;
   reg  [15:0] sendAddr;
+  wire [15:0] sendAddr_0 = sendAddr;
   reg  [15:0] sendRemaining;
+  wire [15:0] sendRemaining_0 = sendRemaining;
   reg  [7:0]  sendByteIdx;
   reg  [7:0]  sendDataBuf_0;
   reg  [7:0]  sendDataBuf_1;
@@ -122,47 +126,51 @@ module CommandParser(
   reg  [15:0] inputBase;
   reg  [15:0] bufferBBase;
   reg         seqStartPending;
-  wire        _GEN = state == 5'h0;
-  wire        _GEN_0 = state == 5'h1;
-  wire        _GEN_1 = state == 5'h2;
-  wire        _GEN_2 = state == 5'h3;
-  wire        _GEN_3 = configByteIdx == 8'hE;
+  wire        _layer_probe = |state;
+  wire        _layer_probe_0 = state == 5'h1;
+  wire        _layer_probe_1 = byteBuffer_0 == 8'h6;
+  wire        _GEN = state == 5'h2;
+  wire        _GEN_0 = state == 5'h3;
+  wire        _GEN_1 = configByteIdx == 8'hE;
   wire [15:0] parsedConfig_weight_base = {byteBuffer_0, byteBuffer_1};
   wire [15:0] parsedConfig_bias_base = {byteBuffer_2, byteBuffer_3};
   wire [15:0] parsedConfig_M = {byteBuffer_4, byteBuffer_5};
   wire [15:0] parsedConfig_K = {byteBuffer_6, byteBuffer_7};
   wire [15:0] parsedConfig_N = {byteBuffer_8, byteBuffer_9};
-  wire [31:0] _GEN_4 = {{16{byteBuffer_12[7]}}, byteBuffer_12, byteBuffer_13};
-  wire        _GEN_5 = _GEN_2 & io_rx_valid & _GEN_3;
-  wire        _GEN_6 = _GEN_0 | _GEN_1;
-  wire        _GEN_7 = _GEN | _GEN_6;
-  wire        _GEN_8 = _GEN_7 | ~_GEN_5;
-  wire        _GEN_9 = _GEN_2 & io_rx_valid;
-  wire        _GEN_10 = state == 5'h4;
-  wire        _GEN_11 = state == 5'h5;
-  wire        _GEN_12 = loadByteIdx == 8'h3;
-  wire        _GEN_13 = _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10;
-  wire        _GEN_14 = io_rx_valid & _GEN_12;
-  wire        _GEN_15 = state == 5'h6;
-  wire        _GEN_16 = state == 5'h7;
-  wire        _GEN_17 = _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10 | _GEN_11 | _GEN_15;
-  wire        _GEN_18 = loadByteIdx == 8'hF;
-  wire        _GEN_19 = io_rx_valid & _GEN_18;
-  wire        _GEN_20 = _GEN_17 | ~(_GEN_16 & _GEN_19);
-  wire        _GEN_21 = state == 5'h8;
-  wire        _GEN_22 = state == 5'h9;
-  wire        _GEN_23 = _GEN_15 | _GEN_16 | _GEN_21;
-  wire        _GEN_24 = _GEN_22 & io_rx_valid;
-  wire        _GEN_25 = _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10 | _GEN_11 | _GEN_23;
-  wire        _GEN_26 = _GEN_22 & _GEN_14;
-  wire        _GEN_27 = state == 5'hA;
-  wire        _GEN_28 = state == 5'h11;
-  wire        _GEN_29 = state == 5'h10;
-  wire        _GEN_30 = state == 5'h12;
-  wire        _GEN_31 = state == 5'hB;
-  wire        _GEN_32 = state == 5'hC;
-  wire        _GEN_33 = state == 5'hD;
-  wire        _GEN_34 = state == 5'hE;
+  wire [31:0] _GEN_2 = {{16{byteBuffer_12[7]}}, byteBuffer_12, byteBuffer_13};
+  wire        _GEN_3 = _GEN_0 & io_rx_valid & _GEN_1;
+  wire        _GEN_4 = _layer_probe_0 | _GEN;
+  wire        _GEN_5 = ~(|state) | _GEN_4;
+  wire        _GEN_6 = _GEN_5 | ~_GEN_3;
+  wire        _GEN_7 = _GEN_0 & io_rx_valid;
+  wire        _GEN_8 = state == 5'h4;
+  wire        _layer_probe_2 = byteIdx == 8'h3;
+  wire        _GEN_9 = state == 5'h5;
+  wire        _GEN_10 = loadByteIdx == 8'h3;
+  wire        _GEN_11 = ~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8;
+  wire        _GEN_12 = io_rx_valid & _GEN_10;
+  wire        _GEN_13 = state == 5'h6;
+  wire        _GEN_14 = state == 5'h7;
+  wire        _GEN_15 =
+    ~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8 | _GEN_9 | _GEN_13;
+  wire        _GEN_16 = loadByteIdx == 8'hF;
+  wire        _GEN_17 = io_rx_valid & _GEN_16;
+  wire        _GEN_18 = _GEN_15 | ~(_GEN_14 & _GEN_17);
+  wire        _GEN_19 = state == 5'h8;
+  wire        _GEN_20 = state == 5'h9;
+  wire        _GEN_21 = _GEN_13 | _GEN_14 | _GEN_19;
+  wire        _GEN_22 = _GEN_20 & io_rx_valid;
+  wire        _GEN_23 =
+    ~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8 | _GEN_9 | _GEN_21;
+  wire        _GEN_24 = _GEN_20 & _GEN_12;
+  wire        _GEN_25 = state == 5'hA;
+  wire        _GEN_26 = state == 5'h11;
+  wire        _GEN_27 = state == 5'h10;
+  wire        _GEN_28 = state == 5'h12;
+  wire        _layer_probe_3 = state == 5'hB;
+  wire        _GEN_29 = state == 5'hC;
+  wire        _GEN_30 = state == 5'hD;
+  wire        _GEN_31 = state == 5'hE;
   reg  [7:0]  casez_tmp;
   always_comb begin
     casez (sendByteIdx[3:0])
@@ -200,51 +208,50 @@ module CommandParser(
         casez_tmp = sendDataBuf_15;
     endcase
   end // always_comb
-  wire        _GEN_35 = _GEN_32 | _GEN_33;
-  wire        _GEN_36 = state == 5'hF;
-  wire        _GEN_37 = _GEN_31 | _GEN_35;
-  wire        _GEN_38 =
-    _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10 | _GEN_11 | _GEN_15 | _GEN_16 | _GEN_21
-    | _GEN_22 | _GEN_27 | _GEN_28 | _GEN_29;
-  wire        _GEN_39 = byteBuffer_0 == 8'h1;
-  wire        _GEN_40 = byteBuffer_0 == 8'h2;
-  wire        _GEN_41 = byteBuffer_0 == 8'h3;
-  wire        _GEN_42 = byteBuffer_0 == 8'h4;
-  wire        _GEN_43 = byteBuffer_0 == 8'h5;
-  wire        _GEN_44 = byteBuffer_0 == 8'h6;
-  wire        _GEN_45 = loadRemaining == 16'h1;
-  wire        _GEN_46 = io_rx_valid & _GEN_12 & _GEN_45;
-  wire        _GEN_47 = io_rx_valid & loadByteIdx[1:0] == 2'h0;
-  wire        _GEN_48 = io_rx_valid & loadByteIdx[1:0] == 2'h1;
-  wire        _GEN_49 = io_rx_valid & loadByteIdx[1:0] == 2'h2;
-  wire        _GEN_50 = io_rx_valid & (&(loadByteIdx[1:0]));
-  wire        _GEN_51 = _GEN | _GEN_0;
+  wire        _GEN_32 = _GEN_29 | _GEN_30;
+  wire        _layer_probe_4 = state == 5'hF;
+  wire        _GEN_33 = _layer_probe_3 | _GEN_32;
+  wire        _GEN_34 =
+    ~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8 | _GEN_9 | _GEN_13 | _GEN_14
+    | _GEN_19 | _GEN_20 | _GEN_25 | _GEN_26 | _GEN_27;
+  wire        _GEN_35 = byteBuffer_0 == 8'h1;
+  wire        _GEN_36 = byteBuffer_0 == 8'h2;
+  wire        _GEN_37 = byteBuffer_0 == 8'h3;
+  wire        _GEN_38 = byteBuffer_0 == 8'h4;
+  wire        _GEN_39 = byteBuffer_0 == 8'h5;
+  wire        _GEN_40 = loadRemaining == 16'h1;
+  wire        _GEN_41 = io_rx_valid & _GEN_10 & _GEN_40;
+  wire        _GEN_42 = io_rx_valid & loadByteIdx[1:0] == 2'h0;
+  wire        _GEN_43 = io_rx_valid & loadByteIdx[1:0] == 2'h1;
+  wire        _GEN_44 = io_rx_valid & loadByteIdx[1:0] == 2'h2;
+  wire        _GEN_45 = io_rx_valid & (&(loadByteIdx[1:0]));
+  wire        _GEN_46 = ~(|state) | _layer_probe_0;
   wire [3:0]  _nextConfig_T = configIdx + 4'h1;
-  wire        _GEN_52 = byteIdx == 8'h3;
-  wire        _GEN_53 = io_rx_valid & _GEN_52;
-  wire        _GEN_54 = _GEN_1 | _GEN_2;
-  wire        _GEN_55 =
-    _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10 | _GEN_11 | _GEN_15 | _GEN_16 | _GEN_21
-    | _GEN_22;
-  wire        _GEN_56 = _GEN_28 | _GEN_29 | _GEN_30;
-  wire        _GEN_57 =
-    _GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10 | _GEN_11 | _GEN_15 | _GEN_16 | _GEN_21
-    | _GEN_22 | _GEN_27 | _GEN_28 | _GEN_29 | _GEN_30 | _GEN_31 | _GEN_32;
-  wire        _GEN_58 = io_tx_ready & sendByteIdx == 8'hF;
-  wire        _GEN_59 = io_rx_valid & byteIdx[3:0] == 4'h0;
-  wire        _GEN_60 = io_rx_valid & byteIdx[3:0] == 4'h1;
-  wire        _GEN_61 = io_rx_valid & byteIdx[3:0] == 4'h2;
-  wire        _GEN_62 = io_rx_valid & byteIdx[3:0] == 4'h3;
-  wire        _GEN_63 = io_rx_valid & byteIdx[3:0] == 4'h4;
-  wire        _GEN_64 = io_rx_valid & byteIdx[3:0] == 4'h5;
-  wire        _GEN_65 = io_rx_valid & byteIdx[3:0] == 4'h6;
-  wire        _GEN_66 = io_rx_valid & byteIdx[3:0] == 4'h7;
-  wire        _GEN_67 = io_rx_valid & byteIdx[3:0] == 4'h8;
-  wire        _GEN_68 = io_rx_valid & byteIdx[3:0] == 4'h9;
-  wire        _GEN_69 = io_rx_valid & byteIdx[3:0] == 4'hA;
-  wire        _GEN_70 = io_rx_valid & byteIdx[3:0] == 4'hB;
-  wire        _GEN_71 = io_rx_valid & byteIdx[3:0] == 4'hC;
-  wire        _GEN_72 = io_rx_valid & byteIdx[3:0] == 4'hD;
+  wire        _GEN_47 = io_rx_valid & _layer_probe_2;
+  wire        _GEN_48 = _GEN | _GEN_0;
+  wire        _GEN_49 =
+    ~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8 | _GEN_9 | _GEN_13 | _GEN_14
+    | _GEN_19 | _GEN_20;
+  wire        _GEN_50 = _GEN_26 | _GEN_27 | _GEN_28;
+  wire        _GEN_51 =
+    ~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8 | _GEN_9 | _GEN_13 | _GEN_14
+    | _GEN_19 | _GEN_20 | _GEN_25 | _GEN_26 | _GEN_27 | _GEN_28 | _layer_probe_3
+    | _GEN_29;
+  wire        _GEN_52 = io_tx_ready & sendByteIdx == 8'hF;
+  wire        _GEN_53 = io_rx_valid & byteIdx[3:0] == 4'h0;
+  wire        _GEN_54 = io_rx_valid & byteIdx[3:0] == 4'h1;
+  wire        _GEN_55 = io_rx_valid & byteIdx[3:0] == 4'h2;
+  wire        _GEN_56 = io_rx_valid & byteIdx[3:0] == 4'h3;
+  wire        _GEN_57 = io_rx_valid & byteIdx[3:0] == 4'h4;
+  wire        _GEN_58 = io_rx_valid & byteIdx[3:0] == 4'h5;
+  wire        _GEN_59 = io_rx_valid & byteIdx[3:0] == 4'h6;
+  wire        _GEN_60 = io_rx_valid & byteIdx[3:0] == 4'h7;
+  wire        _GEN_61 = io_rx_valid & byteIdx[3:0] == 4'h8;
+  wire        _GEN_62 = io_rx_valid & byteIdx[3:0] == 4'h9;
+  wire        _GEN_63 = io_rx_valid & byteIdx[3:0] == 4'hA;
+  wire        _GEN_64 = io_rx_valid & byteIdx[3:0] == 4'hB;
+  wire        _GEN_65 = io_rx_valid & byteIdx[3:0] == 4'hC;
+  wire        _GEN_66 = io_rx_valid & byteIdx[3:0] == 4'hD;
   always @(posedge clock) begin
     if (reset) begin
       state <= 5'h0;
@@ -312,116 +319,109 @@ module CommandParser(
       seqStartPending <= 1'h0;
     end
     else begin
-      if (_GEN) begin
-        if (io_rx_valid) begin
-          state <= 5'h1;
-          byteBuffer_0 <= io_rx_data;
-          byteIdx <= 8'h0;
-        end
-      end
-      else begin
-        if (_GEN_0) begin
-          if (_GEN_39)
+      if (|state) begin
+        if (_layer_probe_0) begin
+          if (_GEN_35)
             state <= 5'h2;
-          else if (_GEN_40)
+          else if (_GEN_36)
             state <= 5'h4;
-          else if (_GEN_41)
+          else if (_GEN_37)
             state <= 5'h6;
-          else if (_GEN_42)
+          else if (_GEN_38)
             state <= 5'h8;
-          else if (_GEN_43)
+          else if (_GEN_39)
             state <= 5'hA;
-          else if (_GEN_44)
+          else if (_layer_probe_1)
             state <= 5'hB;
-          if (_GEN_39 | ~(_GEN_40 | _GEN_41 | _GEN_42 | _GEN_43 | _GEN_44)) begin
+          if (_GEN_35 | ~(_GEN_36 | _GEN_37 | _GEN_38 | _GEN_39 | _layer_probe_1)) begin
           end
           else
             byteIdx <= 8'h0;
         end
         else begin
-          if (_GEN_1) begin
+          if (_GEN) begin
             if (io_rx_valid)
               state <= 5'h3;
           end
-          else if (_GEN_2) begin
-            if (io_rx_valid & _GEN_3 & {4'h0, _nextConfig_T} == numLayers)
+          else if (_GEN_0) begin
+            if (io_rx_valid & _GEN_1 & {4'h0, _nextConfig_T} == numLayers)
               state <= 5'h0;
           end
-          else if (_GEN_10) begin
-            if (_GEN_53)
+          else if (_GEN_8) begin
+            if (_GEN_47)
               state <= 5'h5;
           end
-          else if (_GEN_11) begin
-            if (_GEN_46)
+          else if (_GEN_9) begin
+            if (_GEN_41)
               state <= 5'h0;
           end
-          else if (_GEN_15) begin
-            if (_GEN_53)
+          else if (_GEN_13) begin
+            if (_GEN_47)
               state <= 5'h7;
           end
-          else if (_GEN_16) begin
-            if (io_rx_valid & _GEN_18 & _GEN_45)
+          else if (_GEN_14) begin
+            if (io_rx_valid & _GEN_16 & _GEN_40)
               state <= 5'h0;
           end
-          else if (_GEN_21) begin
-            if (_GEN_53)
+          else if (_GEN_19) begin
+            if (_GEN_47)
               state <= 5'h9;
           end
-          else if (_GEN_22) begin
-            if (_GEN_46)
+          else if (_GEN_20) begin
+            if (_GEN_41)
               state <= 5'h0;
           end
-          else if (_GEN_27) begin
-            if (_GEN_53)
+          else if (_GEN_25) begin
+            if (_GEN_47)
               state <= 5'h11;
           end
-          else if (_GEN_28) begin
+          else if (_GEN_26) begin
             if (io_seq_busy & ~io_seq_done)
               state <= 5'h10;
           end
-          else if (_GEN_29) begin
+          else if (_GEN_27) begin
             if (io_seq_done)
               state <= 5'h12;
           end
-          else if (_GEN_30) begin
+          else if (_GEN_28) begin
             if (io_tx_ready)
               state <= 5'h0;
           end
-          else if (_GEN_31) begin
-            if (_GEN_53)
+          else if (_layer_probe_3) begin
+            if (_GEN_47)
               state <= 5'hC;
           end
-          else if (_GEN_32)
+          else if (_GEN_29)
             state <= 5'hD;
-          else if (_GEN_33)
+          else if (_GEN_30)
             state <= 5'hE;
-          else if (_GEN_34) begin
-            if (_GEN_58)
+          else if (_GEN_31) begin
+            if (_GEN_52)
               state <= sendRemaining == 16'h1 ? 5'hF : 5'hC;
           end
-          else if (_GEN_36 & io_tx_ready)
+          else if (_layer_probe_4 & io_tx_ready)
             state <= 5'h0;
-          if (~_GEN_54) begin
-            if (_GEN_10) begin
+          if (~_GEN_48) begin
+            if (_GEN_8) begin
               if (io_rx_valid)
                 byteIdx <= byteIdx + 8'h1;
             end
-            else if (~_GEN_11) begin
-              if (_GEN_15) begin
+            else if (~_GEN_9) begin
+              if (_GEN_13) begin
                 if (io_rx_valid)
                   byteIdx <= byteIdx + 8'h1;
               end
-              else if (~_GEN_16) begin
-                if (_GEN_21) begin
+              else if (~_GEN_14) begin
+                if (_GEN_19) begin
                   if (io_rx_valid)
                     byteIdx <= byteIdx + 8'h1;
                 end
-                else if (~_GEN_22) begin
-                  if (_GEN_27) begin
+                else if (~_GEN_20) begin
+                  if (_GEN_25) begin
                     if (io_rx_valid)
                       byteIdx <= byteIdx + 8'h1;
                   end
-                  else if (_GEN_56 | ~(_GEN_31 & io_rx_valid)) begin
+                  else if (_GEN_50 | ~(_layer_probe_3 & io_rx_valid)) begin
                   end
                   else
                     byteIdx <= byteIdx + 8'h1;
@@ -430,31 +430,31 @@ module CommandParser(
             end
           end
         end
-        if (~_GEN_6) begin
-          if (_GEN_2) begin
+        if (~_GEN_4) begin
+          if (_GEN_0) begin
             if (io_rx_valid & configByteIdx[3:0] == 4'h0)
               byteBuffer_0 <= io_rx_data;
           end
-          else if (_GEN_10) begin
-            if (_GEN_59)
+          else if (_GEN_8) begin
+            if (_GEN_53)
               byteBuffer_0 <= io_rx_data;
           end
-          else if (~_GEN_11) begin
-            if (_GEN_15) begin
-              if (_GEN_59)
+          else if (~_GEN_9) begin
+            if (_GEN_13) begin
+              if (_GEN_53)
                 byteBuffer_0 <= io_rx_data;
             end
-            else if (~_GEN_16) begin
-              if (_GEN_21) begin
-                if (_GEN_59)
+            else if (~_GEN_14) begin
+              if (_GEN_19) begin
+                if (_GEN_53)
                   byteBuffer_0 <= io_rx_data;
               end
-              else if (~_GEN_22) begin
-                if (_GEN_27) begin
-                  if (_GEN_59)
+              else if (~_GEN_20) begin
+                if (_GEN_25) begin
+                  if (_GEN_53)
                     byteBuffer_0 <= io_rx_data;
                 end
-                else if (_GEN_56 | ~(_GEN_31 & _GEN_59)) begin
+                else if (_GEN_50 | ~(_layer_probe_3 & _GEN_53)) begin
                 end
                 else
                   byteBuffer_0 <= io_rx_data;
@@ -463,8 +463,13 @@ module CommandParser(
           end
         end
       end
-      if (~_GEN_7) begin
-        if (_GEN_2) begin
+      else if (io_rx_valid) begin
+        state <= 5'h1;
+        byteBuffer_0 <= io_rx_data;
+        byteIdx <= 8'h0;
+      end
+      if (~_GEN_5) begin
+        if (_GEN_0) begin
           if (io_rx_valid & configByteIdx[3:0] == 4'h1)
             byteBuffer_1 <= io_rx_data;
           if (io_rx_valid & configByteIdx[3:0] == 4'h2)
@@ -492,171 +497,171 @@ module CommandParser(
           if (io_rx_valid & configByteIdx[3:0] == 4'hD)
             byteBuffer_13 <= io_rx_data;
         end
-        else if (_GEN_10) begin
-          if (_GEN_60)
+        else if (_GEN_8) begin
+          if (_GEN_54)
             byteBuffer_1 <= io_rx_data;
-          if (_GEN_61)
+          if (_GEN_55)
             byteBuffer_2 <= io_rx_data;
-          if (_GEN_62)
+          if (_GEN_56)
             byteBuffer_3 <= io_rx_data;
-          if (_GEN_63)
+          if (_GEN_57)
             byteBuffer_4 <= io_rx_data;
-          if (_GEN_64)
+          if (_GEN_58)
             byteBuffer_5 <= io_rx_data;
-          if (_GEN_65)
+          if (_GEN_59)
             byteBuffer_6 <= io_rx_data;
-          if (_GEN_66)
+          if (_GEN_60)
             byteBuffer_7 <= io_rx_data;
-          if (_GEN_67)
+          if (_GEN_61)
             byteBuffer_8 <= io_rx_data;
-          if (_GEN_68)
+          if (_GEN_62)
             byteBuffer_9 <= io_rx_data;
-          if (_GEN_69)
+          if (_GEN_63)
             byteBuffer_10 <= io_rx_data;
-          if (_GEN_70)
+          if (_GEN_64)
             byteBuffer_11 <= io_rx_data;
-          if (_GEN_71)
+          if (_GEN_65)
             byteBuffer_12 <= io_rx_data;
-          if (_GEN_72)
+          if (_GEN_66)
             byteBuffer_13 <= io_rx_data;
         end
-        else if (~_GEN_11) begin
-          if (_GEN_15) begin
-            if (_GEN_60)
+        else if (~_GEN_9) begin
+          if (_GEN_13) begin
+            if (_GEN_54)
               byteBuffer_1 <= io_rx_data;
-            if (_GEN_61)
+            if (_GEN_55)
               byteBuffer_2 <= io_rx_data;
-            if (_GEN_62)
+            if (_GEN_56)
               byteBuffer_3 <= io_rx_data;
-            if (_GEN_63)
+            if (_GEN_57)
               byteBuffer_4 <= io_rx_data;
-            if (_GEN_64)
+            if (_GEN_58)
               byteBuffer_5 <= io_rx_data;
-            if (_GEN_65)
+            if (_GEN_59)
               byteBuffer_6 <= io_rx_data;
-            if (_GEN_66)
+            if (_GEN_60)
               byteBuffer_7 <= io_rx_data;
-            if (_GEN_67)
+            if (_GEN_61)
               byteBuffer_8 <= io_rx_data;
-            if (_GEN_68)
+            if (_GEN_62)
               byteBuffer_9 <= io_rx_data;
-            if (_GEN_69)
+            if (_GEN_63)
               byteBuffer_10 <= io_rx_data;
-            if (_GEN_70)
+            if (_GEN_64)
               byteBuffer_11 <= io_rx_data;
-            if (_GEN_71)
+            if (_GEN_65)
               byteBuffer_12 <= io_rx_data;
-            if (_GEN_72)
+            if (_GEN_66)
               byteBuffer_13 <= io_rx_data;
           end
-          else if (~_GEN_16) begin
-            if (_GEN_21) begin
-              if (_GEN_60)
+          else if (~_GEN_14) begin
+            if (_GEN_19) begin
+              if (_GEN_54)
                 byteBuffer_1 <= io_rx_data;
-              if (_GEN_61)
+              if (_GEN_55)
                 byteBuffer_2 <= io_rx_data;
-              if (_GEN_62)
+              if (_GEN_56)
                 byteBuffer_3 <= io_rx_data;
-              if (_GEN_63)
+              if (_GEN_57)
                 byteBuffer_4 <= io_rx_data;
-              if (_GEN_64)
+              if (_GEN_58)
                 byteBuffer_5 <= io_rx_data;
-              if (_GEN_65)
+              if (_GEN_59)
                 byteBuffer_6 <= io_rx_data;
-              if (_GEN_66)
+              if (_GEN_60)
                 byteBuffer_7 <= io_rx_data;
-              if (_GEN_67)
+              if (_GEN_61)
                 byteBuffer_8 <= io_rx_data;
-              if (_GEN_68)
+              if (_GEN_62)
                 byteBuffer_9 <= io_rx_data;
-              if (_GEN_69)
+              if (_GEN_63)
                 byteBuffer_10 <= io_rx_data;
-              if (_GEN_70)
+              if (_GEN_64)
                 byteBuffer_11 <= io_rx_data;
-              if (_GEN_71)
+              if (_GEN_65)
                 byteBuffer_12 <= io_rx_data;
-              if (_GEN_72)
+              if (_GEN_66)
                 byteBuffer_13 <= io_rx_data;
             end
-            else if (~_GEN_22) begin
-              if (_GEN_27) begin
-                if (_GEN_60)
+            else if (~_GEN_20) begin
+              if (_GEN_25) begin
+                if (_GEN_54)
                   byteBuffer_1 <= io_rx_data;
-                if (_GEN_61)
+                if (_GEN_55)
                   byteBuffer_2 <= io_rx_data;
-                if (_GEN_62)
+                if (_GEN_56)
                   byteBuffer_3 <= io_rx_data;
-                if (_GEN_63)
+                if (_GEN_57)
                   byteBuffer_4 <= io_rx_data;
-                if (_GEN_64)
+                if (_GEN_58)
                   byteBuffer_5 <= io_rx_data;
-                if (_GEN_65)
+                if (_GEN_59)
                   byteBuffer_6 <= io_rx_data;
-                if (_GEN_66)
+                if (_GEN_60)
                   byteBuffer_7 <= io_rx_data;
-                if (_GEN_67)
+                if (_GEN_61)
                   byteBuffer_8 <= io_rx_data;
-                if (_GEN_68)
+                if (_GEN_62)
                   byteBuffer_9 <= io_rx_data;
-                if (_GEN_69)
+                if (_GEN_63)
                   byteBuffer_10 <= io_rx_data;
-                if (_GEN_70)
+                if (_GEN_64)
                   byteBuffer_11 <= io_rx_data;
-                if (_GEN_71)
+                if (_GEN_65)
                   byteBuffer_12 <= io_rx_data;
-                if (_GEN_72)
+                if (_GEN_66)
                   byteBuffer_13 <= io_rx_data;
               end
               else begin
-                if (_GEN_56 | ~(_GEN_31 & _GEN_60)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_54)) begin
                 end
                 else
                   byteBuffer_1 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_61)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_55)) begin
                 end
                 else
                   byteBuffer_2 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_62)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_56)) begin
                 end
                 else
                   byteBuffer_3 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_63)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_57)) begin
                 end
                 else
                   byteBuffer_4 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_64)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_58)) begin
                 end
                 else
                   byteBuffer_5 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_65)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_59)) begin
                 end
                 else
                   byteBuffer_6 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_66)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_60)) begin
                 end
                 else
                   byteBuffer_7 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_67)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_61)) begin
                 end
                 else
                   byteBuffer_8 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_68)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_62)) begin
                 end
                 else
                   byteBuffer_9 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_69)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_63)) begin
                 end
                 else
                   byteBuffer_10 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_70)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_64)) begin
                 end
                 else
                   byteBuffer_11 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_71)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_65)) begin
                 end
                 else
                   byteBuffer_12 <= io_rx_data;
-                if (_GEN_56 | ~(_GEN_31 & _GEN_72)) begin
+                if (_GEN_50 | ~(_layer_probe_3 & _GEN_66)) begin
                 end
                 else
                   byteBuffer_13 <= io_rx_data;
@@ -665,183 +670,183 @@ module CommandParser(
           end
         end
       end
-      if (_GEN_51 | ~(_GEN_1 & io_rx_valid)) begin
+      if (_GEN_46 | ~(_GEN & io_rx_valid)) begin
       end
       else
         numLayers <= io_rx_data;
-      if (~_GEN_51) begin
-        if (_GEN_1) begin
+      if (~_GEN_46) begin
+        if (_GEN) begin
           if (io_rx_valid) begin
             configIdx <= 4'h0;
             configByteIdx <= 8'h0;
           end
         end
         else begin
-          if (_GEN_5)
+          if (_GEN_3)
             configIdx <= _nextConfig_T;
-          if (_GEN_9)
-            configByteIdx <= _GEN_3 ? 8'h0 : configByteIdx + 8'h1;
+          if (_GEN_7)
+            configByteIdx <= _GEN_1 ? 8'h0 : configByteIdx + 8'h1;
         end
       end
-      if (~(_GEN | _GEN_0 | _GEN_54)) begin
-        if (_GEN_10) begin
-          if (_GEN_53) begin
+      if (~(~(|state) | _layer_probe_0 | _GEN_48)) begin
+        if (_GEN_8) begin
+          if (_GEN_47) begin
             loadAddr <= {byteBuffer_0, byteBuffer_1};
             loadRemaining <= {byteBuffer_2, io_rx_data};
             loadByteIdx <= 8'h0;
           end
         end
-        else if (_GEN_11) begin
-          if (_GEN_14) begin
+        else if (_GEN_9) begin
+          if (_GEN_12) begin
             loadAddr <= loadAddr + 16'h1;
             loadRemaining <= loadRemaining - 16'h1;
           end
           if (io_rx_valid)
-            loadByteIdx <= _GEN_12 ? 8'h0 : loadByteIdx + 8'h1;
+            loadByteIdx <= _GEN_10 ? 8'h0 : loadByteIdx + 8'h1;
         end
-        else if (_GEN_15) begin
-          if (_GEN_53) begin
+        else if (_GEN_13) begin
+          if (_GEN_47) begin
             loadAddr <= {byteBuffer_0, byteBuffer_1};
             loadRemaining <= {byteBuffer_2, io_rx_data};
             loadByteIdx <= 8'h0;
           end
         end
-        else if (_GEN_16) begin
-          if (_GEN_19) begin
+        else if (_GEN_14) begin
+          if (_GEN_17) begin
             loadAddr <= loadAddr + 16'h1;
             loadRemaining <= loadRemaining - 16'h1;
           end
           if (io_rx_valid)
-            loadByteIdx <= _GEN_18 ? 8'h0 : loadByteIdx + 8'h1;
+            loadByteIdx <= _GEN_16 ? 8'h0 : loadByteIdx + 8'h1;
         end
-        else if (_GEN_21) begin
-          if (_GEN_53) begin
+        else if (_GEN_19) begin
+          if (_GEN_47) begin
             loadAddr <= {byteBuffer_0, byteBuffer_1};
             loadRemaining <= {byteBuffer_2, io_rx_data};
             loadByteIdx <= 8'h0;
           end
         end
         else begin
-          if (_GEN_26) begin
+          if (_GEN_24) begin
             loadAddr <= loadAddr + 16'h1;
             loadRemaining <= loadRemaining - 16'h1;
           end
-          if (_GEN_24)
-            loadByteIdx <= _GEN_12 ? 8'h0 : loadByteIdx + 8'h1;
+          if (_GEN_22)
+            loadByteIdx <= _GEN_10 ? 8'h0 : loadByteIdx + 8'h1;
         end
       end
-      if (~_GEN_13) begin
-        if (_GEN_11) begin
-          if (_GEN_47)
+      if (~_GEN_11) begin
+        if (_GEN_9) begin
+          if (_GEN_42)
             dataBuf_0 <= io_rx_data;
-          if (_GEN_48)
+          if (_GEN_43)
             dataBuf_1 <= io_rx_data;
-          if (_GEN_49)
+          if (_GEN_44)
             dataBuf_2 <= io_rx_data;
-          if (_GEN_50)
+          if (_GEN_45)
             dataBuf_3 <= io_rx_data;
         end
         else begin
-          if (_GEN_23 | ~(_GEN_22 & _GEN_47)) begin
+          if (_GEN_21 | ~(_GEN_20 & _GEN_42)) begin
           end
           else
             dataBuf_0 <= io_rx_data;
-          if (_GEN_23 | ~(_GEN_22 & _GEN_48)) begin
+          if (_GEN_21 | ~(_GEN_20 & _GEN_43)) begin
           end
           else
             dataBuf_1 <= io_rx_data;
-          if (_GEN_23 | ~(_GEN_22 & _GEN_49)) begin
+          if (_GEN_21 | ~(_GEN_20 & _GEN_44)) begin
           end
           else
             dataBuf_2 <= io_rx_data;
-          if (_GEN_23 | ~(_GEN_22 & _GEN_50)) begin
+          if (_GEN_21 | ~(_GEN_20 & _GEN_45)) begin
           end
           else
             dataBuf_3 <= io_rx_data;
         end
       end
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h0)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h0)) begin
       end
       else
         biasByteBuf_0 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h1)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h1)) begin
       end
       else
         biasByteBuf_1 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h2)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h2)) begin
       end
       else
         biasByteBuf_2 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h3)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h3)) begin
       end
       else
         biasByteBuf_3 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h4)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h4)) begin
       end
       else
         biasByteBuf_4 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h5)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h5)) begin
       end
       else
         biasByteBuf_5 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h6)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h6)) begin
       end
       else
         biasByteBuf_6 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h7)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h7)) begin
       end
       else
         biasByteBuf_7 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h8)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h8)) begin
       end
       else
         biasByteBuf_8 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'h9)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'h9)) begin
       end
       else
         biasByteBuf_9 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'hA)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'hA)) begin
       end
       else
         biasByteBuf_10 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'hB)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'hB)) begin
       end
       else
         biasByteBuf_11 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'hC)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'hC)) begin
       end
       else
         biasByteBuf_12 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'hD)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'hD)) begin
       end
       else
         biasByteBuf_13 <= io_rx_data;
-      if (_GEN_17 | ~(_GEN_16 & io_rx_valid & loadByteIdx[3:0] == 4'hE)) begin
+      if (_GEN_15 | ~(_GEN_14 & io_rx_valid & loadByteIdx[3:0] == 4'hE)) begin
       end
       else
         biasByteBuf_14 <= io_rx_data;
-      if (~(_GEN | _GEN_0 | _GEN_1 | _GEN_2 | _GEN_10 | _GEN_11 | _GEN_15 | _GEN_16
-            | _GEN_21 | _GEN_22 | _GEN_27 | _GEN_56)) begin
-        if (_GEN_31) begin
-          if (_GEN_53) begin
+      if (~(~(|state) | _layer_probe_0 | _GEN | _GEN_0 | _GEN_8 | _GEN_9 | _GEN_13
+            | _GEN_14 | _GEN_19 | _GEN_20 | _GEN_25 | _GEN_50)) begin
+        if (_layer_probe_3) begin
+          if (_GEN_47) begin
             sendAddr <= {byteBuffer_0, byteBuffer_1};
             sendRemaining <= {byteBuffer_2, io_rx_data};
           end
         end
-        else if (_GEN_35 | ~(_GEN_34 & _GEN_58)) begin
+        else if (_GEN_32 | ~(_GEN_31 & _GEN_52)) begin
         end
         else begin
           sendAddr <= sendAddr + 16'h1;
           sendRemaining <= sendRemaining - 16'h1;
         end
       end
-      if (~_GEN_57) begin
-        if (_GEN_33)
+      if (~_GEN_51) begin
+        if (_GEN_30)
           sendByteIdx <= 8'h0;
-        else if (_GEN_34 & io_tx_ready)
+        else if (_GEN_31 & io_tx_ready)
           sendByteIdx <= sendByteIdx + 8'h1;
       end
-      if (_GEN_57 | ~_GEN_33) begin
+      if (_GEN_51 | ~_GEN_30) begin
       end
       else begin
         sendDataBuf_0 <= io_out_rd_data_0[7:0];
@@ -861,15 +866,15 @@ module CommandParser(
         sendDataBuf_14 <= io_out_rd_data_3[23:16];
         sendDataBuf_15 <= io_out_rd_data_3[31:24];
       end
-      if (_GEN_55 | ~(_GEN_27 & _GEN_53)) begin
+      if (_GEN_49 | ~(_GEN_25 & _GEN_47)) begin
       end
       else begin
         inputBase <= {byteBuffer_0, byteBuffer_1};
         bufferBBase <= {byteBuffer_2, io_rx_data};
       end
-      seqStartPending <= ~_GEN_55 & _GEN_27 & io_rx_valid & _GEN_52;
+      seqStartPending <= ~_GEN_49 & _GEN_25 & io_rx_valid & _layer_probe_2;
     end
-    if (_GEN_8) begin
+    if (_GEN_6) begin
     end
     else begin
       configReg_weight_base <= parsedConfig_weight_base;
@@ -879,55 +884,55 @@ module CommandParser(
       configReg_N <= parsedConfig_N;
       configReg_activation <= byteBuffer_10[1:0];
       configReg_shift <= byteBuffer_11[4:0];
-      configReg_relu6_thresh <= _GEN_4;
+      configReg_relu6_thresh <= _GEN_2;
       configReg_clamp_en <= io_rx_data[0];
     end
   end // always @(posedge)
   assign io_tx_data =
-    _GEN_38
+    _GEN_34
       ? 8'h0
-      : _GEN_30 ? 8'hAA : _GEN_37 ? 8'h0 : _GEN_34 ? casez_tmp : {8{_GEN_36}};
-  assign io_tx_valid = ~_GEN_38 & (_GEN_30 | ~_GEN_37 & (_GEN_34 | _GEN_36));
+      : _GEN_28 ? 8'hAA : _GEN_33 ? 8'h0 : _GEN_31 ? casez_tmp : {8{_layer_probe_4}};
+  assign io_tx_valid = ~_GEN_34 & (_GEN_28 | ~_GEN_33 & (_GEN_31 | _layer_probe_4));
   assign io_seq_start = seqStartPending;
   assign io_seq_num_layers = numLayers;
   assign io_seq_input_base = inputBase;
   assign io_seq_buffer_b_base = bufferBBase;
-  assign io_config_wr_en = ~_GEN_7 & _GEN_9 & _GEN_3;
+  assign io_config_wr_en = ~_GEN_5 & _GEN_7 & _GEN_1;
   assign io_config_wr_idx = configIdx;
   assign io_config_wr_data_weight_base =
-    _GEN_8 ? configReg_weight_base : parsedConfig_weight_base;
+    _GEN_6 ? configReg_weight_base : parsedConfig_weight_base;
   assign io_config_wr_data_bias_base =
-    _GEN_8 ? configReg_bias_base : parsedConfig_bias_base;
-  assign io_config_wr_data_M = _GEN_8 ? configReg_M : parsedConfig_M;
-  assign io_config_wr_data_K = _GEN_8 ? configReg_K : parsedConfig_K;
-  assign io_config_wr_data_N = _GEN_8 ? configReg_N : parsedConfig_N;
+    _GEN_6 ? configReg_bias_base : parsedConfig_bias_base;
+  assign io_config_wr_data_M = _GEN_6 ? configReg_M : parsedConfig_M;
+  assign io_config_wr_data_K = _GEN_6 ? configReg_K : parsedConfig_K;
+  assign io_config_wr_data_N = _GEN_6 ? configReg_N : parsedConfig_N;
   assign io_config_wr_data_activation =
-    _GEN_8 ? configReg_activation : byteBuffer_10[1:0];
-  assign io_config_wr_data_shift = _GEN_8 ? configReg_shift : byteBuffer_11[4:0];
-  assign io_config_wr_data_relu6_thresh = _GEN_8 ? configReg_relu6_thresh : _GEN_4;
-  assign io_config_wr_data_clamp_en = _GEN_8 ? configReg_clamp_en : io_rx_data[0];
-  assign io_wt_wr_en = ~_GEN_13 & _GEN_11 & io_rx_valid & _GEN_12;
+    _GEN_6 ? configReg_activation : byteBuffer_10[1:0];
+  assign io_config_wr_data_shift = _GEN_6 ? configReg_shift : byteBuffer_11[4:0];
+  assign io_config_wr_data_relu6_thresh = _GEN_6 ? configReg_relu6_thresh : _GEN_2;
+  assign io_config_wr_data_clamp_en = _GEN_6 ? configReg_clamp_en : io_rx_data[0];
+  assign io_wt_wr_en = ~_GEN_11 & _GEN_9 & io_rx_valid & _GEN_10;
   assign io_wt_wr_addr = loadAddr;
   assign io_wt_wr_data_0 = dataBuf_0;
   assign io_wt_wr_data_1 = dataBuf_1;
   assign io_wt_wr_data_2 = dataBuf_2;
-  assign io_wt_wr_data_3 = _GEN_13 | ~(_GEN_11 & _GEN_14) ? dataBuf_3 : io_rx_data;
-  assign io_bias_wr_en = ~_GEN_17 & _GEN_16 & io_rx_valid & _GEN_18;
+  assign io_wt_wr_data_3 = _GEN_11 | ~(_GEN_9 & _GEN_12) ? dataBuf_3 : io_rx_data;
+  assign io_bias_wr_en = ~_GEN_15 & _GEN_14 & io_rx_valid & _GEN_16;
   assign io_bias_wr_addr = loadAddr;
   assign io_bias_wr_data_0 =
-    _GEN_20 ? 32'h0 : {biasByteBuf_3, biasByteBuf_2, biasByteBuf_1, biasByteBuf_0};
+    _GEN_18 ? 32'h0 : {biasByteBuf_3, biasByteBuf_2, biasByteBuf_1, biasByteBuf_0};
   assign io_bias_wr_data_1 =
-    _GEN_20 ? 32'h0 : {biasByteBuf_7, biasByteBuf_6, biasByteBuf_5, biasByteBuf_4};
+    _GEN_18 ? 32'h0 : {biasByteBuf_7, biasByteBuf_6, biasByteBuf_5, biasByteBuf_4};
   assign io_bias_wr_data_2 =
-    _GEN_20 ? 32'h0 : {biasByteBuf_11, biasByteBuf_10, biasByteBuf_9, biasByteBuf_8};
+    _GEN_18 ? 32'h0 : {biasByteBuf_11, biasByteBuf_10, biasByteBuf_9, biasByteBuf_8};
   assign io_bias_wr_data_3 =
-    _GEN_20 ? 32'h0 : {io_rx_data, biasByteBuf_14, biasByteBuf_13, biasByteBuf_12};
-  assign io_act_wr_en = ~_GEN_25 & _GEN_24 & _GEN_12;
+    _GEN_18 ? 32'h0 : {io_rx_data, biasByteBuf_14, biasByteBuf_13, biasByteBuf_12};
+  assign io_act_wr_en = ~_GEN_23 & _GEN_22 & _GEN_10;
   assign io_act_wr_addr = loadAddr;
   assign io_act_wr_data_0 = dataBuf_0;
   assign io_act_wr_data_1 = dataBuf_1;
   assign io_act_wr_data_2 = dataBuf_2;
-  assign io_act_wr_data_3 = _GEN_25 | ~_GEN_26 ? dataBuf_3 : io_rx_data;
+  assign io_act_wr_data_3 = _GEN_23 | ~_GEN_24 ? dataBuf_3 : io_rx_data;
   assign io_out_rd_addr = sendAddr;
   assign io_busy = |state;
 endmodule

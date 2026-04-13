@@ -11,7 +11,9 @@ module UartRx(
   reg  [3:0]  bitIdx;
   reg  [7:0]  shiftReg;
   reg  [7:0]  dataReg;
+  wire [7:0]  io_data_0 = dataReg;
   reg         validReg;
+  wire        io_valid_0 = validReg;
   reg  [1:0]  state;
   reg         rxSync_REG;
   reg         rxSync;

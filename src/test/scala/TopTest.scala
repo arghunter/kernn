@@ -39,20 +39,20 @@ class AlchitryTopTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd wi
     bytes.foreach(b => sendUartByte(dut, b & 0xFF))
   }
 
-  def recvUartByte(dut: AlchitryTop, timeoutCycles: Int = cyclesPerBit * 50000): Int = {
+def recvUartByte(dut: AlchitryTop, timeoutCycles: Int = cyclesPerBit * 50000): Int = {
     var waited = 0
-    // Wait for RX line to drop (Start Bit)
     while (dut.io.usb_tx.peek().litToBoolean && waited < timeoutCycles) {
       dut.clock.step(1)
       waited += 1
     }
     
     if (waited >= timeoutCycles) {
-      throw new RuntimeException(s"UART TX timeout! The FPGA stopped responding after $waited cycles. Sequencer likely deadlocked.")
+      throw new RuntimeException(s"UART TX timeout!")
     }
 
-    // Fast-forward to the center of the first data bit (1.5 bit periods)
-    dut.clock.step(cyclesPerBit + (cyclesPerBit / 2))
+    // We detected the falling edge and are 1 cycle into the start bit already
+    // Skip to center of bit 0: need (1.5T - 1) more cycles
+    dut.clock.step(cyclesPerBit + (cyclesPerBit / 2) - 1)
     
     var value = 0
     for (bit <- 0 until 8) {
@@ -62,7 +62,6 @@ class AlchitryTopTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd wi
       if (bit < 7) dut.clock.step(cyclesPerBit)
     }
     
-    // Wait through the stop bit
     dut.clock.step(cyclesPerBit)
     value
   }
@@ -120,11 +119,17 @@ class AlchitryTopTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd wi
     sendUartBytes(dut, Seq(0x05) ++ u16(inputBase) ++ u16(bufBBase))
   }
 
-  def readOutput(dut: AlchitryTop, m: Int, nn: Int, baseAddr: Int = 0): Array[Array[Long]] = {
+def readOutput(dut: AlchitryTop, m: Int, nn: Int, baseAddr: Int = 0): Array[Array[Long]] = {
     val tilesN = nn / n
     val count = (m / n) * tilesN * n
     sendUartBytes(dut, Seq(0x06) ++ u16(baseAddr) ++ u16(count))
 
+    // The FPGA may start transmitting before we begin listening.
+    // If TX is already low (start bit in progress), we missed the edge.
+    // Wait for it to finish this frame and catch the next clean start.
+    // But actually we need THIS byte. So instead, just ensure we 
+    // start listening before the FPGA can possibly respond.
+    
     val result = Array.ofDim[Long](m, nn)
     for (tR <- 0 until m / n; tC <- 0 until tilesN; r <- 0 until n) {
       val rowBytes = Array.ofDim[Int](n * 4)
@@ -246,7 +251,7 @@ class AlchitryTopTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd wi
       println("[TB] Waiting for Sequencer 0xAA ACK...")
       val ack = recvUartByte(dut, cyclesPerBit * 200000) // generous timeout for compute
       assert(ack == 0xAA, f"Expected 0xAA done ack, got 0x$ack%02X")
-      
+      dut.clock.step(cyclesPerBit * 5)
       println("[TB] Reading Output...")
       val result = readOutput(dut, m, nn)
       println("result:")

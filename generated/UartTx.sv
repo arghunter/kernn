@@ -12,6 +12,7 @@ module UartTx(
   reg  [3:0]  bitIdx;
   reg  [9:0]  shiftReg;
   reg         busy;
+  wire        _io_ready_T = ~busy;
   wire        _GEN = counter == 16'h0;
   always @(posedge clock) begin
     if (reset) begin

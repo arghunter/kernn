@@ -1,11 +1,15 @@
+verification/UartRx_Verification.sv
 UartRx.sv
+verification/UartTx_Verification.sv
 UartTx.sv
+verification/CommandParser_Verification.sv
 CommandParser.sv
 PE.sv
 SysArray.sv
 SysArrayController.sv
 TiledMatMulController.sv
 ActivationFunctionBank.sv
+verification/LayerSequencer_Verification.sv
 configMem_16x120.sv
 LayerSequencer.sv
 weightMem_16384x32.sv

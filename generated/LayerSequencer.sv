@@ -71,7 +71,9 @@ module LayerSequencer(
   wire         _matmul_io_busy;
   wire         _matmul_io_isLastK;
   reg  [3:0]   state;
+  wire [3:0]   state_0 = state;
   reg  [7:0]   layerIdx;
+  wire [7:0]   layerIdx_0 = layerIdx;
   reg  [7:0]   numLayers;
   reg  [15:0]  curConfig_weight_base;
   reg  [15:0]  curConfig_bias_base;
@@ -94,6 +96,8 @@ module LayerSequencer(
   reg  [7:0]   copyData_1;
   reg  [7:0]   copyData_2;
   reg  [7:0]   copyData_3;
+  wire         io_busy_0 = (|state) & state != 4'h8;
+  wire         _io_done_T = state == 4'h8;
   wire         _GEN = state == 4'h0;
   wire         _GEN_0 = state == 4'h1;
   wire         _GEN_1 = state == 4'h2;
@@ -327,8 +331,8 @@ module LayerSequencer(
         io_config_wr_data_relu6_thresh,
         io_config_wr_data_clamp_en})
   );
-  assign io_busy = (|state) & state != 4'h8;
-  assign io_done = state == 4'h8;
+  assign io_busy = io_busy_0;
+  assign io_done = _io_done_T;
   assign io_act_wr_addr =
     _GEN_12
       ? 16'h0
