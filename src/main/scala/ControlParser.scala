@@ -129,7 +129,8 @@ class CommandParser(val n: Int = 4) extends Module {
         is(0x03.U) { byteIdx := 0.U; state := CmdState.READ_BIAS_HEADER }
         is(0x04.U) { byteIdx := 0.U; state := CmdState.READ_ACT_HEADER }
         is(0x05.U) { byteIdx := 0.U; state := CmdState.READ_RUN_HEADER }
-        is(0x06.U) { byteIdx := 0.U; state := CmdState.READ_OUTPUT_HEADER }
+        is(0x06.U) { byteIdx := 0.U; state := CmdState.READ_OUTPUT_HEADER
+        printf("READING OUTPUT HEADER\n") }
       }
     }
 
@@ -346,6 +347,7 @@ when(configByteIdx === 14.U) {
           sendAddr      := Cat(byteBuffer(0), byteBuffer(1))
           sendRemaining := Cat(byteBuffer(2), io.rx_data)
           state         := CmdState.SEND_READ_ADDR
+          printf(p"SENDING READ ADDR addr ${sendAddr}, remaining ${sendRemaining}")
         }
       }
     }
@@ -388,6 +390,7 @@ when(configByteIdx === 14.U) {
 
     is(CmdState.SEND_WAIT_TX) {
       // Send done marker
+      printf("WAITING TX PLS")
       io.tx_data  := 0xFF.U
       io.tx_valid := true.B
       when(io.tx_ready) {

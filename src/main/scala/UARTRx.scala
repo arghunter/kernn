@@ -73,4 +73,7 @@ class UartRx(val clockFreq: Int, val baudRate: Int) extends Module {
       }
     }
   }
+  when(io.valid) {
+    printf(p"Byte Recieved: ${io.data}\n")
+}
 }

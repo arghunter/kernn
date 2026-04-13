@@ -331,4 +331,8 @@ class LayerSequencer(val n: Int = 4, val addr_width: Int = 16, val max_layers: I
       }
     }
   }
+// Drop this near the bottom of your LayerSequencer module, outside of any 'when' blocks
+when(io.busy) {
+    printf(p"Seq State: ${state}, layer_idx: ${layerIdx}\n")
+}
 }

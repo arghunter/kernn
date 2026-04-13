@@ -258,20 +258,7 @@ def run_mnist_inference(port='/dev/ttyUSB0', baud=115200, num_images=10):
 
             # Load input activations
             acc.load_activations(input_matrix, 784, N, base_addr=0)
-            # --- THE ISOLATION TEST ---
-            print("\n🔍 HEALTH CHECK: Did the parser survive the memory load?")
-            # Send a read command (0x06) for 1 single element (count=1) at address 0
-            acc._send([0x06, 0x00, 0x00, 0x01, 0x00])
-            health_resp = acc.ser.read(5) # Expect 4 bytes of data + 0xFF marker
-            
-            if len(health_resp) == 0:
-                print("❌ FAILED: The FPGA timed out on the health check.")
-                print("CONCLUSION: Your hardware is crashing or dropping bytes during `load_activations` or `load_weights`. It is stuck waiting for missing memory bytes, so it is completely ignoring your 0x05 run command.")
-                sys.exit(1)
-            else:
-                print(f"✅ PASSED: FPGA replied with: {[hex(b) for b in health_resp]}")
-                print("CONCLUSION: The memory loaded perfectly. The parser is completely healthy. The deadlock is happening inside your custom Chisel Neural Network compute pipeline!")
-            # --------------------------
+
             # Run inference
             t0 = time.time()
             acc.run(input_base=0, buffer_b_base=2048)

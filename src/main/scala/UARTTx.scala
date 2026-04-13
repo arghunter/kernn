@@ -18,7 +18,9 @@ class UartTx(val clockFreq: Int, val baudRate: Int) extends Module {
 
   io.ready := !busy
   io.txd   := true.B
-
+ when(io.valid & !busy) {
+    printf(p"Sending Out: ${io.data}\n")
+  }
   when(busy) {
     io.txd := shiftReg(0)
     when(counter === 0.U) {
@@ -38,4 +40,5 @@ class UartTx(val clockFreq: Int, val baudRate: Int) extends Module {
     bitIdx   := 0.U
     io.txd   := false.B  
   }
+ 
 }
