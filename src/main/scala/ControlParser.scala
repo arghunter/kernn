@@ -9,7 +9,7 @@ object CmdState extends ChiselEnum {
       READ_ACT_HEADER, READ_ACT_DATA,
       READ_RUN_HEADER,
       READ_OUTPUT_HEADER, SEND_READ_ADDR, SEND_WAIT_MEM, SEND_BYTE, SEND_WAIT_TX,
-      RUN_WAIT, RUN_WAIT_START, RUN_SEND_ACK = Value // <-- Added RUN_SEND_ACK here
+      RUN_WAIT, RUN_WAIT_START, RUN_SEND_ACK = Value 
 }
 
 class CommandParser(val n: Int = 4) extends Module {
@@ -83,12 +83,11 @@ class CommandParser(val n: Int = 4) extends Module {
   val inputBase    = RegInit(0.U(16.W))
   val bufferBBase  = RegInit(0.U(16.W))
 
-  // One-cycle delayed start pulse so inputBase/bufferBBase have settled
   val seqStartPending = RegInit(false.B)
 
   // Defaults
   io.seq_start         := seqStartPending
-  seqStartPending      := false.B          // auto-clear every cycle
+  seqStartPending      := false.B        
 
   io.seq_num_layers    := numLayers
   io.seq_input_base    := inputBase
@@ -134,7 +133,6 @@ class CommandParser(val n: Int = 4) extends Module {
       }
     }
 
-    // === LOAD CONFIG ===
     is(CmdState.READ_NUM_LAYERS) {
       when(io.rx_valid) {
         numLayers    := io.rx_data
@@ -151,7 +149,6 @@ class CommandParser(val n: Int = 4) extends Module {
         configByteIdx := nextByteIdx
 
 when(configByteIdx === 14.U) {
-  // 1. Create a wire with the current cycle's parsed data
   val parsedConfig = Wire(new LayerConfig)
   parsedConfig.weight_base  := Cat(byteBuffer(0), byteBuffer(1))
   parsedConfig.bias_base    := Cat(byteBuffer(2), byteBuffer(3))
@@ -163,12 +160,10 @@ when(configByteIdx === 14.U) {
   parsedConfig.relu6_thresh := Cat(byteBuffer(12), byteBuffer(13)).asSInt
   parsedConfig.clamp_en     := io.rx_data(0).asBool
 
-  // 2. Drive the output port directly THIS cycle
   io.config_wr_data := parsedConfig
   io.config_wr_en   := true.B
   io.config_wr_idx  := configIdx
 
-  // 3. (Optional) Save it to the register for any future state that might need it
   configReg := parsedConfig
 
   configByteIdx := 0.U
@@ -181,7 +176,6 @@ when(configByteIdx === 14.U) {
       }
     }
 
-    // === LOAD WEIGHTS ===
     is(CmdState.READ_WEIGHT_HEADER) {
       when(io.rx_valid) {
         byteBuffer(byteIdx) := io.rx_data
@@ -220,7 +214,6 @@ when(configByteIdx === 14.U) {
       }
     }
 
-    // === LOAD BIAS ===
     is(CmdState.READ_BIAS_HEADER) {
       when(io.rx_valid) {
         byteBuffer(byteIdx) := io.rx_data
@@ -259,7 +252,6 @@ when(configByteIdx === 14.U) {
       }
     }
 
-    // === LOAD ACTIVATIONS ===
     is(CmdState.READ_ACT_HEADER) {
       when(io.rx_valid) {
         byteBuffer(byteIdx) := io.rx_data
@@ -298,10 +290,7 @@ when(configByteIdx === 14.U) {
       }
     }
 
-    // === RUN ===
-    // Parse the 4-byte header (inputBase[15:8], inputBase[7:0], bufBBase[15:8], bufBBase[7:0]),
-    // latch the addresses into registers, then set seqStartPending so the pulse fires one
-    // cycle later — after inputBase/bufferBBase registers have updated.
+  
   is(CmdState.READ_RUN_HEADER) {
       when(io.rx_valid) {
         byteBuffer(byteIdx) := io.rx_data
@@ -316,7 +305,6 @@ when(configByteIdx === 14.U) {
     }
 
     is(CmdState.RUN_WAIT_START) {
-      // Wait for sequencer to acknowledge start (go busy, done goes low)
       // when(io.seq_busy) {
         state := CmdState.RUN_WAIT
       // }
@@ -329,7 +317,6 @@ is(CmdState.RUN_WAIT) {
 }
 
     is(CmdState.RUN_SEND_ACK) {
-      // Unconditionally assert tx_valid and wait out the UART backpressure
       io.tx_data := 0xAA.U
       io.tx_valid := true.B
       when(io.tx_ready) {
@@ -337,7 +324,6 @@ is(CmdState.RUN_WAIT) {
       }
     }
 
-    // === READ OUTPUT ===
     is(CmdState.READ_OUTPUT_HEADER) {
       when(io.rx_valid) {
         byteBuffer(byteIdx) := io.rx_data
@@ -346,7 +332,7 @@ is(CmdState.RUN_WAIT) {
           sendAddr      := Cat(byteBuffer(0), byteBuffer(1))
           sendRemaining := Cat(byteBuffer(2), io.rx_data)
           state         := CmdState.SEND_READ_ADDR
-          printf(p"SENDING READ ADDR addr ${sendAddr}, remaining ${sendRemaining}")
+          // printf(p"SENDING READ ADDR addr ${sendAddr}, remaining ${sendRemaining}")
         }
       }
     }
@@ -358,7 +344,6 @@ is(CmdState.RUN_WAIT) {
 
     is(CmdState.SEND_WAIT_MEM) {
       io.out_rd_addr := sendAddr
-      // Pack n × 32-bit values into bytes, little-endian
       for (i <- 0 until n) {
         val val32 = io.out_rd_data(i).asUInt
         sendDataBuf(i * 4)     := val32(7, 0)
@@ -388,8 +373,7 @@ is(CmdState.RUN_WAIT) {
     }
 
     is(CmdState.SEND_WAIT_TX) {
-      // Send done marker
-      printf("WAITING TX PLS")
+      // printf("WAITING TX PLS")
       io.tx_data  := 0xFF.U
       io.tx_valid := true.B
       when(io.tx_ready) {

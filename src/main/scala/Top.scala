@@ -8,13 +8,11 @@ class AlchitryTop(val n: Int = 4, val clockFreq: Int = 100000000, val baudRate: 
     val usb_tx = Output(Bool())
   })
 
-  // === UART ===
   val rx = Module(new UartRx(clockFreq, baudRate))
   val tx = Module(new UartTx(clockFreq, baudRate))
   rx.io.rxd := io.usb_rx
   io.usb_tx := tx.io.txd
 
-  // === Command Parser ===
   val parser = Module(new CommandParser(n))
   parser.io.rx_data := rx.io.data
   parser.io.rx_valid := rx.io.valid
@@ -22,10 +20,8 @@ class AlchitryTop(val n: Int = 4, val clockFreq: Int = 100000000, val baudRate: 
   tx.io.valid := parser.io.tx_valid
   parser.io.tx_ready := tx.io.ready
 
-  // === Layer Sequencer ===
   val seq = Module(new LayerSequencer(n, 16, 16))
 
-  // Parser ↔ Sequencer control
   seq.io.start := parser.io.seq_start
   parser.io.seq_busy := seq.io.busy
   parser.io.seq_done := seq.io.done
@@ -36,28 +32,23 @@ class AlchitryTop(val n: Int = 4, val clockFreq: Int = 100000000, val baudRate: 
   parser.io.seq_result_M := seq.io.result_M
   parser.io.seq_result_N := seq.io.result_N
 
-  // Parser ↔ Config
   seq.io.config_wr_en := parser.io.config_wr_en
   seq.io.config_wr_idx := parser.io.config_wr_idx
   seq.io.config_wr_data := parser.io.config_wr_data
 
-  // === Memories ===
   val weightMem = SyncReadMem(16384, Vec(n, SInt(8.W)))
   val actMem = SyncReadMem(4096, Vec(n, SInt(8.W)))
   val outMem = SyncReadMem(4096, Vec(n, SInt(32.W)))
   val biasMem = SyncReadMem(256, Vec(n, SInt(32.W)))
   
 
-  // === Weight Memory ===
-  // 1 Write, 1 Read -> Infers properly
+
   when(parser.io.wt_wr_en) {
     weightMem.write(parser.io.wt_wr_addr, parser.io.wt_wr_data)
   }
   seq.io.weight_data := weightMem.read(seq.io.weight_addr)
 
-  // === Activation Memory ===
-  // Multiplexing the write port to prevent generating a 3rd port
-// === Activation Memory ===
+
 val act_wr_en   = seq.io.act_wr_en || parser.io.act_wr_en
 val act_wr_addr = Mux(seq.io.act_wr_en, seq.io.act_wr_addr, parser.io.act_wr_addr)
 val act_wr_data = Mux(seq.io.act_wr_en, seq.io.act_wr_data, parser.io.act_wr_data)
@@ -91,12 +82,12 @@ parser.io.out_rd_data := out_rd_data
 
   
 
-  // === LED Status ===
+
   io.led := Cat(
-    seq.io.done,                          // led[7]: inference complete
-    seq.io.busy,                          // led[6]: sequencer running
-    parser.io.busy,                       // led[5]: parser busy
-    rx.io.valid,                          // led[4]: UART receiving
-    0.U(4.W)                              // led[3:0]: unused
+    seq.io.done,                          
+    seq.io.busy,                        
+    parser.io.busy,                       
+    rx.io.valid,                       
+    0.U(4.W)                              
   )
 }
