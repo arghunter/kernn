@@ -375,12 +375,10 @@ module CommandParser(
             if (_GEN_47)
               state <= 5'h11;
           end
-          else if (_GEN_26) begin
-            if (io_seq_busy & ~io_seq_done)
-              state <= 5'h10;
-          end
+          else if (_GEN_26)
+            state <= 5'h10;
           else if (_GEN_27) begin
-            if (io_seq_done)
+            if (io_seq_done | ~io_seq_busy)
               state <= 5'h12;
           end
           else if (_GEN_28) begin

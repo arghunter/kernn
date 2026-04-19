@@ -161,7 +161,7 @@ module LayerSequencer(
           state <= 4'h7;
         else if (_GEN_9)
           state <= {1'h0, ~_GEN_17, 2'h1};
-        else if (state == 4'h8 & io_start)
+        else if (state == 4'h8)
           state <= 4'h0;
         if (_GEN_11 | ~(_GEN_9 & _GEN_17)) begin
         end

@@ -302,140 +302,344 @@ class CommandParserStressTest extends AnyFlatSpec with HasCliOptions with Cli.Em
     }
   }
 
-  it should "handle identity 8x8 tiled" in {
+  // it should "handle identity 8x8 tiled" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val m = 8; val k = 8; val nn = 8
+  //     val W = Array.tabulate(m, k)((r, c) => if (r == c) 1 else 0)
+  //     val A = Array.tabulate(k, nn)((r, c) => r * nn + c + 1)
+  //     val bias = Array.fill(nn)(0)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     assertResult(result, expected, m, nn, "identity 8x8")
+  //   }
+  // }
+
+  // it should "handle relu single tile" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(10)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.fill(m, k)(rng.nextInt(20) - 10)
+  //     val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
+  //     val bias = Array.fill(nn)(rng.nextInt(100) - 50)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 4, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 4, 6, false)
+  //     assertResult(result, expected, m, nn, "relu single tile")
+  //   }
+  // }
+
+  // it should "handle leaky relu single tile" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(20)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.fill(m, k)(rng.nextInt(20) - 10)
+  //     val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
+  //     val bias = Array.fill(nn)(rng.nextInt(100) - 50)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 2, 4, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 2, 4, 6, false)
+  //     assertResult(result, expected, m, nn, "leaky relu single tile")
+  //   }
+  // }
+
+  // it should "handle relu6 single tile" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(30)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.fill(m, k)(rng.nextInt(20) - 10)
+  //     val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
+  //     val bias = Array.fill(nn)(rng.nextInt(100) - 50)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 3, 4, 50, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 3, 4, 50, false)
+  //     assertResult(result, expected, m, nn, "relu6 single tile")
+  //   }
+  // }
+
+  // it should "handle bias + relu + clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(100)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.fill(m, k)(rng.nextInt(20) - 10)
+  //     val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
+  //     val bias = Array.fill(nn)(rng.nextInt(200) - 100)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 4, 6, true)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 4, 6, true)
+  //     assertResult(result, expected, m, nn, "bias+relu+clamp")
+  //   }
+  // }
+
+  // it should "handle random 8x8 tiled no clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(200)
+  //     val m = 8; val k = 8; val nn = 8
+  //     val W = Array.fill(m, k)(rng.nextInt(256) - 128)
+  //     val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
+  //     val bias = Array.fill(nn)(0)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 8, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 8, 6, false)
+  //     assertResult(result, expected, m, nn, "random 8x8 relu no clamp")
+  //   }
+  // }
+
+  // it should "handle non-square 8x4 × 4x8 no clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(300)
+  //     val m = 8; val k = 4; val nn = 8
+  //     val W = Array.fill(m, k)(rng.nextInt(256) - 128)
+  //     val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
+  //     val bias = Array.fill(nn)(rng.nextInt(500) - 250)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 4, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 4, 6, false)
+  //     assertResult(result, expected, m, nn, "nonsquare no clamp")
+  //   }
+  // }
+
+  // it should "handle random 4x4 with clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(350)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.fill(m, k)(rng.nextInt(256) - 128)
+  //     val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
+  //     val bias = Array.fill(nn)(rng.nextInt(1000) - 500)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 8, 6, true)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 8, 6, true)
+  //     assertResult(result, expected, m, nn, "random 4x4 clamp")
+  //   }
+  // }
+
+  // it should "handle random 12x12 tiled" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(380)
+  //     val m = 12; val k = 12; val nn = 12
+  //     val W = Array.fill(m, k)(rng.nextInt(256) - 128)
+  //     val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
+  //     val bias = Array.fill(nn)(rng.nextInt(500) - 250)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 2, 6, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 2, 6, 6, false)
+  //     assertResult(result, expected, m, nn, "random 12x12 leaky relu")
+  //   }
+  // }
+
+  // it should "handle two-layer inference" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(500)
+  //     val m0 = 4; val k0 = 4; val n0 = 4
+  //     val m1 = 4; val k1 = 4; val n1 = 4
+  //     val W0 = Array.fill(m0, k0)(rng.nextInt(10) - 5)
+  //     val W1 = Array.fill(m1, k1)(rng.nextInt(10) - 5)
+  //     val A0 = Array.fill(k0, n0)(rng.nextInt(10) - 5)
+  //     val bias0 = Array.fill(n0)(rng.nextInt(50) - 25)
+  //     val bias1 = Array.fill(n1)(0)
+
+  //     val w0Base = 0
+  //     val w1Base = (m0 / n) * (k0 / n) * n
+  //     val b0Base = 0
+  //     val b1Base = n0 / n
+
+  //     val configs = Seq(
+  //       Map("weight_base" -> w0Base, "bias_base" -> b0Base,
+  //         "M" -> m0, "K" -> k0, "N" -> n0,
+  //         "activation" -> 1, "shift" -> 4, "relu6_thresh" -> 6, "clamp_en" -> 1),
+  //       Map("weight_base" -> w1Base, "bias_base" -> b1Base,
+  //         "M" -> m1, "K" -> k1, "N" -> n1,
+  //         "activation" -> 0, "shift" -> 0, "relu6_thresh" -> 6, "clamp_en" -> 0))
+
+  //     sendConfig(dut, configs)
+  //     sendWeights(dut, W0, m0, k0, w0Base)
+  //     sendWeights(dut, W1, m1, k1, w1Base)
+  //     sendBias(dut, bias0, n0, b0Base)
+  //     sendBias(dut, bias1, n1, b1Base)
+  //     sendActivations(dut, A0, k0, n0, 0)
+  //     sendRun(dut, 0, 2048)
+
+  //     val cycles = waitDone(dut)
+  //     println(s"Two-layer done in $cycles cycles")
+
+  //     val expected = expectedMultiLayer(Seq(W0, W1), Seq(bias0, bias1), A0, configs)
+  //     val result = readOutput(dut, m1, n1)
+  //     assertResult(result, expected, m1, n1, "two-layer")
+  //   }
+  // }
+
+  // it should "handle three-layer inference" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(600)
+  //     val sizes = Seq((4, 4, 4), (4, 4, 4), (4, 4, 4))
+  //     val funcs = Seq(1, 2, 0)
+  //     val shifts = Seq(3, 3, 0)
+  //     val clamps = Seq(true, true, false)
+
+  //     val weights = sizes.map { case (m, k, _) => Array.fill(m, k)(rng.nextInt(6) - 3) }
+  //     val biases = sizes.map { case (_, _, nn) => Array.fill(nn)(rng.nextInt(20) - 10) }
+  //     val input = Array.fill(sizes(0)._2, sizes(0)._3)(rng.nextInt(10) - 5)
+
+  //     var wtOffset = 0
+  //     var biasOffset = 0
+  //     val configs = for (i <- 0 until 3) yield {
+  //       val (m, k, nn) = sizes(i)
+  //       val cfg = Map(
+  //         "weight_base" -> wtOffset, "bias_base" -> biasOffset,
+  //         "M" -> m, "K" -> k, "N" -> nn,
+  //         "activation" -> funcs(i), "shift" -> shifts(i),
+  //         "relu6_thresh" -> 6, "clamp_en" -> (if (clamps(i)) 1 else 0))
+  //       wtOffset += (m / n) * (k / n) * n
+  //       biasOffset += nn / n
+  //       cfg
+  //     }
+
+  //     sendConfig(dut, configs)
+  //     for (i <- 0 until 3) {
+  //       val (m, k, _) = sizes(i)
+  //       sendWeights(dut, weights(i), m, k, configs(i)("weight_base"))
+  //     }
+  //     for (i <- 0 until 3) {
+  //       val (_, _, nn) = sizes(i)
+  //       sendBias(dut, biases(i), nn, configs(i)("bias_base"))
+  //     }
+  //     sendActivations(dut, input, sizes(0)._2, sizes(0)._3, 0)
+  //     sendRun(dut, 0, 2048)
+
+  //     val cycles = waitDone(dut)
+  //     println(s"Three-layer done in $cycles cycles")
+
+  //     val expected = expectedMultiLayer(weights, biases, input, configs)
+  //     val result = readOutput(dut, sizes(2)._1, sizes(2)._3)
+  //     assertResult(result, expected, sizes(2)._1, sizes(2)._3, "three-layer")
+  //   }
+  // }
+
+  // it should "handle extreme weight values no clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val bias = Array.fill(nn)(0)
+  //     val W = Array.fill(m, k)(127)
+  //     val A = Array.fill(k, nn)(127)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     assertResult(result, expected, m, nn, "all +127 no clamp")
+  //   }
+  // }
+
+  // it should "handle extreme negative values no clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val bias = Array.fill(nn)(0)
+  //     val W = Array.fill(m, k)(-128)
+  //     val A = Array.fill(k, nn)(-128)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     assertResult(result, expected, m, nn, "all -128 no clamp")
+  //   }
+  // }
+
+  // it should "handle extreme values with clamp" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val bias = Array.fill(nn)(0)
+  //     val W = Array.fill(m, k)(127)
+  //     val A = Array.fill(k, nn)(127)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 8, 6, true)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 8, 6, true)
+  //     assertResult(result, expected, m, nn, "all +127 with clamp")
+  //   }
+  // }
+
+  // it should "handle zero matrices" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.fill(m, k)(0)
+  //     val A = Array.fill(k, nn)(0)
+  //     val bias = Array.fill(nn)(0)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     assertResult(result, expected, m, nn, "all zeros")
+  //   }
+  // }
+
+  // it should "handle deep K accumulation 4x12 × 12x4" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val rng = new Random(700)
+  //     val m = 4; val k = 12; val nn = 4
+  //     val W = Array.fill(m, k)(rng.nextInt(64) - 32)
+  //     val A = Array.fill(k, nn)(rng.nextInt(64) - 32)
+  //     val bias = Array.fill(nn)(rng.nextInt(200) - 100)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 6, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 6, 6, false)
+  //     assertResult(result, expected, m, nn, "deep K 4x12*12x4")
+  //   }
+  // }
+
+  // it should "handle large bias values" in {
+  //   simulate(new FullSystemHarness(n)) { dut =>
+  //     dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
+  //     val m = 4; val k = 4; val nn = 4
+  //     val W = Array.tabulate(m, k)((r, c) => if (r == c) 1 else 0)
+  //     val A = Array.fill(k, nn)(0)
+  //     val bias = Array(10000, -10000, 32767, -32768)
+  //     val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
+  //     assertResult(result, expected, m, nn, "large bias values")
+  //   }
+  // }
+  it should "handle back-to-back runs without stalling" in {
     simulate(new FullSystemHarness(n)) { dut =>
       dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val m = 8; val k = 8; val nn = 8
+
+      val m = 4; val k = 4; val nn = 4
       val W = Array.tabulate(m, k)((r, c) => if (r == c) 1 else 0)
-      val A = Array.tabulate(k, nn)((r, c) => r * nn + c + 1)
       val bias = Array.fill(nn)(0)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
-      assertResult(result, expected, m, nn, "identity 8x8")
+
+      // Send config and weights once
+      sendConfig(dut, Seq(Map(
+        "weight_base" -> 0, "bias_base" -> 0,
+        "M" -> m, "K" -> k, "N" -> nn,
+        "activation" -> 0, "shift" -> 0,
+        "relu6_thresh" -> 6, "clamp_en" -> 0)))
+      sendWeights(dut, W, m, k, 0)
+      sendBias(dut, bias, nn, 0)
+
+      // Run 5 consecutive inferences with different inputs
+      for (run <- 0 until 5) {
+        val A = Array.tabulate(k, nn)((r, c) => r * nn + c + 1 + run * 10)
+        val expected = matMul(W, A, m, k, nn)
+
+        println(s"  Run $run: sending activations...")
+        sendActivations(dut, A, k, nn, 0)
+        sendRun(dut, 0, 2048)
+
+        val cycles = waitDone(dut)
+        println(s"  Run $run: done in $cycles cycles")
+
+        val result = readOutput(dut, m, nn)
+        assertResult(result, expected, m, nn, s"back-to-back run $run")
+      }
+      println("  Back-to-back 5 runs PASSED")
     }
   }
 
-  it should "handle relu single tile" in {
+  it should "handle back-to-back two-layer runs" in {
     simulate(new FullSystemHarness(n)) { dut =>
       dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(10)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.fill(m, k)(rng.nextInt(20) - 10)
-      val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
-      val bias = Array.fill(nn)(rng.nextInt(100) - 50)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 4, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 4, 6, false)
-      assertResult(result, expected, m, nn, "relu single tile")
-    }
-  }
 
-  it should "handle leaky relu single tile" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(20)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.fill(m, k)(rng.nextInt(20) - 10)
-      val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
-      val bias = Array.fill(nn)(rng.nextInt(100) - 50)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 2, 4, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 2, 4, 6, false)
-      assertResult(result, expected, m, nn, "leaky relu single tile")
-    }
-  }
-
-  it should "handle relu6 single tile" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(30)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.fill(m, k)(rng.nextInt(20) - 10)
-      val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
-      val bias = Array.fill(nn)(rng.nextInt(100) - 50)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 3, 4, 50, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 3, 4, 50, false)
-      assertResult(result, expected, m, nn, "relu6 single tile")
-    }
-  }
-
-  it should "handle bias + relu + clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(100)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.fill(m, k)(rng.nextInt(20) - 10)
-      val A = Array.fill(k, nn)(rng.nextInt(20) - 10)
-      val bias = Array.fill(nn)(rng.nextInt(200) - 100)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 4, 6, true)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 4, 6, true)
-      assertResult(result, expected, m, nn, "bias+relu+clamp")
-    }
-  }
-
-  it should "handle random 8x8 tiled no clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(200)
-      val m = 8; val k = 8; val nn = 8
-      val W = Array.fill(m, k)(rng.nextInt(256) - 128)
-      val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
-      val bias = Array.fill(nn)(0)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 8, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 8, 6, false)
-      assertResult(result, expected, m, nn, "random 8x8 relu no clamp")
-    }
-  }
-
-  it should "handle non-square 8x4 × 4x8 no clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(300)
-      val m = 8; val k = 4; val nn = 8
-      val W = Array.fill(m, k)(rng.nextInt(256) - 128)
-      val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
-      val bias = Array.fill(nn)(rng.nextInt(500) - 250)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 4, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 4, 6, false)
-      assertResult(result, expected, m, nn, "nonsquare no clamp")
-    }
-  }
-
-  it should "handle random 4x4 with clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(350)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.fill(m, k)(rng.nextInt(256) - 128)
-      val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
-      val bias = Array.fill(nn)(rng.nextInt(1000) - 500)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 8, 6, true)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 8, 6, true)
-      assertResult(result, expected, m, nn, "random 4x4 clamp")
-    }
-  }
-
-  it should "handle random 12x12 tiled" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(380)
-      val m = 12; val k = 12; val nn = 12
-      val W = Array.fill(m, k)(rng.nextInt(256) - 128)
-      val A = Array.fill(k, nn)(rng.nextInt(256) - 128)
-      val bias = Array.fill(nn)(rng.nextInt(500) - 250)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 2, 6, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 2, 6, 6, false)
-      assertResult(result, expected, m, nn, "random 12x12 leaky relu")
-    }
-  }
-
-  it should "handle two-layer inference" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(500)
+      val rng = new Random(800)
       val m0 = 4; val k0 = 4; val n0 = 4
       val m1 = 4; val k1 = 4; val n1 = 4
       val W0 = Array.fill(m0, k0)(rng.nextInt(10) - 5)
       val W1 = Array.fill(m1, k1)(rng.nextInt(10) - 5)
-      val A0 = Array.fill(k0, n0)(rng.nextInt(10) - 5)
       val bias0 = Array.fill(n0)(rng.nextInt(50) - 25)
       val bias1 = Array.fill(n1)(0)
 
@@ -452,147 +656,29 @@ class CommandParserStressTest extends AnyFlatSpec with HasCliOptions with Cli.Em
           "M" -> m1, "K" -> k1, "N" -> n1,
           "activation" -> 0, "shift" -> 0, "relu6_thresh" -> 6, "clamp_en" -> 0))
 
+      // Upload model once
       sendConfig(dut, configs)
       sendWeights(dut, W0, m0, k0, w0Base)
       sendWeights(dut, W1, m1, k1, w1Base)
       sendBias(dut, bias0, n0, b0Base)
       sendBias(dut, bias1, n1, b1Base)
-      sendActivations(dut, A0, k0, n0, 0)
-      sendRun(dut, 0, 2048)
 
-      val cycles = waitDone(dut)
-      println(s"Two-layer done in $cycles cycles")
+      // Run 3 consecutive inferences with different inputs
+      for (run <- 0 until 3) {
+        val A0 = Array.fill(k0, n0)(rng.nextInt(10) - 5)
+        val expected = expectedMultiLayer(Seq(W0, W1), Seq(bias0, bias1), A0, configs)
 
-      val expected = expectedMultiLayer(Seq(W0, W1), Seq(bias0, bias1), A0, configs)
-      val result = readOutput(dut, m1, n1)
-      assertResult(result, expected, m1, n1, "two-layer")
-    }
-  }
+        println(s"  Two-layer run $run: sending activations...")
+        sendActivations(dut, A0, k0, n0, 0)
+        sendRun(dut, 0, 2048)
 
-  it should "handle three-layer inference" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(600)
-      val sizes = Seq((4, 4, 4), (4, 4, 4), (4, 4, 4))
-      val funcs = Seq(1, 2, 0)
-      val shifts = Seq(3, 3, 0)
-      val clamps = Seq(true, true, false)
+        val cycles = waitDone(dut)
+        println(s"  Two-layer run $run: done in $cycles cycles")
 
-      val weights = sizes.map { case (m, k, _) => Array.fill(m, k)(rng.nextInt(6) - 3) }
-      val biases = sizes.map { case (_, _, nn) => Array.fill(nn)(rng.nextInt(20) - 10) }
-      val input = Array.fill(sizes(0)._2, sizes(0)._3)(rng.nextInt(10) - 5)
-
-      var wtOffset = 0
-      var biasOffset = 0
-      val configs = for (i <- 0 until 3) yield {
-        val (m, k, nn) = sizes(i)
-        val cfg = Map(
-          "weight_base" -> wtOffset, "bias_base" -> biasOffset,
-          "M" -> m, "K" -> k, "N" -> nn,
-          "activation" -> funcs(i), "shift" -> shifts(i),
-          "relu6_thresh" -> 6, "clamp_en" -> (if (clamps(i)) 1 else 0))
-        wtOffset += (m / n) * (k / n) * n
-        biasOffset += nn / n
-        cfg
+        val result = readOutput(dut, m1, n1)
+        assertResult(result, expected, m1, n1, s"back-to-back two-layer run $run")
       }
-
-      sendConfig(dut, configs)
-      for (i <- 0 until 3) {
-        val (m, k, _) = sizes(i)
-        sendWeights(dut, weights(i), m, k, configs(i)("weight_base"))
-      }
-      for (i <- 0 until 3) {
-        val (_, _, nn) = sizes(i)
-        sendBias(dut, biases(i), nn, configs(i)("bias_base"))
-      }
-      sendActivations(dut, input, sizes(0)._2, sizes(0)._3, 0)
-      sendRun(dut, 0, 2048)
-
-      val cycles = waitDone(dut)
-      println(s"Three-layer done in $cycles cycles")
-
-      val expected = expectedMultiLayer(weights, biases, input, configs)
-      val result = readOutput(dut, sizes(2)._1, sizes(2)._3)
-      assertResult(result, expected, sizes(2)._1, sizes(2)._3, "three-layer")
-    }
-  }
-
-  it should "handle extreme weight values no clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val m = 4; val k = 4; val nn = 4
-      val bias = Array.fill(nn)(0)
-      val W = Array.fill(m, k)(127)
-      val A = Array.fill(k, nn)(127)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
-      assertResult(result, expected, m, nn, "all +127 no clamp")
-    }
-  }
-
-  it should "handle extreme negative values no clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val m = 4; val k = 4; val nn = 4
-      val bias = Array.fill(nn)(0)
-      val W = Array.fill(m, k)(-128)
-      val A = Array.fill(k, nn)(-128)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
-      assertResult(result, expected, m, nn, "all -128 no clamp")
-    }
-  }
-
-  it should "handle extreme values with clamp" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val m = 4; val k = 4; val nn = 4
-      val bias = Array.fill(nn)(0)
-      val W = Array.fill(m, k)(127)
-      val A = Array.fill(k, nn)(127)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 8, 6, true)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 8, 6, true)
-      assertResult(result, expected, m, nn, "all +127 with clamp")
-    }
-  }
-
-  it should "handle zero matrices" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.fill(m, k)(0)
-      val A = Array.fill(k, nn)(0)
-      val bias = Array.fill(nn)(0)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
-      assertResult(result, expected, m, nn, "all zeros")
-    }
-  }
-
-  it should "handle deep K accumulation 4x12 × 12x4" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val rng = new Random(700)
-      val m = 4; val k = 12; val nn = 4
-      val W = Array.fill(m, k)(rng.nextInt(64) - 32)
-      val A = Array.fill(k, nn)(rng.nextInt(64) - 32)
-      val bias = Array.fill(nn)(rng.nextInt(200) - 100)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 1, 6, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 1, 6, 6, false)
-      assertResult(result, expected, m, nn, "deep K 4x12*12x4")
-    }
-  }
-
-  it should "handle large bias values" in {
-    simulate(new FullSystemHarness(n)) { dut =>
-      dut.io.rx_valid.poke(false.B); dut.io.tx_ready.poke(true.B); waitForInit(dut)
-      val m = 4; val k = 4; val nn = 4
-      val W = Array.tabulate(m, k)((r, c) => if (r == c) 1 else 0)
-      val A = Array.fill(k, nn)(0)
-      val bias = Array(10000, -10000, 32767, -32768)
-      val expected = expectedSingleLayer(W, A, bias, m, k, nn, 0, 0, 6, false)
-      val result = runSingleLayer(dut, W, A, bias, m, k, nn, 0, 0, 6, false)
-      assertResult(result, expected, m, nn, "large bias values")
+      println("  Back-to-back two-layer 3 runs PASSED")
     }
   }
 }

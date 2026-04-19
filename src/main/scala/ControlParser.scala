@@ -317,17 +317,16 @@ when(configByteIdx === 14.U) {
 
     is(CmdState.RUN_WAIT_START) {
       // Wait for sequencer to acknowledge start (go busy, done goes low)
-      when(io.seq_busy && !io.seq_done) {
+      // when(io.seq_busy) {
         state := CmdState.RUN_WAIT
-      }
+      // }
     }
 
-   is(CmdState.RUN_WAIT) {
-      // Catch the 1-cycle pulse immediately and lock it in
-      when(io.seq_done) {
-        state := CmdState.RUN_SEND_ACK
-      }
-    }
+is(CmdState.RUN_WAIT) {
+  when(io.seq_done || !io.seq_busy) {
+    state := CmdState.RUN_SEND_ACK
+  }
+}
 
     is(CmdState.RUN_SEND_ACK) {
       // Unconditionally assert tx_valid and wait out the UART backpressure

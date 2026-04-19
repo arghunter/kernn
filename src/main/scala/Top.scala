@@ -67,20 +67,15 @@ when(act_wr_en) {
 }
 seq.io.act_rd_data := actMem.read(seq.io.act_rd_addr)
 
-  
-  // Single read port
+
   seq.io.act_rd_data := actMem.read(seq.io.act_rd_addr)
 
-  // === Bias Memory ===
-  // 1 Write, 1 Read -> Infers properly
+
   when(parser.io.bias_wr_en) {
     biasMem.write(parser.io.bias_wr_addr, parser.io.bias_wr_data)
   }
   seq.io.bias_data := biasMem.read(seq.io.bias_addr)
 
-  // === Output Memory ===
-  // Multiplexing the write port
-// === Output Memory ===
 val out_wr_en   = seq.io.output_wen || parser.io.out_wr_en
 val out_wr_addr = Mux(seq.io.output_wen, seq.io.output_wr_addr, parser.io.out_wr_addr)
 val out_wr_data = Mux(seq.io.output_wen, seq.io.output_data_wr, parser.io.out_wr_data)
@@ -94,14 +89,7 @@ val out_rd_data = outMem.read(out_rd_addr)
 seq.io.output_data_r := out_rd_data
 parser.io.out_rd_data := out_rd_data
 
-  // Multiplexing the read port
-  // Assuming the sequencer takes priority while busy, and parser reads when done
-  // val out_rd_addr = Mux(seq.io.busy, seq.io.output_rd_addr, parser.io.out_rd_addr)
-  // val out_rd_data = outMem.read(out_rd_addr)
-
-  // // Route the shared single-port read data back to both modules
-  // seq.io.output_data_r := out_rd_data
-  // parser.io.out_rd_data := out_rd_data
+  
 
   // === LED Status ===
   io.led := Cat(

@@ -326,13 +326,12 @@ class LayerSequencer(val n: Int = 4, val addr_width: Int = 16, val max_layers: I
     }
 
     is(SeqState.DONE) {
-      when(io.start) {
+      // when(io.start) {
         state := SeqState.IDLE
-      }
+      // }
     }
   }
-// Drop this near the bottom of your LayerSequencer module, outside of any 'when' blocks
-when(io.busy) {
-    printf(p"Seq State: ${state}, layer_idx: ${layerIdx}\n")
-}
+// when(io.busy) {
+//     printf(p"Seq State: ${state}, layer_idx: ${layerIdx}\n")
+// }
 }

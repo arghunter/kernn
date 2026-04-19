@@ -5,14 +5,20 @@ import org.scalatest.flatspec.AnyFlatSpec
 import scala.util.Random
 
 class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd with ChiselSim {
-  val n = 4
 
-  // Harness with configurable memory sizes to support larger layers
+  val n = 16
+
+  // Memory depths scaled to n so they're always large enough
+  val wtMemDepth   = 65536
+  val actMemDepth  = 65536
+  val outMemDepth  = 65536
+  val biasMemDepth = 4096
+
   class SequencerTestHarness(val n: Int,
-                              wtMemDepth: Int = 16384,
-                              actMemDepth: Int = 16384,
-                              outMemDepth: Int = 16384,
-                              biasMemDepth: Int = 1024) extends Module {
+                              wtMemDepth: Int = 65536,
+                              actMemDepth: Int = 65536,
+                              outMemDepth: Int = 65536,
+                              biasMemDepth: Int = 4096) extends Module {
     val io = IO(new Bundle {
       val start          = Input(Bool())
       val busy           = Output(Bool())
@@ -26,24 +32,19 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       val result_base    = Output(UInt(16.W))
       val result_M       = Output(UInt(16.W))
       val result_N       = Output(UInt(16.W))
-      // Weight memory load
       val wt_wr_en       = Input(Bool())
       val wt_wr_addr     = Input(UInt(16.W))
       val wt_wr_data     = Input(Vec(n, SInt(8.W)))
-      // Activation memory load and read
       val act_wr_en      = Input(Bool())
       val act_wr_addr    = Input(UInt(16.W))
       val act_wr_data    = Input(Vec(n, SInt(8.W)))
       val act_rd_addr    = Input(UInt(16.W))
       val act_rd_data    = Output(Vec(n, SInt(8.W)))
-      // Bias memory load
       val bias_wr_en     = Input(Bool())
       val bias_wr_addr   = Input(UInt(16.W))
       val bias_wr_data   = Input(Vec(n, SInt(32.W)))
-      // Output memory read (for checking final layer if no copy)
       val out_rd_addr    = Input(UInt(16.W))
       val out_rd_data    = Output(Vec(n, SInt(32.W)))
-      // Output memory clear/write
       val out_wr_en      = Input(Bool())
       val out_wr_addr    = Input(UInt(16.W))
       val out_wr_data    = Input(Vec(n, SInt(32.W)))
@@ -56,11 +57,9 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     val outMem    = SyncReadMem(outMemDepth,  Vec(n, SInt(32.W)))
     val biasMem   = SyncReadMem(biasMemDepth, Vec(n, SInt(32.W)))
 
-    // Weight memory
     when(io.wt_wr_en) { weightMem.write(io.wt_wr_addr, io.wt_wr_data) }
     seq.io.weight_data := weightMem.read(seq.io.weight_addr)
 
-    // Activation memory: sequencer writes take priority, then testbench loads
     when(seq.io.act_wr_en) {
       actMem.write(seq.io.act_wr_addr, seq.io.act_wr_data)
     }.elsewhen(io.act_wr_en) {
@@ -69,7 +68,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     seq.io.act_rd_data := actMem.read(seq.io.act_rd_addr)
     io.act_rd_data     := actMem.read(io.act_rd_addr)
 
-    // Output memory
     when(seq.io.output_wen) {
       outMem.write(seq.io.output_wr_addr, seq.io.output_data_wr)
     }.elsewhen(io.out_wr_en) {
@@ -78,11 +76,9 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     seq.io.output_data_r := outMem.read(seq.io.output_rd_addr)
     io.out_rd_data       := outMem.read(io.out_rd_addr)
 
-    // Bias memory
     when(io.bias_wr_en) { biasMem.write(io.bias_wr_addr, io.bias_wr_data) }
     seq.io.bias_data := biasMem.read(seq.io.bias_addr)
 
-    // Control wiring
     seq.io.start          := io.start
     seq.io.num_layers     := io.num_layers
     seq.io.config_wr_en   := io.config_wr_en
@@ -126,8 +122,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     cycles
   }
 
-  // Weight layout: tiled as (tR, tK, t) → address = (tR * tilesK + tK) * n + t
-  // Each word holds one column of a 4-row tile (n rows × 1 element)
   def loadWeights(dut: SequencerTestHarness, W: Array[Array[Int]], m: Int, k: Int, baseAddr: Int): Unit = {
     val tilesK = k / n
     for (tR <- 0 until m / n; tK <- 0 until tilesK) {
@@ -143,7 +137,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     dut.io.wt_wr_en.poke(false.B)
   }
 
-  // Activation layout: tiled as (tK, tC, t) → address = (tK * tilesN + tC) * n + t
   def loadActivations(dut: SequencerTestHarness, A: Array[Array[Int]], k: Int, nn: Int, baseAddr: Int): Unit = {
     val tilesN = nn / n
     for (tK <- 0 until k / n; tC <- 0 until tilesN) {
@@ -159,7 +152,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     dut.io.act_wr_en.poke(false.B)
   }
 
-  // Bias layout: tiled as tC → address = baseAddr + tC, each word holds n bias values
   def loadBias(dut: SequencerTestHarness, bias: Array[Int], nn: Int, baseAddr: Int): Unit = {
     val tilesN = nn / n
     for (tC <- 0 until tilesN) {
@@ -182,7 +174,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     dut.io.out_wr_en.poke(false.B)
   }
 
-  // Read 32-bit output memory (used for final-layer results)
   def readOutputResults(dut: SequencerTestHarness, m: Int, nn: Int): Array[Array[Long]] = {
     val tilesN = nn / n
     val result = Array.ofDim[Long](m, nn)
@@ -199,7 +190,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     result
   }
 
-  // Read 8-bit activation memory (used for intermediate/quantized results)
   def readActResults(dut: SequencerTestHarness, m: Int, nn: Int, baseAddr: Int): Array[Array[Int]] = {
     val tilesN = nn / n
     val result = Array.ofDim[Int](m, nn)
@@ -266,15 +256,18 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
     }
   }
 
-  // ─── Utility: compute weight memory footprint (in words) for one layer ───────
-  // Returns (weightWords, biasWords) consumed by an M×K×N layer
   def layerMemFootprint(m: Int, k: Int, nn: Int): (Int, Int) = {
-    val wtWords   = (m / n) * (k / n) * n  // each tile col is n words
+    val wtWords   = (m / n) * (k / n) * n
     val biasWords = nn / n
     (wtWords, biasWords)
   }
 
+  // bufferBBase must be beyond the activation input buffer.
+  // For a layer with K rows and N cols, the activation footprint is (K/n)*(N/n)*n words.
+  def safeBufferBBase(k: Int, nn: Int): Int = (k / n) * (nn / n) * n * 4 + 256
+
   // ─── Common test driver for a single large layer ──────────────────────────────
+
   def runSingleLayerTest(m: Int, k: Int, nn: Int,
                           activation: Int, shift: Int,
                           relu6Thresh: Int, clampEn: Boolean,
@@ -283,21 +276,17 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       s"All dimensions must be multiples of n=$n, got M=$m K=$k N=$nn")
 
     val inputBase   = 0
-    val bufferBBase = (k / n) * (nn / n) * n * 4  // generous separation
+    val bufferBBase = safeBufferBBase(k, nn)
 
-    simulate(new SequencerTestHarness(n, wtMemDepth = 65536, actMemDepth = 65536,
-                                       outMemDepth = 65536, biasMemDepth = 4096)) { dut =>
+    simulate(new SequencerTestHarness(n)) { dut =>
       val rng  = new Random(seed)
       val W    = Array.fill(m, k)(rng.nextInt(20) - 10)
       val A    = Array.fill(k, nn)(rng.nextInt(20) - 10)
       val bias = Array.fill(nn)(rng.nextInt(100) - 50)
 
-      dut.io.start.poke(false.B)
-      dut.io.config_wr_en.poke(false.B)
-      dut.io.wt_wr_en.poke(false.B)
-      dut.io.act_wr_en.poke(false.B)
-      dut.io.bias_wr_en.poke(false.B)
-      dut.io.out_wr_en.poke(false.B)
+      dut.io.start.poke(false.B); dut.io.config_wr_en.poke(false.B)
+      dut.io.wt_wr_en.poke(false.B); dut.io.act_wr_en.poke(false.B)
+      dut.io.bias_wr_en.poke(false.B); dut.io.out_wr_en.poke(false.B)
       dut.clock.step(50)
 
       loadWeights(dut, W, m, k, 0)
@@ -310,12 +299,10 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       dut.io.num_layers.poke(1.U)
       dut.io.input_base.poke(inputBase.U)
       dut.io.buffer_b_base.poke(bufferBBase.U)
-      dut.io.start.poke(true.B)
-      dut.clock.step()
-      dut.io.start.poke(false.B)
+      dut.io.start.poke(true.B); dut.clock.step(); dut.io.start.poke(false.B)
 
       val cycles = waitForDone(dut)
-      println(s"[M=$m K=$k N=$nn act=$activation shift=$shift clamp=$clampEn] done in $cycles cycles")
+      println(s"[n=$n M=$m K=$k N=$nn act=$activation shift=$shift clamp=$clampEn] done in $cycles cycles")
 
       val raw      = matMul(W, A, m, k, nn)
       val expected = applyBiasActClamp(raw, bias, m, nn, activation, shift, relu6Thresh, clampEn)
@@ -323,111 +310,94 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
 
       for (r <- 0 until m; c <- 0 until nn)
         assert(result(r)(c) == expected(r)(c),
-          s"M=$m K=$k N=$nn: mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
+          s"[n=$n] M=$m K=$k N=$nn: mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
     }
   }
 
   // ─── Common test driver for a chain of layers ────────────────────────────────
+
   case class LayerSpec(m: Int, k: Int, nn: Int, activation: Int, shift: Int,
                         relu6Thresh: Int, clampEn: Boolean)
 
   def runMultiLayerTest(layers: Seq[LayerSpec], seed: Long = 0L): Unit = {
     require(layers.nonEmpty)
-    // The output of layer i has shape M[i]×N[i]. It feeds layer i+1 as a K[i+1]×N[i+1]
-    // matrix, so: K[i+1] == M[i] (output rows become next input rows) and
-    // N[i+1] == N[i] (the column/batch dimension is fixed throughout the network).
     for (i <- 1 until layers.length) {
       require(layers(i).k == layers(i-1).m,
         s"Layer $i K=${layers(i).k} must equal layer ${i-1} M=${layers(i-1).m}")
       require(layers(i).nn == layers(i-1).nn,
-        s"Layer $i N=${layers(i).nn} must equal layer ${i-1} N=${layers(i-1).nn} (column dim is fixed)")
+        s"Layer $i N=${layers(i).nn} must equal layer ${i-1} N=${layers(i-1).nn}")
     }
 
     val inputBase   = 0
-    // bufferBBase just needs to be beyond the largest activation buffer
     val maxActWords = layers.map(l => (l.k / n) * (l.nn / n) * n).max
-    val bufferBBase = maxActWords * 4 + 256   // generous gap
+    val bufferBBase = maxActWords * 4 + 256
 
-    simulate(new SequencerTestHarness(n, wtMemDepth = 65536, actMemDepth = 65536,
-                                       outMemDepth = 65536, biasMemDepth = 4096)) { dut =>
+    simulate(new SequencerTestHarness(n)) { dut =>
       val rng = new Random(seed)
 
-      val Ws    = layers.map(l => Array.fill(l.m, l.k)(rng.nextInt(20) - 10))
+      val Ws     = layers.map(l => Array.fill(l.m, l.k)(rng.nextInt(20) - 10))
       val biases = layers.map(l => Array.fill(l.nn)(rng.nextInt(100) - 50))
-      val A0    = Array.fill(layers.head.k, layers.head.nn)(rng.nextInt(20) - 10)
+      val A0     = Array.fill(layers.head.k, layers.head.nn)(rng.nextInt(20) - 10)
 
-      dut.io.start.poke(false.B)
-      dut.io.config_wr_en.poke(false.B)
-      dut.io.wt_wr_en.poke(false.B)
-      dut.io.act_wr_en.poke(false.B)
-      dut.io.bias_wr_en.poke(false.B)
-      dut.io.out_wr_en.poke(false.B)
+      dut.io.start.poke(false.B); dut.io.config_wr_en.poke(false.B)
+      dut.io.wt_wr_en.poke(false.B); dut.io.act_wr_en.poke(false.B)
+      dut.io.bias_wr_en.poke(false.B); dut.io.out_wr_en.poke(false.B)
       dut.clock.step(50)
 
-      // Load all weights back-to-back, track offsets
-      var wtOff   = 0
-      var biasOff = 0
+      var wtOff = 0; var biasOff = 0
       for (i <- layers.indices) {
         val l = layers(i)
         loadWeights(dut, Ws(i), l.m, l.k, wtOff)
         loadBias(dut, biases(i), l.nn, biasOff)
         val (wt, b) = layerMemFootprint(l.m, l.k, l.nn)
-        wtOff   += wt
-        biasOff += b
+        wtOff += wt; biasOff += b
       }
 
       loadActivations(dut, A0, layers.head.k, layers.head.nn, inputBase)
       clearOutputMem(dut, 4096)
 
-      // Write layer configs
-      wtOff   = 0
-      biasOff = 0
+      wtOff = 0; biasOff = 0
       for (i <- layers.indices) {
         val l = layers(i)
         writeConfig(dut, i, wtOff, biasOff, l.m, l.k, l.nn, l.activation, l.shift, l.relu6Thresh, l.clampEn)
         val (wt, b) = layerMemFootprint(l.m, l.k, l.nn)
-        wtOff   += wt
-        biasOff += b
+        wtOff += wt; biasOff += b
       }
 
       dut.io.num_layers.poke(layers.length.U)
       dut.io.input_base.poke(inputBase.U)
       dut.io.buffer_b_base.poke(bufferBBase.U)
-      dut.io.start.poke(true.B)
-      dut.clock.step()
-      dut.io.start.poke(false.B)
+      dut.io.start.poke(true.B); dut.clock.step(); dut.io.start.poke(false.B)
 
       val cycles = waitForDone(dut)
-      println(s"[${layers.length} layers] done in $cycles cycles")
+      println(s"[n=$n ${layers.length} layers] done in $cycles cycles")
 
-      // Software reference: chain layers
       var cur: Array[Array[Int]] = A0
       for (i <- layers.indices) {
         val l   = layers(i)
         val raw = matMul(Ws(i), cur, l.m, l.k, l.nn)
         cur = applyBiasActClamp(raw, biases(i), l.m, l.nn, l.activation, l.shift, l.relu6Thresh, l.clampEn)
       }
-      val expected = cur  // last layer's output (int-typed, possibly unclamped)
 
-      val last = layers.last
+      val last   = layers.last
       val result = readOutputResults(dut, last.m, last.nn)
 
       for (r <- 0 until last.m; c <- 0 until last.nn)
-        assert(result(r)(c) == expected(r)(c).toLong,
-          s"Mismatch at layer${layers.length-1} ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
+        assert(result(r)(c) == cur(r)(c).toLong,
+          s"[n=$n] Mismatch at layer${layers.length-1} ($r,$c): got ${result(r)(c)}, expected ${cur(r)(c)}")
     }
   }
 
-  // ─── Original 4×4 tests (unchanged) ─────────────────────────────────────────
-
-  val inputBase   = 0
-  val bufferBBase = 2048
+  // ─── Inline tests (sized relative to n) ──────────────────────────────────────
 
   "LayerSequencer" should "run a single layer (identity, no clamp)" in {
     simulate(new SequencerTestHarness(n)) { dut =>
-      val m = 4; val k = 4; val nn = 4
-      val W    = Array(Array(1,2,3,4), Array(5,6,7,8), Array(1,0,1,0), Array(0,1,0,1))
-      val A    = Array(Array(1,0,0,1), Array(0,1,0,1), Array(0,0,1,1), Array(1,0,0,1))
+      val m = n; val k = n; val nn = n
+      val inputBase   = 0
+      val bufferBBase = safeBufferBBase(k, nn)
+      val rng  = new Random(99)
+      val W    = Array.fill(m, k)(rng.nextInt(10) - 5)
+      val A    = Array.fill(k, nn)(rng.nextInt(10) - 5)
       val bias = Array.fill(nn)(0)
 
       dut.io.start.poke(false.B); dut.io.config_wr_en.poke(false.B)
@@ -439,7 +409,6 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       loadActivations(dut, A, k, nn, inputBase)
       loadBias(dut, bias, nn, 0)
       clearOutputMem(dut, 512)
-
       writeConfig(dut, 0, 0, 0, m, k, nn, 0, 0, 6, false)
 
       dut.io.num_layers.poke(1.U)
@@ -448,7 +417,7 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       dut.io.start.poke(true.B); dut.clock.step(); dut.io.start.poke(false.B)
 
       val cycles = waitForDone(dut)
-      println(s"Single 4×4 layer done in $cycles cycles")
+      println(s"[n=$n] Single ${n}x${n} layer done in $cycles cycles")
 
       val raw      = matMul(W, A, m, k, nn)
       val expected = applyBiasActClamp(raw, bias, m, nn, 0, 0, 6, false)
@@ -458,23 +427,26 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
         println(s"  Row $r: ${result(r).mkString(", ")} (expected: ${expected(r).mkString(", ")})")
       for (r <- 0 until m; c <- 0 until nn)
         assert(result(r)(c) == expected(r)(c),
-          s"Mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
+          s"[n=$n] Mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
     }
   }
 
   it should "run two layers with ReLU and clamp" in {
     simulate(new SequencerTestHarness(n)) { dut =>
-      val m0 = 4; val k0 = 4; val n0 = 4
-      val m1 = 4; val k1 = 4; val n1 = 4
-      val rng  = new Random(42)
-      val W0   = Array.fill(m0, k0)(rng.nextInt(20) - 10)
-      val W1   = Array.fill(m1, k1)(rng.nextInt(20) - 10)
-      val A0   = Array.fill(k0, n0)(rng.nextInt(20) - 10)
+      val m0 = n; val k0 = n; val n0 = n
+      val m1 = n; val k1 = n; val n1 = n
+      val inputBase   = 0
+      val bufferBBase = safeBufferBBase(k0, n0)
+      val rng   = new Random(42)
+      val W0    = Array.fill(m0, k0)(rng.nextInt(20) - 10)
+      val W1    = Array.fill(m1, k1)(rng.nextInt(20) - 10)
+      val A0    = Array.fill(k0, n0)(rng.nextInt(20) - 10)
       val bias0 = Array.fill(n0)(rng.nextInt(100) - 50)
       val bias1 = Array.fill(n1)(0)
 
-      val w0Base = 0;       val w1Base = m0 * k0
-      val b0Base = 0;       val b1Base = n0 / n
+      val (w0Words, b0Words) = layerMemFootprint(m0, k0, n0)
+      val w0Base = 0; val w1Base = w0Words
+      val b0Base = 0; val b1Base = b0Words
 
       dut.io.start.poke(false.B); dut.io.config_wr_en.poke(false.B)
       dut.io.wt_wr_en.poke(false.B); dut.io.act_wr_en.poke(false.B)
@@ -497,7 +469,7 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       dut.io.start.poke(true.B); dut.clock.step(); dut.io.start.poke(false.B)
 
       val cycles = waitForDone(dut)
-      println(s"Two 4×4 layers done in $cycles cycles")
+      println(s"[n=$n] Two ${n}x${n} layers done in $cycles cycles")
 
       val raw0     = matMul(W0, A0, m0, k0, n0)
       val act0     = applyBiasActClamp(raw0, bias0, m0, n0, 1, 4, 6, true)
@@ -509,17 +481,19 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
         println(s"  Row $r: ${result(r).mkString(", ")} (expected: ${expected(r).mkString(", ")})")
       for (r <- 0 until m1; c <- 0 until n1)
         assert(result(r)(c) == expected(r)(c),
-          s"Mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
+          s"[n=$n] Mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
     }
   }
 
   it should "run three layers with different activations" in {
     simulate(new SequencerTestHarness(n)) { dut =>
-      val rng   = new Random(100)
-      val sizes = Seq((4,4,4), (4,4,4), (4,4,4))
+      val rng    = new Random(100)
+      val sizes  = Seq((n,n,n), (n,n,n), (n,n,n))
       val funcs  = Seq(1, 2, 0)
       val shifts = Seq(4, 3, 0)
       val clamps = Seq(true, true, false)
+      val inputBase   = 0
+      val bufferBBase = safeBufferBBase(sizes(0)._2, sizes(0)._3)
 
       val weights = sizes.map { case (m, k, _) => Array.fill(m, k)(rng.nextInt(10) - 5) }
       val biases  = sizes.map { case (_, _, nn) => Array.fill(nn)(rng.nextInt(20) - 10) }
@@ -532,14 +506,16 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
 
       var wtOffset = 0; var biasOffset = 0
       for (i <- 0 until 3) {
-        val (m, k, _) = sizes(i)
+        val (m, k, nn) = sizes(i)
         loadWeights(dut, weights(i), m, k, wtOffset)
-        wtOffset += (m / n) * (k / n) * n
+        val (wt, _) = layerMemFootprint(m, k, nn)
+        wtOffset += wt
       }
       for (i <- 0 until 3) {
         val (_, _, nn) = sizes(i)
         loadBias(dut, biases(i), nn, biasOffset)
-        biasOffset += nn / n
+        val (_, b) = layerMemFootprint(sizes(i)._1, sizes(i)._2, nn)
+        biasOffset += b
       }
       loadActivations(dut, input, sizes(0)._2, sizes(0)._3, inputBase)
       clearOutputMem(dut, 512)
@@ -548,8 +524,8 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       for (i <- 0 until 3) {
         val (m, k, nn) = sizes(i)
         writeConfig(dut, i, wtOffset, biasOffset, m, k, nn, funcs(i), shifts(i), 6, clamps(i))
-        wtOffset += (m / n) * (k / n) * n
-        biasOffset += nn / n
+        val (wt, b) = layerMemFootprint(m, k, nn)
+        wtOffset += wt; biasOffset += b
       }
 
       dut.io.num_layers.poke(3.U)
@@ -558,140 +534,129 @@ class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd
       dut.io.start.poke(true.B); dut.clock.step(); dut.io.start.poke(false.B)
 
       val cycles = waitForDone(dut)
-      println(s"Three 4×4 layers done in $cycles cycles")
+      println(s"[n=$n] Three ${n}x${n} layers done in $cycles cycles")
 
-      val lastRaw  = matMul(weights(2),
-        applyBiasActClamp(
-          matMul(weights(1),
-            applyBiasActClamp(matMul(weights(0), input, 4,4,4), biases(0), 4,4, 1,4,6,true),
-            4,4,4),
-          biases(1), 4,4, 2,3,6,true),
-        4,4,4)
-      val expected = applyBiasActClamp(lastRaw, biases(2), 4, 4, 0, 0, 6, false)
-      val result   = readOutputResults(dut, 4, 4)
+      var cur = input.map(_.map(_.toInt))
+      for (i <- 0 until 3) {
+        val (m, k, nn) = sizes(i)
+        val raw = matMul(weights(i), cur, m, k, nn)
+        cur = applyBiasActClamp(raw, biases(i), m, nn, funcs(i), shifts(i), 6, clamps(i))
+      }
+      val expected = cur
+      val result   = readOutputResults(dut, sizes(2)._1, sizes(2)._3)
 
-      for (r <- 0 until 4)
+      for (r <- 0 until n)
         println(s"  Row $r: ${result(r).mkString(", ")} (expected: ${expected(r).mkString(", ")})")
-      for (r <- 0 until 4; c <- 0 until 4)
-        assert(result(r)(c) == expected(r)(c),
-          s"Mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
+      for (r <- 0 until n; c <- 0 until n)
+        assert(result(r)(c) == expected(r)(c).toLong,
+          s"[n=$n] Mismatch at ($r,$c): got ${result(r)(c)}, expected ${expected(r)(c)}")
     }
   }
 
   // ─── Larger single-layer tests ───────────────────────────────────────────────
 
-  it should "run an 8×8×8 single layer (identity, no clamp)" in {
-    runSingleLayerTest(m = 8, k = 8, nn = 8,
-      activation = 0, shift = 0, relu6Thresh = 6, clampEn = false, seed = 1L)
+  it should s"run a ${2*n}x${2*n}x${2*n} single layer (identity, no clamp)" in {
+    runSingleLayerTest(2*n, 2*n, 2*n, 0, 0, 6, false, seed = 1L)
   }
 
-  it should "run an 8×8×8 single layer with ReLU and clamp" in {
-    runSingleLayerTest(m = 8, k = 8, nn = 8,
-      activation = 1, shift = 4, relu6Thresh = 6, clampEn = true, seed = 2L)
+  it should s"run a ${2*n}x${2*n}x${2*n} single layer with ReLU and clamp" in {
+    runSingleLayerTest(2*n, 2*n, 2*n, 1, 4, 6, true, seed = 2L)
   }
 
-  it should "run a 16×16×16 single layer (identity, no clamp)" in {
-    runSingleLayerTest(m = 16, k = 16, nn = 16,
-      activation = 0, shift = 0, relu6Thresh = 6, clampEn = false, seed = 3L)
+  it should s"run a ${4*n}x${4*n}x${4*n} single layer (identity, no clamp)" in {
+    runSingleLayerTest(4*n, 4*n, 4*n, 0, 0, 6, false, seed = 3L)
   }
 
-  it should "run a 16×16×16 single layer with ReLU and clamp" in {
-    runSingleLayerTest(m = 16, k = 16, nn = 16,
-      activation = 1, shift = 4, relu6Thresh = 6, clampEn = true, seed = 4L)
+  it should s"run a ${4*n}x${4*n}x${4*n} single layer with ReLU and clamp" in {
+    runSingleLayerTest(4*n, 4*n, 4*n, 1, 4, 6, true, seed = 4L)
   }
 
-  it should "run a 16×16×16 single layer with Leaky ReLU and clamp" in {
-    runSingleLayerTest(m = 16, k = 16, nn = 16,
-      activation = 2, shift = 3, relu6Thresh = 6, clampEn = true, seed = 5L)
+  it should s"run a ${4*n}x${4*n}x${4*n} single layer with Leaky ReLU and clamp" in {
+    runSingleLayerTest(4*n, 4*n, 4*n, 2, 3, 6, true, seed = 5L)
   }
 
-  it should "run a 16×8×16 non-square layer (identity, no clamp)" in {
-    runSingleLayerTest(m = 16, k = 8, nn = 16,
-      activation = 0, shift = 0, relu6Thresh = 6, clampEn = false, seed = 6L)
+  it should s"run a ${4*n}x${2*n}x${4*n} non-square layer (identity, no clamp)" in {
+    runSingleLayerTest(4*n, 2*n, 4*n, 0, 0, 6, false, seed = 6L)
   }
 
-  it should "run a 32×16×8 non-square layer with ReLU and clamp" in {
-    runSingleLayerTest(m = 32, k = 16, nn = 8,
-      activation = 1, shift = 4, relu6Thresh = 6, clampEn = true, seed = 7L)
+  it should s"run a ${8*n}x${4*n}x${2*n} non-square layer with ReLU and clamp" in {
+    runSingleLayerTest(8*n, 4*n, 2*n, 1, 4, 6, true, seed = 7L)
   }
 
-  it should "run a 32×32×32 single layer (identity, no clamp)" in {
-    runSingleLayerTest(m = 32, k = 32, nn = 32,
-      activation = 0, shift = 0, relu6Thresh = 6, clampEn = false, seed = 8L)
+  it should s"run a ${8*n}x${8*n}x${8*n} single layer (identity, no clamp)" in {
+    runSingleLayerTest(8*n, 8*n, 8*n, 0, 0, 6, false, seed = 8L)
   }
 
   // ─── Larger multi-layer tests ────────────────────────────────────────────────
 
-  it should "run two 8×8×8 layers with ReLU→identity" in {
+  it should s"run two ${2*n}x${2*n}x${2*n} layers with ReLU->identity" in {
     runMultiLayerTest(Seq(
-      LayerSpec(8, 8, 8,  activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec(8, 8, 8,  activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(2*n, 2*n, 2*n, 1, 4, 6, true),
+      LayerSpec(2*n, 2*n, 2*n, 0, 0, 6, false)
     ), seed = 10L)
   }
 
-  it should "run two 16×16×16 layers with ReLU→identity" in {
+  it should s"run two ${4*n}x${4*n}x${4*n} layers with ReLU->identity" in {
     runMultiLayerTest(Seq(
-      LayerSpec(16, 16, 16, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 16, 16, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(4*n, 4*n, 4*n, 1, 4, 6, true),
+      LayerSpec(4*n, 4*n, 4*n, 0, 0, 6, false)
     ), seed = 11L)
   }
 
-  it should "run a 3-layer 8×8×8 chain (relu → leaky → identity)" in {
+  it should s"run a 3-layer ${2*n}x${2*n}x${2*n} chain (relu->leaky->identity)" in {
     runMultiLayerTest(Seq(
-      LayerSpec(8, 8, 8, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec(8, 8, 8, activation = 2, shift = 3, relu6Thresh = 6, clampEn = true),
-      LayerSpec(8, 8, 8, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(2*n, 2*n, 2*n, 1, 4, 6, true),
+      LayerSpec(2*n, 2*n, 2*n, 2, 3, 6, true),
+      LayerSpec(2*n, 2*n, 2*n, 0, 0, 6, false)
     ), seed = 12L)
   }
 
-  it should "run a 3-layer 16×16×16 chain (relu → leaky → identity)" in {
+  it should s"run a 3-layer ${4*n}x${4*n}x${4*n} chain (relu->leaky->identity)" in {
     runMultiLayerTest(Seq(
-      LayerSpec(16, 16, 16, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 16, 16, activation = 2, shift = 3, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 16, 16, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(4*n, 4*n, 4*n, 1, 4, 6, true),
+      LayerSpec(4*n, 4*n, 4*n, 2, 3, 6, true),
+      LayerSpec(4*n, 4*n, 4*n, 0, 0, 6, false)
     ), seed = 13L)
   }
 
-  it should "run a dimension-shrinking chain: 32×32×8 → 16×32×8 → 8×16×8" in {
-    // M shrinks each layer (32→16→8). K[i+1] == M[i]. N=8 is fixed (batch columns).
+  it should "run a dimension-shrinking chain" in {
     runMultiLayerTest(Seq(
-      LayerSpec(32, 32, 8, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 32, 8, activation = 2, shift = 3, relu6Thresh = 6, clampEn = true),
-      LayerSpec( 8, 16, 8, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(8*n, 8*n, 2*n, 1, 4, 6, true),
+      LayerSpec(4*n, 8*n, 2*n, 2, 3, 6, true),
+      LayerSpec(2*n, 4*n, 2*n, 0, 0, 6, false)
     ), seed = 14L)
   }
 
-  it should "run a dimension-growing chain: 4×4×8 → 8×4×8 → 16×8×8" in {
-    // M grows each layer (4→8→16). K[i+1] == M[i]. N=8 is fixed (batch columns).
+  it should "run a dimension-growing chain" in {
     runMultiLayerTest(Seq(
-      LayerSpec( 4,  4, 8, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec( 8,  4, 8, activation = 2, shift = 3, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16,  8, 8, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(  n,   n, 2*n, 1, 4, 6, true),
+      LayerSpec(2*n,   n, 2*n, 2, 3, 6, true),
+      LayerSpec(4*n, 2*n, 2*n, 0, 0, 6, false)
     ), seed = 15L)
   }
 
-  it should "run a 4-layer 8×8×8 chain with all activation types" in {
+  it should s"run a 4-layer ${2*n}x${2*n}x${2*n} chain with all activation types" in {
     runMultiLayerTest(Seq(
-      LayerSpec(8, 8, 8, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),   // relu
-      LayerSpec(8, 8, 8, activation = 2, shift = 3, relu6Thresh = 6, clampEn = true),   // leaky relu
-      LayerSpec(8, 8, 8, activation = 3, shift = 2, relu6Thresh = 6, clampEn = true),   // relu6
-      LayerSpec(8, 8, 8, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)   // identity
+      LayerSpec(2*n, 2*n, 2*n, 1, 4, 6, true),
+      LayerSpec(2*n, 2*n, 2*n, 2, 3, 6, true),
+      LayerSpec(2*n, 2*n, 2*n, 3, 2, 6, true),
+      LayerSpec(2*n, 2*n, 2*n, 0, 0, 6, false)
     ), seed = 16L)
   }
 
-  it should "run a 4-layer 16×16×16 chain with all activation types" in {
+  it should s"run a 4-layer ${4*n}x${4*n}x${4*n} chain with all activation types" in {
     runMultiLayerTest(Seq(
-      LayerSpec(16, 16, 16, activation = 1, shift = 4, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 16, 16, activation = 2, shift = 3, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 16, 16, activation = 3, shift = 2, relu6Thresh = 6, clampEn = true),
-      LayerSpec(16, 16, 16, activation = 0, shift = 0, relu6Thresh = 6, clampEn = false)
+      LayerSpec(4*n, 4*n, 4*n, 1, 4, 6, true),
+      LayerSpec(4*n, 4*n, 4*n, 2, 3, 6, true),
+      LayerSpec(4*n, 4*n, 4*n, 3, 2, 6, true),
+      LayerSpec(4*n, 4*n, 4*n, 0, 0, 6, false)
     ), seed = 17L)
   }
 
-  it should "stress-test: 5-layer 16×16×16 all-relu chain" in {
+  it should s"stress-test: 5-layer ${4*n}x${4*n}x${4*n} all-relu chain" in {
     runMultiLayerTest(Seq.tabulate(5) { i =>
       val isLast = i == 4
-      LayerSpec(16, 16, 16,
+      LayerSpec(4*n, 4*n, 4*n,
         activation  = if (isLast) 0 else 1,
         shift       = if (isLast) 0 else 4,
         relu6Thresh = 6,
