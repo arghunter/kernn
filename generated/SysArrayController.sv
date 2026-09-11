@@ -8,23 +8,55 @@ module SysArrayController(
                 io_weight_data_1,
                 io_weight_data_2,
                 io_weight_data_3,
+                io_weight_data_4,
+                io_weight_data_5,
+                io_weight_data_6,
+                io_weight_data_7,
+                io_weight_data_8,
+                io_weight_data_9,
+                io_weight_data_10,
+                io_weight_data_11,
   input  [15:0] io_activation_base_addr,
   output [15:0] io_activation_addr,
   input  [7:0]  io_activation_data_0,
                 io_activation_data_1,
                 io_activation_data_2,
                 io_activation_data_3,
+                io_activation_data_4,
+                io_activation_data_5,
+                io_activation_data_6,
+                io_activation_data_7,
+                io_activation_data_8,
+                io_activation_data_9,
+                io_activation_data_10,
+                io_activation_data_11,
   input  [15:0] io_output_base_addr,
   output [15:0] io_output_rd_addr,
   input  [31:0] io_output_data_r_0,
                 io_output_data_r_1,
                 io_output_data_r_2,
                 io_output_data_r_3,
+                io_output_data_r_4,
+                io_output_data_r_5,
+                io_output_data_r_6,
+                io_output_data_r_7,
+                io_output_data_r_8,
+                io_output_data_r_9,
+                io_output_data_r_10,
+                io_output_data_r_11,
   output [15:0] io_output_wr_addr,
   output [31:0] io_output_data_wr_0,
                 io_output_data_wr_1,
                 io_output_data_wr_2,
                 io_output_data_wr_3,
+                io_output_data_wr_4,
+                io_output_data_wr_5,
+                io_output_data_wr_6,
+                io_output_data_wr_7,
+                io_output_data_wr_8,
+                io_output_data_wr_9,
+                io_output_data_wr_10,
+                io_output_data_wr_11,
   output        io_output_wen,
   input         io_accumulate,
   output        io_busy,
@@ -35,6 +67,14 @@ module SysArrayController(
   wire [31:0] _array_io_actOut_1;
   wire [31:0] _array_io_actOut_2;
   wire [31:0] _array_io_actOut_3;
+  wire [31:0] _array_io_actOut_4;
+  wire [31:0] _array_io_actOut_5;
+  wire [31:0] _array_io_actOut_6;
+  wire [31:0] _array_io_actOut_7;
+  wire [31:0] _array_io_actOut_8;
+  wire [31:0] _array_io_actOut_9;
+  wire [31:0] _array_io_actOut_10;
+  wire [31:0] _array_io_actOut_11;
   reg  [2:0]  state;
   reg  [23:0] count;
   reg  [15:0] weight_base_addr_reg;
@@ -42,21 +82,20 @@ module SysArrayController(
   reg  [15:0] output_base_addr_reg;
   reg         accumulate_reg;
   wire        _GEN = state == 3'h0;
-  wire        _GEN_0 = count == 24'h4;
+  wire        _GEN_0 = count == 24'hC;
   wire        _GEN_1 = state == 3'h1;
-  wire        _GEN_2 = count == 24'h8;
+  wire        _GEN_2 = count == 24'hB;
   wire        _GEN_3 = _GEN | ~(_GEN_1 & _GEN_2);
   wire        _GEN_4 = state == 3'h2;
   wire        _GEN_5 = state == 3'h3;
   wire        _GEN_6 = _GEN | _GEN_1 | _GEN_4 | ~_GEN_5;
   wire        _GEN_7 = state == 3'h4;
-  wire        _GEN_8 = count == 24'h7;
-  wire        _GEN_9 = state == 3'h5;
-  wire        _GEN_10 = state == 3'h6;
-  wire        _GEN_11 = _GEN_1 | _GEN_4 | _GEN_5 | _GEN_7;
-  wire        _GEN_12 = _GEN | _GEN_1 | _GEN_4 | _GEN_5 | _GEN_7 | _GEN_9;
-  wire [15:0] _io_output_rd_addr_T_4 = output_base_addr_reg + 16'h4;
-  wire        _GEN_13 = _GEN_12 | ~_GEN_10;
+  wire        _GEN_8 = count == 24'h17;
+  wire        _GEN_9 = state == 3'h6;
+  wire        _GEN_10 = _GEN_1 | _GEN_4 | _GEN_5;
+  wire        _GEN_11 = _GEN | _GEN_1 | _GEN_4 | _GEN_5 | _GEN_7;
+  wire [15:0] _io_output_rd_addr_T_4 = output_base_addr_reg + 16'hC;
+  wire        _GEN_12 = _GEN_11 | ~_GEN_9;
   wire [23:0] _io_output_rd_addr_T_6 = count + 24'h1;
   reg  [23:0] casez_tmp;
   always_comb begin
@@ -72,7 +111,7 @@ module SysArrayController(
       3'b100:
         casez_tmp = _GEN_8 ? 24'h1 : count + 24'h1;
       3'b101:
-        casez_tmp = 24'h1;
+        casez_tmp = count;
       3'b110:
         casez_tmp = _GEN_0 ? 24'h0 : _io_output_rd_addr_T_6;
       default:
@@ -80,25 +119,25 @@ module SysArrayController(
     endcase
   end // always_comb
   reg  [2:0]  casez_tmp_0;
-  wire [2:0]  _GEN_14 = _GEN_10 & _GEN_0 ? 3'h2 : state;
+  wire [2:0]  _GEN_13 = _GEN_9 & _GEN_0 ? 3'h2 : state;
   always_comb begin
     casez (state)
       3'b000:
-        casez_tmp_0 = _GEN_0 ? 3'h1 : state;
+        casez_tmp_0 = _GEN_0 ? 3'h2 : state;
       3'b001:
         casez_tmp_0 = _GEN_2 ? 3'h3 : state;
       3'b010:
-        casez_tmp_0 = io_start ? 3'h0 : state;
+        casez_tmp_0 = io_start ? 3'h1 : state;
       3'b011:
         casez_tmp_0 = _GEN_0 ? 3'h4 : state;
       3'b100:
-        casez_tmp_0 = _GEN_8 ? 3'h5 : state;
+        casez_tmp_0 = _GEN_8 ? 3'h6 : state;
       3'b101:
-        casez_tmp_0 = 3'h6;
+        casez_tmp_0 = _GEN_13;
       3'b110:
-        casez_tmp_0 = _GEN_14;
+        casez_tmp_0 = _GEN_13;
       default:
-        casez_tmp_0 = _GEN_14;
+        casez_tmp_0 = _GEN_13;
     endcase
   end // always_comb
   always @(posedge clock) begin
@@ -124,50 +163,106 @@ module SysArrayController(
     end
   end // always @(posedge)
   SysArray array (
-    .clock         (clock),
-    .reset         (reset),
-    .io_weightIn_0 (_GEN_6 ? 8'h0 : io_weight_data_0),
-    .io_weightIn_1 (_GEN_6 ? 8'h0 : io_weight_data_1),
-    .io_weightIn_2 (_GEN_6 ? 8'h0 : io_weight_data_2),
-    .io_weightIn_3 (_GEN_6 ? 8'h0 : io_weight_data_3),
-    .io_actIn_0    (_GEN_6 ? 8'h0 : io_activation_data_0),
-    .io_actIn_1    (_GEN_6 ? 8'h0 : io_activation_data_1),
-    .io_actIn_2    (_GEN_6 ? 8'h0 : io_activation_data_2),
-    .io_actIn_3    (_GEN_6 ? 8'h0 : io_activation_data_3),
-    .io_actOut_0   (_array_io_actOut_0),
-    .io_actOut_1   (_array_io_actOut_1),
-    .io_actOut_2   (_array_io_actOut_2),
-    .io_actOut_3   (_array_io_actOut_3),
-    .io_resetIn    (_GEN | ~_GEN_11 & (_GEN_9 | _GEN_10))
+    .clock          (clock),
+    .reset          (reset),
+    .io_weightIn_0  (_GEN_6 ? 8'h0 : io_weight_data_0),
+    .io_weightIn_1  (_GEN_6 ? 8'h0 : io_weight_data_1),
+    .io_weightIn_2  (_GEN_6 ? 8'h0 : io_weight_data_2),
+    .io_weightIn_3  (_GEN_6 ? 8'h0 : io_weight_data_3),
+    .io_weightIn_4  (_GEN_6 ? 8'h0 : io_weight_data_4),
+    .io_weightIn_5  (_GEN_6 ? 8'h0 : io_weight_data_5),
+    .io_weightIn_6  (_GEN_6 ? 8'h0 : io_weight_data_6),
+    .io_weightIn_7  (_GEN_6 ? 8'h0 : io_weight_data_7),
+    .io_weightIn_8  (_GEN_6 ? 8'h0 : io_weight_data_8),
+    .io_weightIn_9  (_GEN_6 ? 8'h0 : io_weight_data_9),
+    .io_weightIn_10 (_GEN_6 ? 8'h0 : io_weight_data_10),
+    .io_weightIn_11 (_GEN_6 ? 8'h0 : io_weight_data_11),
+    .io_actIn_0     (_GEN_6 ? 8'h0 : io_activation_data_0),
+    .io_actIn_1     (_GEN_6 ? 8'h0 : io_activation_data_1),
+    .io_actIn_2     (_GEN_6 ? 8'h0 : io_activation_data_2),
+    .io_actIn_3     (_GEN_6 ? 8'h0 : io_activation_data_3),
+    .io_actIn_4     (_GEN_6 ? 8'h0 : io_activation_data_4),
+    .io_actIn_5     (_GEN_6 ? 8'h0 : io_activation_data_5),
+    .io_actIn_6     (_GEN_6 ? 8'h0 : io_activation_data_6),
+    .io_actIn_7     (_GEN_6 ? 8'h0 : io_activation_data_7),
+    .io_actIn_8     (_GEN_6 ? 8'h0 : io_activation_data_8),
+    .io_actIn_9     (_GEN_6 ? 8'h0 : io_activation_data_9),
+    .io_actIn_10    (_GEN_6 ? 8'h0 : io_activation_data_10),
+    .io_actIn_11    (_GEN_6 ? 8'h0 : io_activation_data_11),
+    .io_actOut_0    (_array_io_actOut_0),
+    .io_actOut_1    (_array_io_actOut_1),
+    .io_actOut_2    (_array_io_actOut_2),
+    .io_actOut_3    (_array_io_actOut_3),
+    .io_actOut_4    (_array_io_actOut_4),
+    .io_actOut_5    (_array_io_actOut_5),
+    .io_actOut_6    (_array_io_actOut_6),
+    .io_actOut_7    (_array_io_actOut_7),
+    .io_actOut_8    (_array_io_actOut_8),
+    .io_actOut_9    (_array_io_actOut_9),
+    .io_actOut_10   (_array_io_actOut_10),
+    .io_actOut_11   (_array_io_actOut_11),
+    .io_resetIn     (_GEN | ~_GEN_10 & (_GEN_7 ? _GEN_8 : _GEN_9))
   );
   assign io_weight_addr =
     _GEN_3 ? weight_base_addr_reg + count[15:0] : weight_base_addr_reg;
   assign io_activation_addr =
     _GEN_3 ? activation_base_addr_reg + count[15:0] : activation_base_addr_reg;
   assign io_output_rd_addr =
-    _GEN | _GEN_11
+    _GEN | _GEN_10
       ? 16'h0
-      : _GEN_9
-          ? output_base_addr_reg + 16'h3
-          : _GEN_10 ? _io_output_rd_addr_T_4 - _io_output_rd_addr_T_6[15:0] : 16'h0;
-  assign io_output_wr_addr = _GEN_13 ? 16'h0 : _io_output_rd_addr_T_4 - count[15:0];
+      : _GEN_7
+          ? (_GEN_8 ? output_base_addr_reg + 16'hB : 16'h0)
+          : _GEN_9 ? _io_output_rd_addr_T_4 - _io_output_rd_addr_T_6[15:0] : 16'h0;
+  assign io_output_wr_addr = _GEN_12 ? 16'h0 : _io_output_rd_addr_T_4 - count[15:0];
   assign io_output_data_wr_0 =
-    _GEN_13
+    _GEN_12
       ? 32'h0
       : accumulate_reg ? _array_io_actOut_0 + io_output_data_r_0 : _array_io_actOut_0;
   assign io_output_data_wr_1 =
-    _GEN_13
+    _GEN_12
       ? 32'h0
       : accumulate_reg ? _array_io_actOut_1 + io_output_data_r_1 : _array_io_actOut_1;
   assign io_output_data_wr_2 =
-    _GEN_13
+    _GEN_12
       ? 32'h0
       : accumulate_reg ? _array_io_actOut_2 + io_output_data_r_2 : _array_io_actOut_2;
   assign io_output_data_wr_3 =
-    _GEN_13
+    _GEN_12
       ? 32'h0
       : accumulate_reg ? _array_io_actOut_3 + io_output_data_r_3 : _array_io_actOut_3;
-  assign io_output_wen = ~_GEN_12 & _GEN_10;
+  assign io_output_data_wr_4 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_4 + io_output_data_r_4 : _array_io_actOut_4;
+  assign io_output_data_wr_5 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_5 + io_output_data_r_5 : _array_io_actOut_5;
+  assign io_output_data_wr_6 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_6 + io_output_data_r_6 : _array_io_actOut_6;
+  assign io_output_data_wr_7 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_7 + io_output_data_r_7 : _array_io_actOut_7;
+  assign io_output_data_wr_8 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_8 + io_output_data_r_8 : _array_io_actOut_8;
+  assign io_output_data_wr_9 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_9 + io_output_data_r_9 : _array_io_actOut_9;
+  assign io_output_data_wr_10 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_10 + io_output_data_r_10 : _array_io_actOut_10;
+  assign io_output_data_wr_11 =
+    _GEN_12
+      ? 32'h0
+      : accumulate_reg ? _array_io_actOut_11 + io_output_data_r_11 : _array_io_actOut_11;
+  assign io_output_wen = ~_GEN_11 & _GEN_9;
   assign io_busy = state != 3'h2;
 endmodule
 

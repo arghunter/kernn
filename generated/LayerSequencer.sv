@@ -22,33 +22,81 @@ module LayerSequencer(
                 io_weight_data_1,
                 io_weight_data_2,
                 io_weight_data_3,
+                io_weight_data_4,
+                io_weight_data_5,
+                io_weight_data_6,
+                io_weight_data_7,
+                io_weight_data_8,
+                io_weight_data_9,
+                io_weight_data_10,
+                io_weight_data_11,
   output [15:0] io_act_rd_addr,
   input  [7:0]  io_act_rd_data_0,
                 io_act_rd_data_1,
                 io_act_rd_data_2,
                 io_act_rd_data_3,
+                io_act_rd_data_4,
+                io_act_rd_data_5,
+                io_act_rd_data_6,
+                io_act_rd_data_7,
+                io_act_rd_data_8,
+                io_act_rd_data_9,
+                io_act_rd_data_10,
+                io_act_rd_data_11,
   output [15:0] io_act_wr_addr,
   output [7:0]  io_act_wr_data_0,
                 io_act_wr_data_1,
                 io_act_wr_data_2,
                 io_act_wr_data_3,
+                io_act_wr_data_4,
+                io_act_wr_data_5,
+                io_act_wr_data_6,
+                io_act_wr_data_7,
+                io_act_wr_data_8,
+                io_act_wr_data_9,
+                io_act_wr_data_10,
+                io_act_wr_data_11,
   output        io_act_wr_en,
   output [15:0] io_output_rd_addr,
   input  [31:0] io_output_data_r_0,
                 io_output_data_r_1,
                 io_output_data_r_2,
                 io_output_data_r_3,
+                io_output_data_r_4,
+                io_output_data_r_5,
+                io_output_data_r_6,
+                io_output_data_r_7,
+                io_output_data_r_8,
+                io_output_data_r_9,
+                io_output_data_r_10,
+                io_output_data_r_11,
   output [15:0] io_output_wr_addr,
   output [31:0] io_output_data_wr_0,
                 io_output_data_wr_1,
                 io_output_data_wr_2,
                 io_output_data_wr_3,
+                io_output_data_wr_4,
+                io_output_data_wr_5,
+                io_output_data_wr_6,
+                io_output_data_wr_7,
+                io_output_data_wr_8,
+                io_output_data_wr_9,
+                io_output_data_wr_10,
+                io_output_data_wr_11,
   output        io_output_wen,
   output [15:0] io_bias_addr,
   input  [31:0] io_bias_data_0,
                 io_bias_data_1,
                 io_bias_data_2,
                 io_bias_data_3,
+                io_bias_data_4,
+                io_bias_data_5,
+                io_bias_data_6,
+                io_bias_data_7,
+                io_bias_data_8,
+                io_bias_data_9,
+                io_bias_data_10,
+                io_bias_data_11,
   input  [15:0] io_input_base,
                 io_buffer_b_base
 );
@@ -58,22 +106,44 @@ module LayerSequencer(
   wire [31:0]  _actFunc_io_out_1;
   wire [31:0]  _actFunc_io_out_2;
   wire [31:0]  _actFunc_io_out_3;
+  wire [31:0]  _actFunc_io_out_4;
+  wire [31:0]  _actFunc_io_out_5;
+  wire [31:0]  _actFunc_io_out_6;
+  wire [31:0]  _actFunc_io_out_7;
+  wire [31:0]  _actFunc_io_out_8;
+  wire [31:0]  _actFunc_io_out_9;
+  wire [31:0]  _actFunc_io_out_10;
+  wire [31:0]  _actFunc_io_out_11;
   wire [15:0]  _matmul_io_output_rd_addr;
   wire [31:0]  _matmul_io_output_data_wr_0;
   wire [31:0]  _matmul_io_output_data_wr_1;
   wire [31:0]  _matmul_io_output_data_wr_2;
   wire [31:0]  _matmul_io_output_data_wr_3;
+  wire [31:0]  _matmul_io_output_data_wr_4;
+  wire [31:0]  _matmul_io_output_data_wr_5;
+  wire [31:0]  _matmul_io_output_data_wr_6;
+  wire [31:0]  _matmul_io_output_data_wr_7;
+  wire [31:0]  _matmul_io_output_data_wr_8;
+  wire [31:0]  _matmul_io_output_data_wr_9;
+  wire [31:0]  _matmul_io_output_data_wr_10;
+  wire [31:0]  _matmul_io_output_data_wr_11;
   wire [31:0]  _matmul_io_bias_values_0;
   wire [31:0]  _matmul_io_bias_values_1;
   wire [31:0]  _matmul_io_bias_values_2;
   wire [31:0]  _matmul_io_bias_values_3;
+  wire [31:0]  _matmul_io_bias_values_4;
+  wire [31:0]  _matmul_io_bias_values_5;
+  wire [31:0]  _matmul_io_bias_values_6;
+  wire [31:0]  _matmul_io_bias_values_7;
+  wire [31:0]  _matmul_io_bias_values_8;
+  wire [31:0]  _matmul_io_bias_values_9;
+  wire [31:0]  _matmul_io_bias_values_10;
+  wire [31:0]  _matmul_io_bias_values_11;
   wire         _matmul_io_bias_en;
   wire         _matmul_io_busy;
   wire         _matmul_io_isLastK;
   reg  [3:0]   state;
-  wire [3:0]   state_0 = state;
   reg  [7:0]   layerIdx;
-  wire [7:0]   layerIdx_0 = layerIdx;
   reg  [7:0]   numLayers;
   reg  [15:0]  curConfig_weight_base;
   reg  [15:0]  curConfig_bias_base;
@@ -96,8 +166,14 @@ module LayerSequencer(
   reg  [7:0]   copyData_1;
   reg  [7:0]   copyData_2;
   reg  [7:0]   copyData_3;
-  wire         io_busy_0 = (|state) & state != 4'h8;
-  wire         _io_done_T = state == 4'h8;
+  reg  [7:0]   copyData_4;
+  reg  [7:0]   copyData_5;
+  reg  [7:0]   copyData_6;
+  reg  [7:0]   copyData_7;
+  reg  [7:0]   copyData_8;
+  reg  [7:0]   copyData_9;
+  reg  [7:0]   copyData_10;
+  reg  [7:0]   copyData_11;
   wire         _GEN = state == 4'h0;
   wire         _GEN_0 = state == 4'h1;
   wire         _GEN_1 = state == 4'h2;
@@ -114,7 +190,7 @@ module LayerSequencer(
   wire         _GEN_12 = _GEN | _GEN_11 | ~_GEN_9;
   wire         _GEN_13 = layerIdx == numLayers - 8'h1;
   wire         _GEN_14 = _GEN | _GEN_0 | _GEN_1;
-  wire         _GEN_15 = copyRow == 16'h3;
+  wire         _GEN_15 = copyRow == 16'hB;
   wire         _GEN_16 = copyTileC == copyTilesN - 16'h1;
   wire         _GEN_17 = _GEN_15 & _GEN_16 & copyTileR == copyTilesM - 16'h1;
   always @(posedge clock) begin
@@ -203,8 +279,8 @@ module LayerSequencer(
       if (_GEN_14 | ~(_GEN_3 & ~_matmul_io_busy) | _GEN_13) begin
       end
       else begin
-        copyTilesM <= {2'h0, curConfig_M[15:2]};
-        copyTilesN <= {2'h0, curConfig_N[15:2]};
+        copyTilesM <= curConfig_M / 16'hC;
+        copyTilesN <= curConfig_N / 16'hC;
       end
     end
     if (_GEN | ~_GEN_0) begin
@@ -247,6 +323,58 @@ module LayerSequencer(
                ? 8'h7F
                : $signed(io_output_data_r_3) < -32'sh80 ? 8'h80 : io_output_data_r_3[7:0])
           : io_output_data_r_3[7:0];
+      copyData_4 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_4) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_4) < -32'sh80 ? 8'h80 : io_output_data_r_4[7:0])
+          : io_output_data_r_4[7:0];
+      copyData_5 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_5) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_5) < -32'sh80 ? 8'h80 : io_output_data_r_5[7:0])
+          : io_output_data_r_5[7:0];
+      copyData_6 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_6) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_6) < -32'sh80 ? 8'h80 : io_output_data_r_6[7:0])
+          : io_output_data_r_6[7:0];
+      copyData_7 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_7) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_7) < -32'sh80 ? 8'h80 : io_output_data_r_7[7:0])
+          : io_output_data_r_7[7:0];
+      copyData_8 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_8) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_8) < -32'sh80 ? 8'h80 : io_output_data_r_8[7:0])
+          : io_output_data_r_8[7:0];
+      copyData_9 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_9) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_9) < -32'sh80 ? 8'h80 : io_output_data_r_9[7:0])
+          : io_output_data_r_9[7:0];
+      copyData_10 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_10) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_10) < -32'sh80
+                   ? 8'h80
+                   : io_output_data_r_10[7:0])
+          : io_output_data_r_10[7:0];
+      copyData_11 <=
+        curConfig_clamp_en
+          ? ($signed(io_output_data_r_11) > 32'sh7F
+               ? 8'h7F
+               : $signed(io_output_data_r_11) < -32'sh80
+                   ? 8'h80
+                   : io_output_data_r_11[7:0])
+          : io_output_data_r_11[7:0];
     end
   end // always @(posedge)
   TiledMatMulController matmul (
@@ -257,21 +385,53 @@ module LayerSequencer(
     .io_weight_data_1        (io_weight_data_1),
     .io_weight_data_2        (io_weight_data_2),
     .io_weight_data_3        (io_weight_data_3),
+    .io_weight_data_4        (io_weight_data_4),
+    .io_weight_data_5        (io_weight_data_5),
+    .io_weight_data_6        (io_weight_data_6),
+    .io_weight_data_7        (io_weight_data_7),
+    .io_weight_data_8        (io_weight_data_8),
+    .io_weight_data_9        (io_weight_data_9),
+    .io_weight_data_10       (io_weight_data_10),
+    .io_weight_data_11       (io_weight_data_11),
     .io_activation_addr      (io_act_rd_addr),
     .io_activation_data_0    (io_act_rd_data_0),
     .io_activation_data_1    (io_act_rd_data_1),
     .io_activation_data_2    (io_act_rd_data_2),
     .io_activation_data_3    (io_act_rd_data_3),
+    .io_activation_data_4    (io_act_rd_data_4),
+    .io_activation_data_5    (io_act_rd_data_5),
+    .io_activation_data_6    (io_act_rd_data_6),
+    .io_activation_data_7    (io_act_rd_data_7),
+    .io_activation_data_8    (io_act_rd_data_8),
+    .io_activation_data_9    (io_act_rd_data_9),
+    .io_activation_data_10   (io_act_rd_data_10),
+    .io_activation_data_11   (io_act_rd_data_11),
     .io_output_rd_addr       (_matmul_io_output_rd_addr),
     .io_output_data_r_0      (io_output_data_r_0),
     .io_output_data_r_1      (io_output_data_r_1),
     .io_output_data_r_2      (io_output_data_r_2),
     .io_output_data_r_3      (io_output_data_r_3),
+    .io_output_data_r_4      (io_output_data_r_4),
+    .io_output_data_r_5      (io_output_data_r_5),
+    .io_output_data_r_6      (io_output_data_r_6),
+    .io_output_data_r_7      (io_output_data_r_7),
+    .io_output_data_r_8      (io_output_data_r_8),
+    .io_output_data_r_9      (io_output_data_r_9),
+    .io_output_data_r_10     (io_output_data_r_10),
+    .io_output_data_r_11     (io_output_data_r_11),
     .io_output_wr_addr       (io_output_wr_addr),
     .io_output_data_wr_0     (_matmul_io_output_data_wr_0),
     .io_output_data_wr_1     (_matmul_io_output_data_wr_1),
     .io_output_data_wr_2     (_matmul_io_output_data_wr_2),
     .io_output_data_wr_3     (_matmul_io_output_data_wr_3),
+    .io_output_data_wr_4     (_matmul_io_output_data_wr_4),
+    .io_output_data_wr_5     (_matmul_io_output_data_wr_5),
+    .io_output_data_wr_6     (_matmul_io_output_data_wr_6),
+    .io_output_data_wr_7     (_matmul_io_output_data_wr_7),
+    .io_output_data_wr_8     (_matmul_io_output_data_wr_8),
+    .io_output_data_wr_9     (_matmul_io_output_data_wr_9),
+    .io_output_data_wr_10    (_matmul_io_output_data_wr_10),
+    .io_output_data_wr_11    (_matmul_io_output_data_wr_11),
     .io_output_wen           (io_output_wen),
     .io_bias_base_addr       (_GEN_5 ? 16'h0 : curConfig_bias_base),
     .io_bias_addr            (io_bias_addr),
@@ -279,10 +439,26 @@ module LayerSequencer(
     .io_bias_data_1          (io_bias_data_1),
     .io_bias_data_2          (io_bias_data_2),
     .io_bias_data_3          (io_bias_data_3),
+    .io_bias_data_4          (io_bias_data_4),
+    .io_bias_data_5          (io_bias_data_5),
+    .io_bias_data_6          (io_bias_data_6),
+    .io_bias_data_7          (io_bias_data_7),
+    .io_bias_data_8          (io_bias_data_8),
+    .io_bias_data_9          (io_bias_data_9),
+    .io_bias_data_10         (io_bias_data_10),
+    .io_bias_data_11         (io_bias_data_11),
     .io_bias_values_0        (_matmul_io_bias_values_0),
     .io_bias_values_1        (_matmul_io_bias_values_1),
     .io_bias_values_2        (_matmul_io_bias_values_2),
     .io_bias_values_3        (_matmul_io_bias_values_3),
+    .io_bias_values_4        (_matmul_io_bias_values_4),
+    .io_bias_values_5        (_matmul_io_bias_values_5),
+    .io_bias_values_6        (_matmul_io_bias_values_6),
+    .io_bias_values_7        (_matmul_io_bias_values_7),
+    .io_bias_values_8        (_matmul_io_bias_values_8),
+    .io_bias_values_9        (_matmul_io_bias_values_9),
+    .io_bias_values_10       (_matmul_io_bias_values_10),
+    .io_bias_values_11       (_matmul_io_bias_values_11),
     .io_bias_en              (_matmul_io_bias_en),
     .io_M                    (_GEN_6 ? 24'h0 : {8'h0, curConfig_M}),
     .io_K                    (_GEN_6 ? 24'h0 : {8'h0, curConfig_K}),
@@ -298,14 +474,38 @@ module LayerSequencer(
     .io_in_1            (_matmul_io_output_data_wr_1),
     .io_in_2            (_matmul_io_output_data_wr_2),
     .io_in_3            (_matmul_io_output_data_wr_3),
+    .io_in_4            (_matmul_io_output_data_wr_4),
+    .io_in_5            (_matmul_io_output_data_wr_5),
+    .io_in_6            (_matmul_io_output_data_wr_6),
+    .io_in_7            (_matmul_io_output_data_wr_7),
+    .io_in_8            (_matmul_io_output_data_wr_8),
+    .io_in_9            (_matmul_io_output_data_wr_9),
+    .io_in_10           (_matmul_io_output_data_wr_10),
+    .io_in_11           (_matmul_io_output_data_wr_11),
     .io_out_0           (_actFunc_io_out_0),
     .io_out_1           (_actFunc_io_out_1),
     .io_out_2           (_actFunc_io_out_2),
     .io_out_3           (_actFunc_io_out_3),
+    .io_out_4           (_actFunc_io_out_4),
+    .io_out_5           (_actFunc_io_out_5),
+    .io_out_6           (_actFunc_io_out_6),
+    .io_out_7           (_actFunc_io_out_7),
+    .io_out_8           (_actFunc_io_out_8),
+    .io_out_9           (_actFunc_io_out_9),
+    .io_out_10          (_actFunc_io_out_10),
+    .io_out_11          (_actFunc_io_out_11),
     .io_bias_0          (_matmul_io_bias_values_0),
     .io_bias_1          (_matmul_io_bias_values_1),
     .io_bias_2          (_matmul_io_bias_values_2),
     .io_bias_3          (_matmul_io_bias_values_3),
+    .io_bias_4          (_matmul_io_bias_values_4),
+    .io_bias_5          (_matmul_io_bias_values_5),
+    .io_bias_6          (_matmul_io_bias_values_6),
+    .io_bias_7          (_matmul_io_bias_values_7),
+    .io_bias_8          (_matmul_io_bias_values_8),
+    .io_bias_9          (_matmul_io_bias_values_9),
+    .io_bias_10         (_matmul_io_bias_values_10),
+    .io_bias_11         (_matmul_io_bias_values_11),
     .io_bias_en         (_matmul_io_bias_en),
     .io_func            (_GEN_5 ? 2'h0 : curConfig_activation),
     .io_shift           (_GEN_5 ? 5'h0 : curConfig_shift),
@@ -331,25 +531,32 @@ module LayerSequencer(
         io_config_wr_data_relu6_thresh,
         io_config_wr_data_clamp_en})
   );
-  assign io_busy = io_busy_0;
-  assign io_done = _io_done_T;
+  assign io_busy = (|state) & state != 4'h8;
+  assign io_done = state == 4'h8;
   assign io_act_wr_addr =
     _GEN_12
       ? 16'h0
-      : writeBufBase + {copyTileR[13:0] * copyTilesN[13:0] + copyTileC[13:0], 2'h0}
-        + copyRow;
+      : writeBufBase + (copyTileR * copyTilesN + copyTileC) * 16'hC + copyRow;
   assign io_act_wr_data_0 = _GEN_12 ? 8'h0 : copyData_0;
   assign io_act_wr_data_1 = _GEN_12 ? 8'h0 : copyData_1;
   assign io_act_wr_data_2 = _GEN_12 ? 8'h0 : copyData_2;
   assign io_act_wr_data_3 = _GEN_12 ? 8'h0 : copyData_3;
+  assign io_act_wr_data_4 = _GEN_12 ? 8'h0 : copyData_4;
+  assign io_act_wr_data_5 = _GEN_12 ? 8'h0 : copyData_5;
+  assign io_act_wr_data_6 = _GEN_12 ? 8'h0 : copyData_6;
+  assign io_act_wr_data_7 = _GEN_12 ? 8'h0 : copyData_7;
+  assign io_act_wr_data_8 = _GEN_12 ? 8'h0 : copyData_8;
+  assign io_act_wr_data_9 = _GEN_12 ? 8'h0 : copyData_9;
+  assign io_act_wr_data_10 = _GEN_12 ? 8'h0 : copyData_10;
+  assign io_act_wr_data_11 = _GEN_12 ? 8'h0 : copyData_11;
   assign io_act_wr_en = ~(_GEN_2 | _GEN_1 | _GEN_3 | _GEN_7 | _GEN_8) & _GEN_9;
   assign io_output_rd_addr =
     _GEN | _GEN_0 | _GEN_4
       ? _matmul_io_output_rd_addr
       : _GEN_7
-          ? {copyTileR[13:0] * copyTilesN[13:0] + copyTileC[13:0], 2'h0} + copyRow
+          ? (copyTileR * copyTilesN + copyTileC) * 16'hC + copyRow
           : _GEN_8
-              ? {copyTileR[13:0] * copyTilesN[13:0] + copyTileC[13:0], 2'h0} + copyRow
+              ? (copyTileR * copyTilesN + copyTileC) * 16'hC + copyRow
               : _matmul_io_output_rd_addr;
   assign io_output_data_wr_0 =
     _matmul_io_isLastK ? _actFunc_io_out_0 : _matmul_io_output_data_wr_0;
@@ -359,5 +566,21 @@ module LayerSequencer(
     _matmul_io_isLastK ? _actFunc_io_out_2 : _matmul_io_output_data_wr_2;
   assign io_output_data_wr_3 =
     _matmul_io_isLastK ? _actFunc_io_out_3 : _matmul_io_output_data_wr_3;
+  assign io_output_data_wr_4 =
+    _matmul_io_isLastK ? _actFunc_io_out_4 : _matmul_io_output_data_wr_4;
+  assign io_output_data_wr_5 =
+    _matmul_io_isLastK ? _actFunc_io_out_5 : _matmul_io_output_data_wr_5;
+  assign io_output_data_wr_6 =
+    _matmul_io_isLastK ? _actFunc_io_out_6 : _matmul_io_output_data_wr_6;
+  assign io_output_data_wr_7 =
+    _matmul_io_isLastK ? _actFunc_io_out_7 : _matmul_io_output_data_wr_7;
+  assign io_output_data_wr_8 =
+    _matmul_io_isLastK ? _actFunc_io_out_8 : _matmul_io_output_data_wr_8;
+  assign io_output_data_wr_9 =
+    _matmul_io_isLastK ? _actFunc_io_out_9 : _matmul_io_output_data_wr_9;
+  assign io_output_data_wr_10 =
+    _matmul_io_isLastK ? _actFunc_io_out_10 : _matmul_io_output_data_wr_10;
+  assign io_output_data_wr_11 =
+    _matmul_io_isLastK ? _actFunc_io_out_11 : _matmul_io_output_data_wr_11;
 endmodule
 

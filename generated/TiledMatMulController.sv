@@ -7,21 +7,53 @@ module TiledMatMulController(
                 io_weight_data_1,
                 io_weight_data_2,
                 io_weight_data_3,
+                io_weight_data_4,
+                io_weight_data_5,
+                io_weight_data_6,
+                io_weight_data_7,
+                io_weight_data_8,
+                io_weight_data_9,
+                io_weight_data_10,
+                io_weight_data_11,
   output [15:0] io_activation_addr,
   input  [7:0]  io_activation_data_0,
                 io_activation_data_1,
                 io_activation_data_2,
                 io_activation_data_3,
+                io_activation_data_4,
+                io_activation_data_5,
+                io_activation_data_6,
+                io_activation_data_7,
+                io_activation_data_8,
+                io_activation_data_9,
+                io_activation_data_10,
+                io_activation_data_11,
   output [15:0] io_output_rd_addr,
   input  [31:0] io_output_data_r_0,
                 io_output_data_r_1,
                 io_output_data_r_2,
                 io_output_data_r_3,
+                io_output_data_r_4,
+                io_output_data_r_5,
+                io_output_data_r_6,
+                io_output_data_r_7,
+                io_output_data_r_8,
+                io_output_data_r_9,
+                io_output_data_r_10,
+                io_output_data_r_11,
   output [15:0] io_output_wr_addr,
   output [31:0] io_output_data_wr_0,
                 io_output_data_wr_1,
                 io_output_data_wr_2,
                 io_output_data_wr_3,
+                io_output_data_wr_4,
+                io_output_data_wr_5,
+                io_output_data_wr_6,
+                io_output_data_wr_7,
+                io_output_data_wr_8,
+                io_output_data_wr_9,
+                io_output_data_wr_10,
+                io_output_data_wr_11,
   output        io_output_wen,
   input  [15:0] io_bias_base_addr,
   output [15:0] io_bias_addr,
@@ -29,10 +61,26 @@ module TiledMatMulController(
                 io_bias_data_1,
                 io_bias_data_2,
                 io_bias_data_3,
+                io_bias_data_4,
+                io_bias_data_5,
+                io_bias_data_6,
+                io_bias_data_7,
+                io_bias_data_8,
+                io_bias_data_9,
+                io_bias_data_10,
+                io_bias_data_11,
   output [31:0] io_bias_values_0,
                 io_bias_values_1,
                 io_bias_values_2,
                 io_bias_values_3,
+                io_bias_values_4,
+                io_bias_values_5,
+                io_bias_values_6,
+                io_bias_values_7,
+                io_bias_values_8,
+                io_bias_values_9,
+                io_bias_values_10,
+                io_bias_values_11,
   output        io_bias_en,
   input  [23:0] io_M,
                 io_K,
@@ -59,6 +107,14 @@ module TiledMatMulController(
   reg  [31:0] biasReg_1;
   reg  [31:0] biasReg_2;
   reg  [31:0] biasReg_3;
+  reg  [31:0] biasReg_4;
+  reg  [31:0] biasReg_5;
+  reg  [31:0] biasReg_6;
+  reg  [31:0] biasReg_7;
+  reg  [31:0] biasReg_8;
+  reg  [31:0] biasReg_9;
+  reg  [31:0] biasReg_10;
+  reg  [31:0] biasReg_11;
   reg         biasValid;
   wire [23:0] _io_bias_en_T = tilesK - 24'h1;
   wire        _GEN = state == 3'h0;
@@ -180,9 +236,9 @@ module TiledMatMulController(
       if (_GEN | ~(_GEN_0 & io_start)) begin
       end
       else begin
-        tilesM <= {2'h0, io_M[23:2]};
-        tilesK <= {2'h0, io_K[23:2]};
-        tilesN <= {2'h0, io_N[23:2]};
+        tilesM <= io_M / 24'hC;
+        tilesK <= io_K / 24'hC;
+        tilesN <= io_N / 24'hC;
         wt_base <= io_weight_base_addr;
         act_base <= io_activation_base_addr;
         bias_base <= io_bias_base_addr;
@@ -197,35 +253,76 @@ module TiledMatMulController(
       biasReg_1 <= io_bias_data_1;
       biasReg_2 <= io_bias_data_2;
       biasReg_3 <= io_bias_data_3;
+      biasReg_4 <= io_bias_data_4;
+      biasReg_5 <= io_bias_data_5;
+      biasReg_6 <= io_bias_data_6;
+      biasReg_7 <= io_bias_data_7;
+      biasReg_8 <= io_bias_data_8;
+      biasReg_9 <= io_bias_data_9;
+      biasReg_10 <= io_bias_data_10;
+      biasReg_11 <= io_bias_data_11;
     end
   end // always @(posedge)
   SysArrayController sysarr (
     .clock                   (clock),
     .reset                   (reset),
-    .io_weight_base_addr     (wt_base + {tileR[13:0] * tilesK[13:0] + tileK[13:0], 2'h0}),
+    .io_weight_base_addr
+      (wt_base + (tileR[15:0] * tilesK[15:0] + tileK[15:0]) * 16'hC),
     .io_weight_addr          (io_weight_addr),
     .io_weight_data_0        (io_weight_data_0),
     .io_weight_data_1        (io_weight_data_1),
     .io_weight_data_2        (io_weight_data_2),
     .io_weight_data_3        (io_weight_data_3),
+    .io_weight_data_4        (io_weight_data_4),
+    .io_weight_data_5        (io_weight_data_5),
+    .io_weight_data_6        (io_weight_data_6),
+    .io_weight_data_7        (io_weight_data_7),
+    .io_weight_data_8        (io_weight_data_8),
+    .io_weight_data_9        (io_weight_data_9),
+    .io_weight_data_10       (io_weight_data_10),
+    .io_weight_data_11       (io_weight_data_11),
     .io_activation_base_addr
-      (act_base + {tileK[13:0] * tilesN[13:0] + tileC[13:0], 2'h0}),
+      (act_base + (tileK[15:0] * tilesN[15:0] + tileC[15:0]) * 16'hC),
     .io_activation_addr      (io_activation_addr),
     .io_activation_data_0    (io_activation_data_0),
     .io_activation_data_1    (io_activation_data_1),
     .io_activation_data_2    (io_activation_data_2),
     .io_activation_data_3    (io_activation_data_3),
-    .io_output_base_addr     ({tileR[13:0] * tilesN[13:0] + tileC[13:0], 2'h0}),
+    .io_activation_data_4    (io_activation_data_4),
+    .io_activation_data_5    (io_activation_data_5),
+    .io_activation_data_6    (io_activation_data_6),
+    .io_activation_data_7    (io_activation_data_7),
+    .io_activation_data_8    (io_activation_data_8),
+    .io_activation_data_9    (io_activation_data_9),
+    .io_activation_data_10   (io_activation_data_10),
+    .io_activation_data_11   (io_activation_data_11),
+    .io_output_base_addr     ((tileR[15:0] * tilesN[15:0] + tileC[15:0]) * 16'hC),
     .io_output_rd_addr       (io_output_rd_addr),
     .io_output_data_r_0      (io_output_data_r_0),
     .io_output_data_r_1      (io_output_data_r_1),
     .io_output_data_r_2      (io_output_data_r_2),
     .io_output_data_r_3      (io_output_data_r_3),
+    .io_output_data_r_4      (io_output_data_r_4),
+    .io_output_data_r_5      (io_output_data_r_5),
+    .io_output_data_r_6      (io_output_data_r_6),
+    .io_output_data_r_7      (io_output_data_r_7),
+    .io_output_data_r_8      (io_output_data_r_8),
+    .io_output_data_r_9      (io_output_data_r_9),
+    .io_output_data_r_10     (io_output_data_r_10),
+    .io_output_data_r_11     (io_output_data_r_11),
     .io_output_wr_addr       (io_output_wr_addr),
     .io_output_data_wr_0     (io_output_data_wr_0),
     .io_output_data_wr_1     (io_output_data_wr_1),
     .io_output_data_wr_2     (io_output_data_wr_2),
     .io_output_data_wr_3     (io_output_data_wr_3),
+    .io_output_data_wr_4     (io_output_data_wr_4),
+    .io_output_data_wr_5     (io_output_data_wr_5),
+    .io_output_data_wr_6     (io_output_data_wr_6),
+    .io_output_data_wr_7     (io_output_data_wr_7),
+    .io_output_data_wr_8     (io_output_data_wr_8),
+    .io_output_data_wr_9     (io_output_data_wr_9),
+    .io_output_data_wr_10    (io_output_data_wr_10),
+    .io_output_data_wr_11    (io_output_data_wr_11),
     .io_output_wen           (io_output_wen),
     .io_accumulate           (|tileK),
     .io_busy                 (_sysarr_io_busy),
@@ -236,6 +333,14 @@ module TiledMatMulController(
   assign io_bias_values_1 = biasReg_1;
   assign io_bias_values_2 = biasReg_2;
   assign io_bias_values_3 = biasReg_3;
+  assign io_bias_values_4 = biasReg_4;
+  assign io_bias_values_5 = biasReg_5;
+  assign io_bias_values_6 = biasReg_6;
+  assign io_bias_values_7 = biasReg_7;
+  assign io_bias_values_8 = biasReg_8;
+  assign io_bias_values_9 = biasReg_9;
+  assign io_bias_values_10 = biasReg_10;
+  assign io_bias_values_11 = biasReg_11;
   assign io_bias_en = biasValid & tileK == _io_bias_en_T;
   assign io_busy = state != 3'h1;
   assign io_isLastK = tileK == _io_bias_en_T;

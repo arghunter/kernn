@@ -66,7 +66,7 @@ class SysArrayController(val n: Int = 8, val weight_addr_width: Int = 16, val ac
       }
     }
 
-is(SysState.INIT_1) {
+  is(SysState.INIT_1) {
       count := count + 1.U
       when(count === (n-1).U) {
         count := 1.U
@@ -82,7 +82,8 @@ is(SysState.INIT_1) {
         activation_base_addr_reg := io.activation_base_addr
         output_base_addr_reg := io.output_base_addr
         accumulate_reg := io.accumulate
-        count := 1.U
+
+        count := 0.U
         state := SysState.INIT_1
       }
     }
@@ -99,14 +100,16 @@ is(SysState.INIT_1) {
 
     is(SysState.FLUSH) {
       count := count + 1.U
-      when(count === (n - 2).U) {
+      when(count === (2 * n - 1).U) {
         count := 1.U
-        state := SysState.DRAIN_READ
-         array.io.resetIn := true.B
+        array.io.resetIn := true.B
 
-      io.output_rd_addr := output_base_addr_reg + n.U - 1.U
+        io.output_rd_addr := output_base_addr_reg + n.U - 1.U
+        state := SysState.DRAIN_READ
       }
     }
+
+   
 
     is(SysState.DRAIN_READ) {
       array.io.resetIn := true.B

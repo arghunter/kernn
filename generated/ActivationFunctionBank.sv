@@ -4,14 +4,38 @@ module ActivationFunctionBank(
                 io_in_1,
                 io_in_2,
                 io_in_3,
+                io_in_4,
+                io_in_5,
+                io_in_6,
+                io_in_7,
+                io_in_8,
+                io_in_9,
+                io_in_10,
+                io_in_11,
   output [31:0] io_out_0,
                 io_out_1,
                 io_out_2,
                 io_out_3,
+                io_out_4,
+                io_out_5,
+                io_out_6,
+                io_out_7,
+                io_out_8,
+                io_out_9,
+                io_out_10,
+                io_out_11,
   input  [31:0] io_bias_0,
                 io_bias_1,
                 io_bias_2,
                 io_bias_3,
+                io_bias_4,
+                io_bias_5,
+                io_bias_6,
+                io_bias_7,
+                io_bias_8,
+                io_bias_9,
+                io_bias_10,
+                io_bias_11,
   input         io_bias_en,
   input  [1:0]  io_func,
   input  [4:0]  io_shift,
@@ -104,6 +128,174 @@ module ActivationFunctionBank(
                 : shifted_3;
     endcase
   end // always_comb
+  reg  [31:0] casez_tmp_3;
+  wire [31:0] shifted_4 =
+    $unsigned($signed($signed(io_bias_en ? io_in_4 + io_bias_4 : io_in_4) >>> _GEN));
+  wire        _GEN_4 = $signed(shifted_4) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_3 = shifted_4;
+      2'b01:
+        casez_tmp_3 = _GEN_4 ? 32'h0 : shifted_4;
+      2'b10:
+        casez_tmp_3 = _GEN_4 ? {{3{shifted_4[31]}}, shifted_4[31:3]} : shifted_4;
+      default:
+        casez_tmp_3 =
+          _GEN_4
+            ? 32'h0
+            : $signed(shifted_4) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_4;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_4;
+  wire [31:0] shifted_5 =
+    $unsigned($signed($signed(io_bias_en ? io_in_5 + io_bias_5 : io_in_5) >>> _GEN));
+  wire        _GEN_5 = $signed(shifted_5) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_4 = shifted_5;
+      2'b01:
+        casez_tmp_4 = _GEN_5 ? 32'h0 : shifted_5;
+      2'b10:
+        casez_tmp_4 = _GEN_5 ? {{3{shifted_5[31]}}, shifted_5[31:3]} : shifted_5;
+      default:
+        casez_tmp_4 =
+          _GEN_5
+            ? 32'h0
+            : $signed(shifted_5) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_5;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_5;
+  wire [31:0] shifted_6 =
+    $unsigned($signed($signed(io_bias_en ? io_in_6 + io_bias_6 : io_in_6) >>> _GEN));
+  wire        _GEN_6 = $signed(shifted_6) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_5 = shifted_6;
+      2'b01:
+        casez_tmp_5 = _GEN_6 ? 32'h0 : shifted_6;
+      2'b10:
+        casez_tmp_5 = _GEN_6 ? {{3{shifted_6[31]}}, shifted_6[31:3]} : shifted_6;
+      default:
+        casez_tmp_5 =
+          _GEN_6
+            ? 32'h0
+            : $signed(shifted_6) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_6;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_6;
+  wire [31:0] shifted_7 =
+    $unsigned($signed($signed(io_bias_en ? io_in_7 + io_bias_7 : io_in_7) >>> _GEN));
+  wire        _GEN_7 = $signed(shifted_7) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_6 = shifted_7;
+      2'b01:
+        casez_tmp_6 = _GEN_7 ? 32'h0 : shifted_7;
+      2'b10:
+        casez_tmp_6 = _GEN_7 ? {{3{shifted_7[31]}}, shifted_7[31:3]} : shifted_7;
+      default:
+        casez_tmp_6 =
+          _GEN_7
+            ? 32'h0
+            : $signed(shifted_7) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_7;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_7;
+  wire [31:0] shifted_8 =
+    $unsigned($signed($signed(io_bias_en ? io_in_8 + io_bias_8 : io_in_8) >>> _GEN));
+  wire        _GEN_8 = $signed(shifted_8) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_7 = shifted_8;
+      2'b01:
+        casez_tmp_7 = _GEN_8 ? 32'h0 : shifted_8;
+      2'b10:
+        casez_tmp_7 = _GEN_8 ? {{3{shifted_8[31]}}, shifted_8[31:3]} : shifted_8;
+      default:
+        casez_tmp_7 =
+          _GEN_8
+            ? 32'h0
+            : $signed(shifted_8) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_8;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_8;
+  wire [31:0] shifted_9 =
+    $unsigned($signed($signed(io_bias_en ? io_in_9 + io_bias_9 : io_in_9) >>> _GEN));
+  wire        _GEN_9 = $signed(shifted_9) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_8 = shifted_9;
+      2'b01:
+        casez_tmp_8 = _GEN_9 ? 32'h0 : shifted_9;
+      2'b10:
+        casez_tmp_8 = _GEN_9 ? {{3{shifted_9[31]}}, shifted_9[31:3]} : shifted_9;
+      default:
+        casez_tmp_8 =
+          _GEN_9
+            ? 32'h0
+            : $signed(shifted_9) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_9;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_9;
+  wire [31:0] shifted_10 =
+    $unsigned($signed($signed(io_bias_en ? io_in_10 + io_bias_10 : io_in_10) >>> _GEN));
+  wire        _GEN_10 = $signed(shifted_10) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_9 = shifted_10;
+      2'b01:
+        casez_tmp_9 = _GEN_10 ? 32'h0 : shifted_10;
+      2'b10:
+        casez_tmp_9 = _GEN_10 ? {{3{shifted_10[31]}}, shifted_10[31:3]} : shifted_10;
+      default:
+        casez_tmp_9 =
+          _GEN_10
+            ? 32'h0
+            : $signed(shifted_10) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_10;
+    endcase
+  end // always_comb
+  reg  [31:0] casez_tmp_10;
+  wire [31:0] shifted_11 =
+    $unsigned($signed($signed(io_bias_en ? io_in_11 + io_bias_11 : io_in_11) >>> _GEN));
+  wire        _GEN_11 = $signed(shifted_11) < 32'sh0;
+  always_comb begin
+    casez (io_func)
+      2'b00:
+        casez_tmp_10 = shifted_11;
+      2'b01:
+        casez_tmp_10 = _GEN_11 ? 32'h0 : shifted_11;
+      2'b10:
+        casez_tmp_10 = _GEN_11 ? {{3{shifted_11[31]}}, shifted_11[31:3]} : shifted_11;
+      default:
+        casez_tmp_10 =
+          _GEN_11
+            ? 32'h0
+            : $signed(shifted_11) > $signed(io_relu6_threshold)
+                ? io_relu6_threshold
+                : shifted_11;
+    endcase
+  end // always_comb
   assign io_out_0 =
     io_clamp_en
       ? ($signed(casez_tmp) > 32'sh7F
@@ -128,5 +320,53 @@ module ActivationFunctionBank(
            ? 32'h7F
            : $signed(casez_tmp_2) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_2)
       : casez_tmp_2;
+  assign io_out_4 =
+    io_clamp_en
+      ? ($signed(casez_tmp_3) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_3) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_3)
+      : casez_tmp_3;
+  assign io_out_5 =
+    io_clamp_en
+      ? ($signed(casez_tmp_4) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_4) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_4)
+      : casez_tmp_4;
+  assign io_out_6 =
+    io_clamp_en
+      ? ($signed(casez_tmp_5) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_5) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_5)
+      : casez_tmp_5;
+  assign io_out_7 =
+    io_clamp_en
+      ? ($signed(casez_tmp_6) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_6) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_6)
+      : casez_tmp_6;
+  assign io_out_8 =
+    io_clamp_en
+      ? ($signed(casez_tmp_7) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_7) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_7)
+      : casez_tmp_7;
+  assign io_out_9 =
+    io_clamp_en
+      ? ($signed(casez_tmp_8) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_8) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_8)
+      : casez_tmp_8;
+  assign io_out_10 =
+    io_clamp_en
+      ? ($signed(casez_tmp_9) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_9) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_9)
+      : casez_tmp_9;
+  assign io_out_11 =
+    io_clamp_en
+      ? ($signed(casez_tmp_10) > 32'sh7F
+           ? 32'h7F
+           : $signed(casez_tmp_10) < -32'sh80 ? 32'hFFFFFF80 : casez_tmp_10)
+      : casez_tmp_10;
 endmodule
 
