@@ -6,7 +6,7 @@ import scala.util.Random
 
 class LayerSequencerTest extends AnyFlatSpec with HasCliOptions with Cli.EmitVcd with ChiselSim {
 
-  val n = 16
+  val n = 15
 
   // Memory depths scaled to n so they're always large enough
   val wtMemDepth   = 65536

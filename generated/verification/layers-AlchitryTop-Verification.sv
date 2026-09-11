@@ -4,5 +4,4 @@
   `include "layers-UartRx-Verification.sv"
   `include "layers-UartTx-Verification.sv"
   `include "layers-CommandParser-Verification.sv"
-  `include "layers-LayerSequencer-Verification.sv"
 `endif // not def layers_AlchitryTop_Verification

@@ -7,18 +7,34 @@ module AlchitryTop(
   output       io_usb_tx
 );
 
+  wire [31:0]  out_wr_data_11;
+  wire [31:0]  out_wr_data_10;
+  wire [31:0]  out_wr_data_9;
+  wire [31:0]  out_wr_data_8;
+  wire [31:0]  out_wr_data_7;
+  wire [31:0]  out_wr_data_6;
+  wire [31:0]  out_wr_data_5;
+  wire [31:0]  out_wr_data_4;
   wire [31:0]  out_wr_data_3;
   wire [31:0]  out_wr_data_2;
   wire [31:0]  out_wr_data_1;
   wire [31:0]  out_wr_data_0;
+  wire [7:0]   act_wr_data_11;
+  wire [7:0]   act_wr_data_10;
+  wire [7:0]   act_wr_data_9;
+  wire [7:0]   act_wr_data_8;
+  wire [7:0]   act_wr_data_7;
+  wire [7:0]   act_wr_data_6;
+  wire [7:0]   act_wr_data_5;
+  wire [7:0]   act_wr_data_4;
   wire [7:0]   act_wr_data_3;
   wire [7:0]   act_wr_data_2;
   wire [7:0]   act_wr_data_1;
   wire [7:0]   act_wr_data_0;
-  wire [127:0] _biasMem_ext_R0_data;
-  wire [127:0] _outMem_ext_R0_data;
-  wire [31:0]  _actMem_ext_R0_data;
-  wire [31:0]  _weightMem_ext_R0_data;
+  wire [383:0] _biasMem_ext_R0_data;
+  wire [383:0] _outMem_ext_R0_data;
+  wire [95:0]  _actMem_ext_R0_data;
+  wire [95:0]  _weightMem_ext_R0_data;
   wire         _seq_io_busy;
   wire         _seq_io_done;
   wire [15:0]  _seq_io_weight_addr;
@@ -28,6 +44,14 @@ module AlchitryTop(
   wire [7:0]   _seq_io_act_wr_data_1;
   wire [7:0]   _seq_io_act_wr_data_2;
   wire [7:0]   _seq_io_act_wr_data_3;
+  wire [7:0]   _seq_io_act_wr_data_4;
+  wire [7:0]   _seq_io_act_wr_data_5;
+  wire [7:0]   _seq_io_act_wr_data_6;
+  wire [7:0]   _seq_io_act_wr_data_7;
+  wire [7:0]   _seq_io_act_wr_data_8;
+  wire [7:0]   _seq_io_act_wr_data_9;
+  wire [7:0]   _seq_io_act_wr_data_10;
+  wire [7:0]   _seq_io_act_wr_data_11;
   wire         _seq_io_act_wr_en;
   wire [15:0]  _seq_io_output_rd_addr;
   wire [15:0]  _seq_io_output_wr_addr;
@@ -35,6 +59,14 @@ module AlchitryTop(
   wire [31:0]  _seq_io_output_data_wr_1;
   wire [31:0]  _seq_io_output_data_wr_2;
   wire [31:0]  _seq_io_output_data_wr_3;
+  wire [31:0]  _seq_io_output_data_wr_4;
+  wire [31:0]  _seq_io_output_data_wr_5;
+  wire [31:0]  _seq_io_output_data_wr_6;
+  wire [31:0]  _seq_io_output_data_wr_7;
+  wire [31:0]  _seq_io_output_data_wr_8;
+  wire [31:0]  _seq_io_output_data_wr_9;
+  wire [31:0]  _seq_io_output_data_wr_10;
+  wire [31:0]  _seq_io_output_data_wr_11;
   wire         _seq_io_output_wen;
   wire [15:0]  _seq_io_bias_addr;
   wire [7:0]   _parser_io_tx_data;
@@ -60,18 +92,42 @@ module AlchitryTop(
   wire [7:0]   _parser_io_wt_wr_data_1;
   wire [7:0]   _parser_io_wt_wr_data_2;
   wire [7:0]   _parser_io_wt_wr_data_3;
+  wire [7:0]   _parser_io_wt_wr_data_4;
+  wire [7:0]   _parser_io_wt_wr_data_5;
+  wire [7:0]   _parser_io_wt_wr_data_6;
+  wire [7:0]   _parser_io_wt_wr_data_7;
+  wire [7:0]   _parser_io_wt_wr_data_8;
+  wire [7:0]   _parser_io_wt_wr_data_9;
+  wire [7:0]   _parser_io_wt_wr_data_10;
+  wire [7:0]   _parser_io_wt_wr_data_11;
   wire         _parser_io_bias_wr_en;
   wire [15:0]  _parser_io_bias_wr_addr;
   wire [31:0]  _parser_io_bias_wr_data_0;
   wire [31:0]  _parser_io_bias_wr_data_1;
   wire [31:0]  _parser_io_bias_wr_data_2;
   wire [31:0]  _parser_io_bias_wr_data_3;
+  wire [31:0]  _parser_io_bias_wr_data_4;
+  wire [31:0]  _parser_io_bias_wr_data_5;
+  wire [31:0]  _parser_io_bias_wr_data_6;
+  wire [31:0]  _parser_io_bias_wr_data_7;
+  wire [31:0]  _parser_io_bias_wr_data_8;
+  wire [31:0]  _parser_io_bias_wr_data_9;
+  wire [31:0]  _parser_io_bias_wr_data_10;
+  wire [31:0]  _parser_io_bias_wr_data_11;
   wire         _parser_io_act_wr_en;
   wire [15:0]  _parser_io_act_wr_addr;
   wire [7:0]   _parser_io_act_wr_data_0;
   wire [7:0]   _parser_io_act_wr_data_1;
   wire [7:0]   _parser_io_act_wr_data_2;
   wire [7:0]   _parser_io_act_wr_data_3;
+  wire [7:0]   _parser_io_act_wr_data_4;
+  wire [7:0]   _parser_io_act_wr_data_5;
+  wire [7:0]   _parser_io_act_wr_data_6;
+  wire [7:0]   _parser_io_act_wr_data_7;
+  wire [7:0]   _parser_io_act_wr_data_8;
+  wire [7:0]   _parser_io_act_wr_data_9;
+  wire [7:0]   _parser_io_act_wr_data_10;
+  wire [7:0]   _parser_io_act_wr_data_11;
   wire [15:0]  _parser_io_out_rd_addr;
   wire         _parser_io_busy;
   wire         _tx_io_ready;
@@ -85,10 +141,34 @@ module AlchitryTop(
     _seq_io_act_wr_en ? _seq_io_act_wr_data_2 : _parser_io_act_wr_data_2;
   assign act_wr_data_3 =
     _seq_io_act_wr_en ? _seq_io_act_wr_data_3 : _parser_io_act_wr_data_3;
+  assign act_wr_data_4 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_4 : _parser_io_act_wr_data_4;
+  assign act_wr_data_5 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_5 : _parser_io_act_wr_data_5;
+  assign act_wr_data_6 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_6 : _parser_io_act_wr_data_6;
+  assign act_wr_data_7 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_7 : _parser_io_act_wr_data_7;
+  assign act_wr_data_8 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_8 : _parser_io_act_wr_data_8;
+  assign act_wr_data_9 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_9 : _parser_io_act_wr_data_9;
+  assign act_wr_data_10 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_10 : _parser_io_act_wr_data_10;
+  assign act_wr_data_11 =
+    _seq_io_act_wr_en ? _seq_io_act_wr_data_11 : _parser_io_act_wr_data_11;
   assign out_wr_data_0 = _seq_io_output_wen ? _seq_io_output_data_wr_0 : 32'h0;
   assign out_wr_data_1 = _seq_io_output_wen ? _seq_io_output_data_wr_1 : 32'h0;
   assign out_wr_data_2 = _seq_io_output_wen ? _seq_io_output_data_wr_2 : 32'h0;
   assign out_wr_data_3 = _seq_io_output_wen ? _seq_io_output_data_wr_3 : 32'h0;
+  assign out_wr_data_4 = _seq_io_output_wen ? _seq_io_output_data_wr_4 : 32'h0;
+  assign out_wr_data_5 = _seq_io_output_wen ? _seq_io_output_data_wr_5 : 32'h0;
+  assign out_wr_data_6 = _seq_io_output_wen ? _seq_io_output_data_wr_6 : 32'h0;
+  assign out_wr_data_7 = _seq_io_output_wen ? _seq_io_output_data_wr_7 : 32'h0;
+  assign out_wr_data_8 = _seq_io_output_wen ? _seq_io_output_data_wr_8 : 32'h0;
+  assign out_wr_data_9 = _seq_io_output_wen ? _seq_io_output_data_wr_9 : 32'h0;
+  assign out_wr_data_10 = _seq_io_output_wen ? _seq_io_output_data_wr_10 : 32'h0;
+  assign out_wr_data_11 = _seq_io_output_wen ? _seq_io_output_data_wr_11 : 32'h0;
   UartRx rx (
     .clock    (clock),
     .reset    (reset),
@@ -135,23 +215,55 @@ module AlchitryTop(
     .io_wt_wr_data_1                (_parser_io_wt_wr_data_1),
     .io_wt_wr_data_2                (_parser_io_wt_wr_data_2),
     .io_wt_wr_data_3                (_parser_io_wt_wr_data_3),
+    .io_wt_wr_data_4                (_parser_io_wt_wr_data_4),
+    .io_wt_wr_data_5                (_parser_io_wt_wr_data_5),
+    .io_wt_wr_data_6                (_parser_io_wt_wr_data_6),
+    .io_wt_wr_data_7                (_parser_io_wt_wr_data_7),
+    .io_wt_wr_data_8                (_parser_io_wt_wr_data_8),
+    .io_wt_wr_data_9                (_parser_io_wt_wr_data_9),
+    .io_wt_wr_data_10               (_parser_io_wt_wr_data_10),
+    .io_wt_wr_data_11               (_parser_io_wt_wr_data_11),
     .io_bias_wr_en                  (_parser_io_bias_wr_en),
     .io_bias_wr_addr                (_parser_io_bias_wr_addr),
     .io_bias_wr_data_0              (_parser_io_bias_wr_data_0),
     .io_bias_wr_data_1              (_parser_io_bias_wr_data_1),
     .io_bias_wr_data_2              (_parser_io_bias_wr_data_2),
     .io_bias_wr_data_3              (_parser_io_bias_wr_data_3),
+    .io_bias_wr_data_4              (_parser_io_bias_wr_data_4),
+    .io_bias_wr_data_5              (_parser_io_bias_wr_data_5),
+    .io_bias_wr_data_6              (_parser_io_bias_wr_data_6),
+    .io_bias_wr_data_7              (_parser_io_bias_wr_data_7),
+    .io_bias_wr_data_8              (_parser_io_bias_wr_data_8),
+    .io_bias_wr_data_9              (_parser_io_bias_wr_data_9),
+    .io_bias_wr_data_10             (_parser_io_bias_wr_data_10),
+    .io_bias_wr_data_11             (_parser_io_bias_wr_data_11),
     .io_act_wr_en                   (_parser_io_act_wr_en),
     .io_act_wr_addr                 (_parser_io_act_wr_addr),
     .io_act_wr_data_0               (_parser_io_act_wr_data_0),
     .io_act_wr_data_1               (_parser_io_act_wr_data_1),
     .io_act_wr_data_2               (_parser_io_act_wr_data_2),
     .io_act_wr_data_3               (_parser_io_act_wr_data_3),
+    .io_act_wr_data_4               (_parser_io_act_wr_data_4),
+    .io_act_wr_data_5               (_parser_io_act_wr_data_5),
+    .io_act_wr_data_6               (_parser_io_act_wr_data_6),
+    .io_act_wr_data_7               (_parser_io_act_wr_data_7),
+    .io_act_wr_data_8               (_parser_io_act_wr_data_8),
+    .io_act_wr_data_9               (_parser_io_act_wr_data_9),
+    .io_act_wr_data_10              (_parser_io_act_wr_data_10),
+    .io_act_wr_data_11              (_parser_io_act_wr_data_11),
     .io_out_rd_addr                 (_parser_io_out_rd_addr),
     .io_out_rd_data_0               (_outMem_ext_R0_data[31:0]),
     .io_out_rd_data_1               (_outMem_ext_R0_data[63:32]),
     .io_out_rd_data_2               (_outMem_ext_R0_data[95:64]),
     .io_out_rd_data_3               (_outMem_ext_R0_data[127:96]),
+    .io_out_rd_data_4               (_outMem_ext_R0_data[159:128]),
+    .io_out_rd_data_5               (_outMem_ext_R0_data[191:160]),
+    .io_out_rd_data_6               (_outMem_ext_R0_data[223:192]),
+    .io_out_rd_data_7               (_outMem_ext_R0_data[255:224]),
+    .io_out_rd_data_8               (_outMem_ext_R0_data[287:256]),
+    .io_out_rd_data_9               (_outMem_ext_R0_data[319:288]),
+    .io_out_rd_data_10              (_outMem_ext_R0_data[351:320]),
+    .io_out_rd_data_11              (_outMem_ext_R0_data[383:352]),
     .io_busy                        (_parser_io_busy)
   );
   LayerSequencer seq (
@@ -177,37 +289,85 @@ module AlchitryTop(
     .io_weight_data_1               (_weightMem_ext_R0_data[15:8]),
     .io_weight_data_2               (_weightMem_ext_R0_data[23:16]),
     .io_weight_data_3               (_weightMem_ext_R0_data[31:24]),
+    .io_weight_data_4               (_weightMem_ext_R0_data[39:32]),
+    .io_weight_data_5               (_weightMem_ext_R0_data[47:40]),
+    .io_weight_data_6               (_weightMem_ext_R0_data[55:48]),
+    .io_weight_data_7               (_weightMem_ext_R0_data[63:56]),
+    .io_weight_data_8               (_weightMem_ext_R0_data[71:64]),
+    .io_weight_data_9               (_weightMem_ext_R0_data[79:72]),
+    .io_weight_data_10              (_weightMem_ext_R0_data[87:80]),
+    .io_weight_data_11              (_weightMem_ext_R0_data[95:88]),
     .io_act_rd_addr                 (_seq_io_act_rd_addr),
     .io_act_rd_data_0               (_actMem_ext_R0_data[7:0]),
     .io_act_rd_data_1               (_actMem_ext_R0_data[15:8]),
     .io_act_rd_data_2               (_actMem_ext_R0_data[23:16]),
     .io_act_rd_data_3               (_actMem_ext_R0_data[31:24]),
+    .io_act_rd_data_4               (_actMem_ext_R0_data[39:32]),
+    .io_act_rd_data_5               (_actMem_ext_R0_data[47:40]),
+    .io_act_rd_data_6               (_actMem_ext_R0_data[55:48]),
+    .io_act_rd_data_7               (_actMem_ext_R0_data[63:56]),
+    .io_act_rd_data_8               (_actMem_ext_R0_data[71:64]),
+    .io_act_rd_data_9               (_actMem_ext_R0_data[79:72]),
+    .io_act_rd_data_10              (_actMem_ext_R0_data[87:80]),
+    .io_act_rd_data_11              (_actMem_ext_R0_data[95:88]),
     .io_act_wr_addr                 (_seq_io_act_wr_addr),
     .io_act_wr_data_0               (_seq_io_act_wr_data_0),
     .io_act_wr_data_1               (_seq_io_act_wr_data_1),
     .io_act_wr_data_2               (_seq_io_act_wr_data_2),
     .io_act_wr_data_3               (_seq_io_act_wr_data_3),
+    .io_act_wr_data_4               (_seq_io_act_wr_data_4),
+    .io_act_wr_data_5               (_seq_io_act_wr_data_5),
+    .io_act_wr_data_6               (_seq_io_act_wr_data_6),
+    .io_act_wr_data_7               (_seq_io_act_wr_data_7),
+    .io_act_wr_data_8               (_seq_io_act_wr_data_8),
+    .io_act_wr_data_9               (_seq_io_act_wr_data_9),
+    .io_act_wr_data_10              (_seq_io_act_wr_data_10),
+    .io_act_wr_data_11              (_seq_io_act_wr_data_11),
     .io_act_wr_en                   (_seq_io_act_wr_en),
     .io_output_rd_addr              (_seq_io_output_rd_addr),
     .io_output_data_r_0             (_outMem_ext_R0_data[31:0]),
     .io_output_data_r_1             (_outMem_ext_R0_data[63:32]),
     .io_output_data_r_2             (_outMem_ext_R0_data[95:64]),
     .io_output_data_r_3             (_outMem_ext_R0_data[127:96]),
+    .io_output_data_r_4             (_outMem_ext_R0_data[159:128]),
+    .io_output_data_r_5             (_outMem_ext_R0_data[191:160]),
+    .io_output_data_r_6             (_outMem_ext_R0_data[223:192]),
+    .io_output_data_r_7             (_outMem_ext_R0_data[255:224]),
+    .io_output_data_r_8             (_outMem_ext_R0_data[287:256]),
+    .io_output_data_r_9             (_outMem_ext_R0_data[319:288]),
+    .io_output_data_r_10            (_outMem_ext_R0_data[351:320]),
+    .io_output_data_r_11            (_outMem_ext_R0_data[383:352]),
     .io_output_wr_addr              (_seq_io_output_wr_addr),
     .io_output_data_wr_0            (_seq_io_output_data_wr_0),
     .io_output_data_wr_1            (_seq_io_output_data_wr_1),
     .io_output_data_wr_2            (_seq_io_output_data_wr_2),
     .io_output_data_wr_3            (_seq_io_output_data_wr_3),
+    .io_output_data_wr_4            (_seq_io_output_data_wr_4),
+    .io_output_data_wr_5            (_seq_io_output_data_wr_5),
+    .io_output_data_wr_6            (_seq_io_output_data_wr_6),
+    .io_output_data_wr_7            (_seq_io_output_data_wr_7),
+    .io_output_data_wr_8            (_seq_io_output_data_wr_8),
+    .io_output_data_wr_9            (_seq_io_output_data_wr_9),
+    .io_output_data_wr_10           (_seq_io_output_data_wr_10),
+    .io_output_data_wr_11           (_seq_io_output_data_wr_11),
     .io_output_wen                  (_seq_io_output_wen),
     .io_bias_addr                   (_seq_io_bias_addr),
     .io_bias_data_0                 (_biasMem_ext_R0_data[31:0]),
     .io_bias_data_1                 (_biasMem_ext_R0_data[63:32]),
     .io_bias_data_2                 (_biasMem_ext_R0_data[95:64]),
     .io_bias_data_3                 (_biasMem_ext_R0_data[127:96]),
+    .io_bias_data_4                 (_biasMem_ext_R0_data[159:128]),
+    .io_bias_data_5                 (_biasMem_ext_R0_data[191:160]),
+    .io_bias_data_6                 (_biasMem_ext_R0_data[223:192]),
+    .io_bias_data_7                 (_biasMem_ext_R0_data[255:224]),
+    .io_bias_data_8                 (_biasMem_ext_R0_data[287:256]),
+    .io_bias_data_9                 (_biasMem_ext_R0_data[319:288]),
+    .io_bias_data_10                (_biasMem_ext_R0_data[351:320]),
+    .io_bias_data_11                (_biasMem_ext_R0_data[383:352]),
     .io_input_base                  (_parser_io_seq_input_base),
     .io_buffer_b_base               (_parser_io_seq_buffer_b_base)
   );
-  weightMem_16384x32 weightMem_ext (
+  weightMem_16384x96 weightMem_ext (
     .R0_addr (_seq_io_weight_addr[13:0]),
     .R0_en   (1'h1),
     .R0_clk  (clock),
@@ -216,12 +376,20 @@ module AlchitryTop(
     .W0_en   (_parser_io_wt_wr_en),
     .W0_clk  (clock),
     .W0_data
-      ({_parser_io_wt_wr_data_3,
+      ({_parser_io_wt_wr_data_11,
+        _parser_io_wt_wr_data_10,
+        _parser_io_wt_wr_data_9,
+        _parser_io_wt_wr_data_8,
+        _parser_io_wt_wr_data_7,
+        _parser_io_wt_wr_data_6,
+        _parser_io_wt_wr_data_5,
+        _parser_io_wt_wr_data_4,
+        _parser_io_wt_wr_data_3,
         _parser_io_wt_wr_data_2,
         _parser_io_wt_wr_data_1,
         _parser_io_wt_wr_data_0})
   );
-  actMem_4096x32 actMem_ext (
+  actMem_4096x96 actMem_ext (
     .R0_addr (_seq_io_act_rd_addr[11:0]),
     .R0_en   (1'h1),
     .R0_clk  (clock),
@@ -230,9 +398,21 @@ module AlchitryTop(
       (_seq_io_act_wr_en ? _seq_io_act_wr_addr[11:0] : _parser_io_act_wr_addr[11:0]),
     .W0_en   (_seq_io_act_wr_en | _parser_io_act_wr_en),
     .W0_clk  (clock),
-    .W0_data ({act_wr_data_3, act_wr_data_2, act_wr_data_1, act_wr_data_0})
+    .W0_data
+      ({act_wr_data_11,
+        act_wr_data_10,
+        act_wr_data_9,
+        act_wr_data_8,
+        act_wr_data_7,
+        act_wr_data_6,
+        act_wr_data_5,
+        act_wr_data_4,
+        act_wr_data_3,
+        act_wr_data_2,
+        act_wr_data_1,
+        act_wr_data_0})
   );
-  outMem_4096x128 outMem_ext (
+  outMem_4096x384 outMem_ext (
     .R0_addr (_seq_io_busy ? _seq_io_output_rd_addr[11:0] : _parser_io_out_rd_addr[11:0]),
     .R0_en   (1'h1),
     .R0_clk  (clock),
@@ -240,9 +420,21 @@ module AlchitryTop(
     .W0_addr (_seq_io_output_wen ? _seq_io_output_wr_addr[11:0] : 12'h0),
     .W0_en   (_seq_io_output_wen),
     .W0_clk  (clock),
-    .W0_data ({out_wr_data_3, out_wr_data_2, out_wr_data_1, out_wr_data_0})
+    .W0_data
+      ({out_wr_data_11,
+        out_wr_data_10,
+        out_wr_data_9,
+        out_wr_data_8,
+        out_wr_data_7,
+        out_wr_data_6,
+        out_wr_data_5,
+        out_wr_data_4,
+        out_wr_data_3,
+        out_wr_data_2,
+        out_wr_data_1,
+        out_wr_data_0})
   );
-  biasMem_256x128 biasMem_ext (
+  biasMem_256x384 biasMem_ext (
     .R0_addr (_seq_io_bias_addr[7:0]),
     .R0_en   (1'h1),
     .R0_clk  (clock),
@@ -251,7 +443,15 @@ module AlchitryTop(
     .W0_en   (_parser_io_bias_wr_en),
     .W0_clk  (clock),
     .W0_data
-      ({_parser_io_bias_wr_data_3,
+      ({_parser_io_bias_wr_data_11,
+        _parser_io_bias_wr_data_10,
+        _parser_io_bias_wr_data_9,
+        _parser_io_bias_wr_data_8,
+        _parser_io_bias_wr_data_7,
+        _parser_io_bias_wr_data_6,
+        _parser_io_bias_wr_data_5,
+        _parser_io_bias_wr_data_4,
+        _parser_io_bias_wr_data_3,
         _parser_io_bias_wr_data_2,
         _parser_io_bias_wr_data_1,
         _parser_io_bias_wr_data_0})

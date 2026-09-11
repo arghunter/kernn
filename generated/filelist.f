@@ -9,11 +9,10 @@ SysArray.sv
 SysArrayController.sv
 TiledMatMulController.sv
 ActivationFunctionBank.sv
-verification/LayerSequencer_Verification.sv
 configMem_16x120.sv
 LayerSequencer.sv
-weightMem_16384x32.sv
-actMem_4096x32.sv
-outMem_4096x128.sv
-biasMem_256x128.sv
+weightMem_16384x96.sv
+actMem_4096x96.sv
+outMem_4096x384.sv
+biasMem_256x384.sv
 AlchitryTop.sv
